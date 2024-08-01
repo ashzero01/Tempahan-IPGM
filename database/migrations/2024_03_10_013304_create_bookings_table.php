@@ -22,6 +22,7 @@ class CreateBookingsTable extends Migration
             $table->time('end_time');
             $table->text('purpose')->nullable();
             $table->string('type')->nullable();
+            $table->string('status')->default('waiting for approval');
             $table->timestamps();
         });
     }

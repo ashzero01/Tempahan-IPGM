@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
-    protected $fillable = ['user_id', 'room_id', 'date', 'start_time', 'end_time', 'purpose', 'type'];
+    protected $fillable = ['user_id', 'room_id', 'date', 'start_time', 'end_time', 'purpose','status', 'type'];
 
     public function room()
     {

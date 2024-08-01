@@ -263,6 +263,7 @@
                                     <th>Start Time</th>
                                     <th>End Time</th>
                                     <th>Purpose</th>
+                                    <th>Status</th>
                                     <th></th>
 
                                 </tr>
@@ -299,23 +300,25 @@ function formatTime(time) {
 
         // Function to fetch booking data from the server
         function fetchBookingData() {
-            const roomId = '{{ $room->id }}';
-            const endpoint = `{{ route('bookings.json', ['room' => $room->id]) }}`;
+    const roomId = '{{ $room->id }}';
+    const endpoint = `{{ route('bookings.json', ['room' => $room->id]) }}`;
 
-            fetch(endpoint)
-                .then(response => response.json())
-                .then(bookings => {
-                    bookings.forEach(booking => {
-                        const { date } = booking;
-                        const button = document.querySelector(`button[data-date="${date}"]`);
+    fetch(endpoint)
+        .then(response => response.json())
+        .then(bookings => {
+            bookings.forEach(booking => {
+                if (booking.type === 'rooms') { // Filter by type 'rooms'
+                    const { date } = booking;
+                    const button = document.querySelector(`button[data-date="${date}"]`);
 
-                        if (button) {
-                            button.classList.add('partial');
-                        }
-                    });
-                })
-                .catch(error => console.error('Error fetching booking data:', error));
-        }
+                    if (button) {
+                        button.classList.add('partial');
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching booking data:', error));
+}
 
 
         // Event listener for date button clicks
@@ -415,7 +418,11 @@ function formatTime(time) {
             tbody.innerHTML = '';
             const userId = '{{ auth()->id() }}'; // Get the ID of the authenticated user
             const isAdmin = '{{ auth()->user()->isAdmin() }}'; // Check if the authenticated user is an admin
-            bookings.forEach(booking => {
+
+            // Filter bookings to include only those with type "rooms"
+            const filteredBookings = bookings.filter(booking => booking.type === 'rooms');
+
+            filteredBookings.forEach(booking => {
                 const row = document.createElement('tr');
                 const startTime = formatTime(booking.start_time);
                 const endTime = formatTime(booking.end_time);
@@ -433,6 +440,8 @@ function formatTime(time) {
                     <td>${startTime}</td>
                     <td>${endTime}</td>
                     <td>${purpose}</td>
+                    <td>${booking.status}</td> <!-- Display the status -->
+
                     <td>
                     ${viewButton}
                         <form action="{{ route('bookings.destroy', ['room' => $room->id, 'booking' => ':bookingId']) }}" method="POST">
@@ -450,6 +459,7 @@ function formatTime(time) {
         })
         .catch(error => console.error('Error fetching booking details:', error));
 }
+
     });
 </script>
 

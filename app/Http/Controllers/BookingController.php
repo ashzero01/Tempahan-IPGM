@@ -23,12 +23,14 @@ class BookingController extends Controller
     
     
     public function getBookings(Room $room)
-    {
-        // Fetch all bookings for the specified room
-        $bookings = $room->bookings;
-    
-        return response()->json($bookings);
-    }
+{
+    // Fetch all bookings of type 'rooms' for the specified room
+    $bookings = Booking::where('room_id', $room->id)
+                       ->where('type', 'rooms')
+                       ->get();
+
+    return response()->json($bookings);
+}
 
     public function getBookingsDetails(Request $request, Room $room)
 {
@@ -104,6 +106,10 @@ return view('bookings.user', compact('bookings'));
         'start_time' => $request->start_time,
         'end_time' => $request->end_time,
         'purpose' => $request->purpose,
+        'status' => 'waiting for approval',
+        'type' => 'rooms',
+
+
 
     ]);
 
@@ -177,6 +183,7 @@ public function delete(Booking $booking)
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
             'purpose' => $request->purpose,
+            'status' => 'waiting for approval',
         ]);
 
         // Redirect to the user's bookings page with a success message
