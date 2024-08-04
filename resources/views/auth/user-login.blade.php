@@ -1,9 +1,9 @@
 <!-- resources/views/auth/user-login.blade.php -->
 <x-guest-layout>
     <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
+    <x-slot name="logo">
+    <img src="{{ asset('images/logo.png') }}" alt="Custom Logo" class="h-16">
+</x-slot>
 
         <x-validation-errors class="mb-4" />
 
