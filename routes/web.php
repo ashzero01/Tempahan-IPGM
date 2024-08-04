@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserLoginController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +36,18 @@ Route::get('/bookings/{user_id}/', 'App\Http\Controllers\BookingController@userB
 Route::get('rooms/bookings/{booking}/edit','App\Http\Controllers\BookingController@edit')->name('bookings.edit');
 Route::put('rooms/bookings/{booking}/','App\Http\Controllers\BookingController@update')->name('bookings.update');
 
+
+
+Route::get('/user/login', function () {
+    if (auth()->check()) {
+        return redirect()->route('dashboard'); // Redirect to a page if user is already logged in
+    }
+
+    return view('auth.user-login');
+})->name('user.login.form');
+
+// Route to handle the login form submission
+Route::post('/user/login', [UserLoginController::class, 'login'])->name('user.login');
 
 
 

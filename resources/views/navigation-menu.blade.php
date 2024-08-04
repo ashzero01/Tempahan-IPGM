@@ -17,10 +17,10 @@
                     </x-nav-link>
 
                     <x-nav-link href="{{ route('rooms.index') }}" :active="request()->routeIs('rooms.index')">
-                         {{ __('Rooms') }}
+                         {{ __('Bilik') }}
                      </x-nav-link>
                      <x-nav-link :href="route('bookings.user', ['user_id' => auth()->id()])" :active="request()->routeIs('bookings.user')">
-    {{ __('Bookings') }}
+    {{ __('Tempahan') }}
 </x-nav-link>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Rooms') }}
+            {{ __('Bilik') }}
         </h2>
     </x-slot>
 
@@ -131,7 +131,7 @@
         <div class="text-right">
             @if (auth()->user()->isAdmin())
                 <!-- Add Room Button -->
-                <a href="{{ route('rooms.create') }}" class="add-room-button">Add Room</a>
+                <a href="{{ route('rooms.create') }}" class="add-room-button">Tambah Bilik</a>
             @endif
         </div>
         <div class="room-container">
@@ -143,19 +143,18 @@
                     <!-- Room Name -->
                     <div class="room-name">{{ $room->name }}</div>
                     <!-- Link to room bookings -->
-                    <span class="room-link">Book Now</span>
+                    <span class="room-link">Tempah Sekarang</span>
                     <!-- Buttons for administrators -->
                     @if (auth()->user()->isAdmin())
                         <div class="admin-buttons">
                             <!-- Edit and delete buttons container -->
                             <div class="edit-delete-container">
-                                <!-- Edit button -->
-                                <a href="{{ route('rooms.edit', $room->id) }}" class="edit-room-button">Edit</a>
+
                                 <!-- Delete button -->
                                 <form action="{{ route('rooms.destroy', $room->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="delete-room-button">Delete</button>
+                                    <button type="submit" class="delete-room-button">Padam</button>
                                 </form>
                             </div>
                         </div>
