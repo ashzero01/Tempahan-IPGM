@@ -1,75 +1,188 @@
-<x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Register</title>
 
-        <x-validation-errors class="mb-4" />
+    <!-- Styles -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('{{ asset('images/background.jpg') }}') no-repeat center center fixed;
+            background-size: cover;
+        }
 
-        <form method="POST" action="{{ route('register') }}">
-            @csrf
+        .header {
+            background-color: #1F2937; /* Dark gray background */
+            padding: 1rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-            <div>
-                <x-label for="name" value="{{ __('Name') }}" />
-                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            </div>
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
 
-            <div class="mt-4">
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            </div>
+        .logo {
+            max-height: 40px; /* Set a maximum height for the logo */
+            max-width: 100px; /* Set a maximum width for the logo */
+            margin-right: 1rem; /* Space between logo and text */
+        }
 
-            <div class="mt-4">
-                <x-label for="ICnumber" value="{{ __('IC Number') }}" />
-                <x-input id="ICnumber" class="block mt-1 w-full" type="text" name="ICnumber" :value="old('ICnumber')" required autocomplete="ICnumber" />
-            </div>
+        .header-title {
+            font-size: 1.5rem; /* Adjust as needed */
+            color: white;
+            margin: 0; /* Remove default margin */
+        }
 
-            <div class="mt-4">
-                <x-label for="phone_number" value="{{ __('Phone Number') }}" />
-                <x-input id="phone_number" class="block mt-1 w-full" type="text" name="phone_number" :value="old('phone_number')" required autocomplete="phone_number" />
-            </div>
-            
-            <div class="mt-4">
-                <x-label for="affiliation" value="{{ __('Affiliation') }}" />
-                <x-input id="affiliation" class="block mt-1 w-full" type="text" name="affiliation" :value="old('affiliation')" required autocomplete="affiliation" />
-            </div>
+        .header a {
+            color: #E5E7EB; /* Light gray for links */
+            text-decoration: none;
+            margin: 0 1rem;
+            font-weight: 500;
+        }
 
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            </div>
+        .header a:hover {
+            color: #60A5FA; /* Lighter blue on hover */
+        }
 
-            <div class="mt-4">
-                <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
-                <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
-            </div>
+        .main-content {
+            text-align: center;
+            padding: 2rem;
+            background-color: rgba(255, 255, 255, 0.8); /* White background with opacity */
+            border-radius: 0.5rem;
+            margin: 2rem auto;
+            max-width: 600px;
+        }
 
-            @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
-                <div class="mt-4">
-                    <x-label for="terms">
-                        <div class="flex items-center">
-                            <x-checkbox name="terms" id="terms" required />
+        .main-content h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #111827; /* Dark gray */
+            margin-bottom: 1rem;
+        }
 
-                            <div class="ms-2">
-                                {!! __('I agree to the :terms_of_service and :privacy_policy', [
-                                        'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('Terms of Service').'</a>',
-                                        'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('Privacy Policy').'</a>',
-                                ]) !!}
-                            </div>
-                        </div>
-                    </x-label>
+        .main-content p {
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .login-form {
+            margin-top: 2rem;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .login-form input[type="text"], .login-form input[type="email"], .login-form input[type="password"] {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #D1D5DB;
+            border-radius: 0.375rem;
+            box-sizing: border-box;
+            font-size: 1.125rem; /* Increase text size */
+            text-align: center; /* Horizontally center the text */
+            line-height: 1.5; /* Adjust line height for vertical alignment */
+        }
+
+        .login-form button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #2563EB;
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .login-form button:hover {
+            background-color: #1D4ED8;
+        }
+
+        .error-message {
+            color: #DC2626; /* Red color for error messages */
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header class="header">
+        <div class="logo-container">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
+            <h2 class="header-title">Sistem Tempahan Bilik dan Kenderaan</h2>
+        </div>
+        <div class="nav-links">
+            <a href="{{ route('login') }}">Log Masuk</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1>Daftar Pengguna</h1>
+        <p>Sila isi maklumat berikut untuk mendaftar.</p>
+
+        <!-- Register Form -->
+        <div class="login-form">
+            @if ($errors->any())
+                <div class="error-message">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
             @endif
 
-            <div class="flex items-center justify-end mt-4">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                    {{ __('Already registered?') }}
-                </a>
+            <form method="POST" action="{{ route('register') }}">
+                @csrf
 
-                <x-button class="ms-4">
-                    {{ __('Register') }}
-                </x-button>
-            </div>
-        </form>
-    </x-authentication-card>
-</x-guest-layout>
+                <div>
+                    <label for="name" style="display: block; margin-bottom: 0.5rem;">Nama</label>
+                    <input id="name" type="text" name="name" required autofocus>
+                </div>
+
+                <div>
+                    <label for="email" style="display: block; margin-bottom: 0.5rem;">Emel</label>
+                    <input id="email" type="email" name="email" required>
+                </div>
+
+                <div>
+                    <label for="ICnumber" style="display: block; margin-bottom: 0.5rem;">No Kad Pengenalan</label>
+                    <input id="ICnumber" type="text" name="ICnumber" required>
+                </div>
+
+                <div>
+                    <label for="phone_number" style="display: block; margin-bottom: 0.5rem;">No Telefon</label>
+                    <input id="phone_number" type="text" name="phone_number">
+                </div>
+
+                <div>
+                    <label for="affiliation" style="display: block; margin-bottom: 0.5rem;">Afiliasi</label>
+                    <input id="affiliation" type="text" name="affiliation">
+                </div>
+
+                <button type="submit">Daftar</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

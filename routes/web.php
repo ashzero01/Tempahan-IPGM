@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserLoginController;
+use App\Http\Controllers\UserRegisterController;
+
 
 
 /*
@@ -48,6 +50,11 @@ Route::get('/user/login', function () {
 
 // Route to handle the login form submission
 Route::post('/user/login', [UserLoginController::class, 'login'])->name('user.login');
+
+
+Route::get('register', [UserRegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('register', [UserRegisterController::class, 'register']);
+
 
 
 

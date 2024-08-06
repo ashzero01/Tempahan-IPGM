@@ -94,7 +94,9 @@
     border: 1px solid #D1D5DB;
     border-radius: 0.375rem;
     box-sizing: border-box;
-}
+    font-size: 1.125rem; /* Increase text size */
+    text-align: center; /* Horizontally center the text */
+    line-height: 1.5; /* Adjust line height for vertical alignment */}
 
 .login-form button {
     width: 100%;
@@ -122,7 +124,7 @@
         <h2 class="header-title">Sistem Tempahan Bilik dan Kenderaan</h2>
     </div>
     <div class="nav-links">
-        <a href="{{ route('register') }}">Daftar untuk Pengguna Pertama</a>
+        <a href="{{ route('register') }}">Daftar untuk Pengguna Baharu</a>
     </div>
 </header>
 
