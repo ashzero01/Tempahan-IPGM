@@ -130,7 +130,7 @@
             <h2 class="header-title">Sistem Tempahan Bilik dan Kenderaan</h2>
         </div>
         <div class="nav-links">
-            <a href="{{ route('login') }}">Log Masuk</a>
+            <a href="/">Balik ke Halaman Utama</a>
         </div>
     </header>
 

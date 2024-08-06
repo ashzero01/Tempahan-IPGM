@@ -106,7 +106,7 @@ return view('bookings.user', compact('bookings'));
         'start_time' => $request->start_time,
         'end_time' => $request->end_time,
         'purpose' => $request->purpose,
-        'status' => 'waiting for approval',
+        'status' => 'Menunggu Pengesahan',
         'type' => 'rooms',
 
 
@@ -114,7 +114,7 @@ return view('bookings.user', compact('bookings'));
     ]);
 
     // Redirect to the booking creation page with a success message
-    return redirect()->route('bookings.create', ['room' => $room->id])->with('success', 'Booking created successfully!');
+    return redirect()->route('bookings.create', ['room' => $room->id])->with('success', 'Tempahan berjaya!');
 }
 public function show(Booking $booking)
 {
@@ -127,13 +127,13 @@ public function delete(Booking $booking)
 {
     $user_id = $booking->user_id; // Assuming there's a user_id field in the Booking model
     $booking->delete();
-    return redirect()->route('bookings.user', ['user_id' => $user_id])->with('success', 'Booking deleted successfully!');
+    return redirect()->route('bookings.user', ['user_id' => $user_id])->with('success', 'Tempahan berjaya dipadam!');
 }
 
     public function destroy(Room $room, Booking $booking)
     {
         $booking->delete();
-        return redirect()->route('bookings.create', ['room' => $room->id])->with('success', 'Booking deleted successfully!');
+        return redirect()->route('bookings.create', ['room' => $room->id])->with('success', 'Tempahan berjaya dipadam!');
     }
 
     public function edit(Booking $booking)
@@ -174,7 +174,7 @@ public function delete(Booking $booking)
 
         // If an existing booking is found, return with an error message
         if ($existingBooking) {
-            return redirect()->route('bookings.edit', ['booking' => $booking->id])->with('error', 'This room is already booked for the specified date and time.');
+            return redirect()->route('bookings.edit', ['booking' => $booking->id])->with('error', 'Bilik ini telah ditempah pada tarikh dan masa yang sama.');
         }
 
         // Update the booking
@@ -183,11 +183,11 @@ public function delete(Booking $booking)
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
             'purpose' => $request->purpose,
-            'status' => 'waiting for approval',
+            'status' => 'Menunggu Pengesahan',
         ]);
 
         // Redirect to the user's bookings page with a success message
-        return redirect()->route('bookings.user', ['user_id' => $booking->user_id])->with('success', 'Booking updated successfully!');
+        return redirect()->route('bookings.user', ['user_id' => $booking->user_id])->with('success', 'Tempahan berjaya dikemaskini!');
     }
 
     

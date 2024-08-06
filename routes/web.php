@@ -60,7 +60,9 @@ Route::post('register', [UserRegisterController::class, 'register']);
 
 
 
-
+Route::get('/temporary-dashboard', function () {
+    return view('dashboard');
+})->name('temporary-dashboard');
 
 
 Route::middleware([
@@ -69,7 +71,7 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return view('dashboard2');
     })->name('dashboard');
     
 });
