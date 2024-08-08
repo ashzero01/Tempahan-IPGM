@@ -1,4 +1,11 @@
 
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <title>Sistem Tempahan IPGMKKB</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{{ asset('css/header.css') }}" rel="stylesheet">
     <style>
         table {
             width: 100%;
@@ -67,26 +74,25 @@
             margin-top: 5px;
         }
 
-        button[type="submit"] {
-            background-color: #3490dc;
-            color: white;
-            font-weight: bold;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        button[type="submit"].book-room {
+      .booking-button {
+        background-color: #3490dc;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
     margin-top: 20px; /* Adjust this value to add space above the button */
     margin-bottom: 20px; /* Adjust this value to add space below the button */
     padding: 10px 20px; /* Adjust padding as needed */
     /* Add any other styles you want to customize */
 }
+    .booking-button:hover {
+        background-color: #2779bd;
+    }
+        
 
-        button[type="submit"]:hover {
-            background-color: #2779bd;
-        }
 
         .alert {
             background-color: #f8d7da;
@@ -185,43 +191,6 @@
             flex-direction: column; /* Stack header and main content vertically */
         }
 
-        .header {
-            background-color: #1F2937; /* Dark gray background */
-            padding: 1rem;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo {
-            max-height: 40px; /* Set a maximum height for the logo */
-            max-width: 100px; /* Set a maximum width for the logo */
-            margin-right: 1rem; /* Space between logo and text */
-        }
-
-        .header-title {
-            font-size: 1.5rem; /* Adjust as needed */
-            color: white;
-            margin: 0; /* Remove default margin */
-        }
-
-        .header a {
-            color: #E5E7EB; /* Light gray for links */
-            text-decoration: none;
-            margin: 0 1rem;
-            font-weight: 500;
-        }
-
-        .header a:hover {
-            color: #60A5FA; /* Lighter blue on hover */
-        }
 
         .main-container {
             flex: 1; /* Take up remaining space */
@@ -275,10 +244,12 @@
             <h2 class="header-title">Sistem Tempahan Bilik dan Kenderaan</h2>
         </div>
         <div class="nav-links">
+        <a>{{ auth()->user()->name }}</a>
+
             <!-- Logout Form -->
             <form method="POST" action="{{ route('logout') }}" style="display:inline;">
                 @csrf
-                <button type="submit" class="text-white hover:text-blue-400 bg-transparent border-none cursor-pointer">
+                <button type="submit" class="logout-button">
                     Log Keluar
                 </button>
             </form>
@@ -342,7 +313,7 @@
                                     <label for="purpose">Tujuan:</label>
                                     <input type="text" id="purpose" name="purpose" required>
                                 </div>
-                                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded mt-2 book-room">Book Room</button>
+                                <button type="submit" class="booking-button">Book Room</button>
                             </form>
                             <!-- Display validation errors -->
                             @if ($errors->any())
@@ -362,7 +333,7 @@
                                     <th>Tarikh</th>
                                     <th>Hari</th>
                                     <th>Masa Mula</th>
-                                    <th>Masa Habis</th>
+                                    <th>Masa Tamat</th>
                                     <th>Tujuan</th>
                                     <th>Status</th>
                                     <th>Tindakan</th>
@@ -379,6 +350,7 @@
         </div>
     </div>
 </div>
+</body>
 
 
     <script>

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Dashboard</title>
+    <title>Sistem Tempahan IPGMKKB</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -23,43 +23,7 @@
             flex-direction: column; /* Stack header and main content vertically */
         }
 
-        .header {
-            background-color: #1F2937; /* Dark gray background */
-            padding: 1rem;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo {
-            max-height: 40px; /* Set a maximum height for the logo */
-            max-width: 100px; /* Set a maximum width for the logo */
-            margin-right: 1rem; /* Space between logo and text */
-        }
-
-        .header-title {
-            font-size: 1.5rem; /* Adjust as needed */
-            color: white;
-            margin: 0; /* Remove default margin */
-        }
-
-        .header a {
-            color: #E5E7EB; /* Light gray for links */
-            text-decoration: none;
-            margin: 0 1rem;
-            font-weight: 500;
-        }
-
-        .header a:hover {
-            color: #60A5FA; /* Lighter blue on hover */
-        }
+        
 
         .main-container {
             flex: 1; /* Take up remaining space */
@@ -73,7 +37,7 @@
             padding: 20px; /* Adjust padding */
             border-radius: 8px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            max-width: 800px; /* Set a maximum width */
+            max-width: 1000px; /* Set a maximum width */
             width: 100%; /* Ensure it takes up the full width available */
             box-sizing: border-box; /* Ensure padding and border are included in the width and height */
         }
@@ -83,16 +47,7 @@
             justify-content: center;
             gap: 16px; /* More consistent gap */
         }
-        button[type="submit"] {
-            background-color: #3490dc;
-            color: white;
-            font-weight: bold;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+     
 
         /* Custom Styling for Square Buttons */
         .custom-button {
@@ -117,7 +72,13 @@
             transform: translateY(-3px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+
+
+
     </style>
+
+<link href="{{ asset('css/header.css') }}" rel="stylesheet">
+
 </head>
 <body>
     <!-- Header Section -->
@@ -127,13 +88,15 @@
             <h2 class="header-title">Sistem Tempahan Bilik dan Kenderaan</h2>
         </div>
         <div class="nav-links">
+            <a>{{ auth()->user()->name }}</a>
        <!-- Logout Form -->
        <form method="POST" action="{{ route('logout') }}" style="display:inline;">
-                @csrf
-                <button type="submit" class="text-white hover:text-blue-400 bg-transparent border-none cursor-pointer">
-                    Log Keluar
-                </button>
-            </form>
+    @csrf
+    <button type="submit" class="logout-button">
+        Log Keluar
+    </button>
+</form>
+
         </div>
     </header>
 
@@ -148,13 +111,16 @@
                 </a>
                 <!-- Tempah Kenderaan Button -->
                 <a href="{{ route('bookings.user', ['user_id' => auth()->id()]) }}" class="custom-button">
-                    Tempah Kenderaan
+                    Tempah Kenderaan (Belum siap)
                 </a>
                 <a href="{{ route('bookings.user', ['user_id' => auth()->id()]) }}" class="custom-button">
-                    Lihat Tempahan
-                </a>
+                    Lihat Tempahan Bilik
+                </a> 
                 <a href="{{ route('bookings.user', ['user_id' => auth()->id()]) }}" class="custom-button">
-                    Kemaskini Profil
+                    Lihat Tempahan Kenderaan (Belum siap)
+                </a> 
+                <a href="{{ route('bookings.user', ['user_id' => auth()->id()]) }}" class="custom-button">
+                    Kemaskini Profil (Belum siap)
                 </a>
             </div>
         </div>

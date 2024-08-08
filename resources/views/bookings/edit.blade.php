@@ -1,11 +1,9 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="header-container">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Edit Booking') }}
-            </h2>
-        </div>
-    </x-slot>
+<head>
+    <title>Sistem Tempahan IPGMKKB</title>
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/header.css') }}" rel="stylesheet">
+<link href="{{ asset('css/header.css') }}" rel="stylesheet">
+
 
     <style>
 
@@ -80,20 +78,25 @@
             margin-top: 5px;
         }
 
-        button[type="submit"] {
-            background-color: #3490dc;
-            color: white;
-            font-weight: bold;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+      .booking-button {
+        background-color: #3490dc;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px; /* Adjust this value to add space above the button */
+    margin-bottom: 20px; /* Adjust this value to add space below the button */
+    padding: 10px 20px; /* Adjust padding as needed */
+    /* Add any other styles you want to customize */
+}
+    .booking-button:hover {
+        background-color: #2779bd;
+    }
+        
 
-        button[type="submit"]:hover {
-            background-color: #2779bd;
-        }
 
         .alert {
             background-color: #f8d7da;
@@ -182,17 +185,90 @@
         .back-button:hover {
             color: red;
         }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+ 
+            min-height: 100vh; /* Ensure the body takes up full viewport height */
+            display: flex;
+            flex-direction: column; /* Stack header and main content vertically */
+        }
+
+
+        .main-container {
+            flex: 1; /* Take up remaining space */
+            display: flex;
+            flex-direction: column; /* Stack content vertically */
+            align-items: center; /* Center content horizontally */
+        }
+
+        .main-content {
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
+            padding: 10px; /* Adjust padding */
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            max-width: 1500px; /* Set a maximum width */
+            width: 100%; /* Ensure it takes up the full width available */
+            box-sizing: border-box; /* Ensure padding and border are included in the width and height */
+            margin-top: 2rem; /* Adjust this value as needed */
+
+        }
+
+        .text-2xl {
+    display: flex;
+    justify-content: space-between; /* Distribute space between the text and button */
+    align-items: center; /* Align items vertically */
+    width: 100%; /* Ensure the container takes full width */
+}
+
+.back-button {
+    background-color: transparent;
+    border: none;
+    color: black;
+    font-size: 40px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.back-button:hover {
+    color: red;
+}
+
     </style>
 
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="flex justify-end mt-4">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="logo-container">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
+            <h2 class="header-title">Sistem Tempahan Bilik dan Kenderaan</h2>
         </div>
+        <div class="nav-links">
+        <a>{{ auth()->user()->name }}</a>
+
+            <!-- Logout Form -->
+            <form method="POST" action="{{ route('logout') }}" style="display:inline;">
+                @csrf
+                <button type="submit" class="logout-button">
+                    Log Keluar
+                </button>
+            </form>
+        </div>
+    </header>
+
+
+    <div class="main-container">
+    <div class="main-content">
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
-                <div class="text-2xl flex justify-between">
-                    <span>Edit Booking</span>
-                    <a href="{{ route('rooms.index') }}" class="back-button">&#129152;</a>
-                </div>
+            <div class="text-2xl flex justify-between items-center">
+            <h2>Tempah   {{ $room->name }}</h2>
+            <a href="javascript:history.back()" class="back-button">&#129152;</a>
+</div>
+
                 @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
@@ -208,28 +284,27 @@
                 <div class="mt-4">
                     <div class="container">
                         <div class="form-container">
-                        <form action="{{ route('bookings.update', ['booking' => $booking->id]) }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('bookings.store', ['room' => $room->id]) }}" method="POST">
                                 @csrf
-                                @method('PUT')
                                 <div>
-                                    <label>Booking Date:</label>
+                                    <label>Tarikh Tempahan:</label>
                                     <div>
                                         <select id="yearSelect" name="year"></select>
                                         <select id="monthSelect" name="month"></select>
                                         <div id="dayButtons"></div>
                                     </div>
-                                    <input type="hidden" id="booking_date" name="date" value="{{ $booking->date }}">
+                                    <input type="hidden" id="booking_date" name="date">
                                     @error('date')
                                     <span class="text-red-500">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div style="margin-top: 10px; display: flex; align-items: center;">
-                                    <label for="start_time">Time:</label>
+                                <div style="margin-top: 10px;display: flex; align-items: center;">
+                                    <label for="start_time">Masa:</label>
                                 </div>
                                 <div style="display: flex; align-items: center;">
-                                    <input type="time" id="start_time" name="start_time" value="{{ $booking->start_time }}" style="margin-right: 10px;" required>
-                                    <span>to</span>
-                                    <input type="time" id="end_time" name="end_time" value="{{ $booking->end_time }}" style="margin-left: 10px;" required>
+                                    <input type="time" id="start_time" name="start_time" style="margin-right: 10px;" required>
+                                    <span>sehingga</span>
+                                    <input type="time" id="end_time" name="end_time" style="margin-left: 10px;" required>
                                     @error('start_time')
                                     <span class="text-red-500">{{ $message }}</span>
                                     @enderror
@@ -238,35 +313,37 @@
                                     @enderror
                                 </div>
                                 <div>
-                                    <label for="purpose">Purpose:</label>
-                                    <input type="text" id="purpose" name="purpose" value="{{ $booking->purpose }}" required>
+                                    <label for="purpose">Tujuan:</label>
+                                    <input type="text" id="purpose" name="purpose" required>
                                 </div>
-                                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded mt-2">Update Booking</button>
+                                <button type="submit" class="booking-button">Book Room</button>
                             </form>
+                            <!-- Display validation errors -->
                             @if ($errors->any())
-                            <div class="alert alert-danger mt-4">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
+                                <div class="alert alert-danger mt-4">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
                             @endif
                         </div>
                         <div class="table-container">
                             <table id="bookingDetails">
                                 <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Day</th>
-                                        <th>Start Time</th>
-                                        <th>End Time</th>
-                                        <th>Purpose</th>
-                                        <th></th>
-                                    </tr>
+                                <tr>
+                                    <th>Tarikh</th>
+                                    <th>Hari</th>
+                                    <th>Masa Mula</th>
+                                    <th>Masa Tamat</th>
+                                    <th>Tujuan</th>
+                                    <th>Status</th>
+                                    <th>Tindakan</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Table rows will be dynamically added here -->
+                                <!-- Table rows will be dynamically added here -->
                                 </tbody>
                             </table>
                         </div>
@@ -275,7 +352,8 @@
             </div>
         </div>
     </div>
-
+</div>
+</body>
     <script>
     function formatTime(time) {
         const [hours, minutes] = time.split(':');
@@ -328,11 +406,11 @@
         });
 
         function getDayOfWeek(dateString) {
-            const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            const date = new Date(dateString);
-            const dayOfWeekIndex = date.getDay();
-            return daysOfWeek[dayOfWeekIndex];
-        }
+        const daysOfWeek = ['Ahad', 'Isnin', 'Selasa', 'Rabu', 'Khamis', 'Jumaat', 'Sabtu'];
+        const date = new Date(dateString);
+        const dayOfWeekIndex = date.getDay();
+        return daysOfWeek[dayOfWeekIndex];
+    }
 
         // Populate year select options
         const startYear = 2000;
@@ -345,11 +423,16 @@
         }
         yearSelect.value = new Date().getFullYear();
 
+        const customMonthNames = [
+    'Januari', 'Februari', 'Mac', 'April', 'Mei', 
+    'Jun','Julai', 'Ogos', 'September',
+     'Oktober', 'November', 'Disember'];
+
         // Populate month select options
         for (let month = 1; month <= 12; month++) {
             const option = document.createElement('option');
             option.value = month;
-            option.textContent = new Date(new Date().getFullYear(), month - 1, 1).toLocaleString('default', { month: 'long' });
+            option.textContent = customMonthNames[month - 1];
             monthSelect.appendChild(option);
         }
         monthSelect.value = new Date().getMonth() + 1;
@@ -415,14 +498,16 @@
                     deleteButton = `<button type="submit" onclick="return confirm('Are you sure you want to delete this booking?')">Delete</button>`;
                 }
                 row.innerHTML = `
-                    <td>${booking.date}</td>
+                <td>${booking.date}</td>
                     <td>${dayOfWeek}</td> <!-- Display the day of the week -->
                     <td>${startTime}</td>
                     <td>${endTime}</td>
                     <td>${purpose}</td>
+                    <td>${booking.status}</td> <!-- Display the status -->
+
                     <td>
-                        ${viewButton}
-                        <form action="{{ route('bookings.destroy', ['room' => $booking->room_id, 'booking' => ':bookingId']) }}" method="POST">
+                    ${viewButton}
+                        <form action="{{ route('bookings.destroy', ['room' => $room->id, 'booking' => ':bookingId']) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             ${deleteButton} <!-- Include delete button based on condition -->
@@ -460,4 +545,3 @@
     });
 </script>
 
-</x-app-layout>

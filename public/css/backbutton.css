@@ -1,0 +1,30 @@
+.back-button {
+    background-color: transparent;
+    border: none;
+    color: black;
+    font-size: 40px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    display: inline-block; /* Ensure it aligns properly */
+    
+}
+
+.back-button:hover {
+    color: red;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between; /* Distribute space between buttons */
+    align-items: center; /* Vertically center the buttons */
+    margin-bottom: 20px; /* Add margin below the button container */
+}
+
+.add-room-button, .back-button .filter-button {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}

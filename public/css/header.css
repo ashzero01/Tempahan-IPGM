@@ -1,0 +1,47 @@
+.header {
+    background-color: #1F2937; /* Dark gray background */
+    padding: 1rem;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    max-height: 40px; /* Set a maximum height for the logo */
+    max-width: 100px; /* Set a maximum width for the logo */
+    margin-right: 1rem; /* Space between logo and text */
+}
+
+.header-title {
+    font-size: 1.5rem; /* Adjust as needed */
+    color: white;
+    margin: 0; /* Remove default margin */
+}
+
+.header a {
+    color: #E5E7EB; /* Light gray for links */
+    text-decoration: none;
+    margin: 0 1rem;
+    font-weight: 500;
+}
+
+.logout-button {
+    background-color: #dc3545; /* Red color */
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.logout-button:hover {
+    background-color: #c82333; /* Darker red color on hover */
+}

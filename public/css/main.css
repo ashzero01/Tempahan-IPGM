@@ -1,0 +1,18 @@
+.main-container {
+    flex: 1; /* Take up remaining space */
+    display: flex; /* Enable flexbox layout */
+    flex-direction: column; /* Stack content vertically */
+    align-items: center; /* Center content horizontally */
+}
+
+.main-content {
+background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
+padding: 20px; /* Adjust padding */
+border-radius: 8px;
+box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+max-width: 1300px; /* Set a maximum width */
+width: 100%; /* Ensure it takes up the full width available */
+box-sizing: border-box; /* Ensure padding and border are included in the width and height */
+margin: 1rem ; /* Add margin to separate it from other elements */
+min-height: 400px; /* Set a minimum height to prevent it from being too small */
+}

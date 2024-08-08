@@ -47,18 +47,25 @@ class BookingController extends Controller
     return response()->json($bookings);
 }
 
-public function userBookings($user_id)
+public function userBookings($user_id, Request $request)
 {
-    // Get the authenticated user's ID
-$userId = Auth::id();
+    $sortField = $request->input('sortField', 'date'); // Default to 'date'
+    $sortDirection = $request->input('sortDirection', 'asc'); // Default to ascending
 
-// Fetch bookings for the authenticated user
-$bookings = Booking::where('user_id', $userId)->get();
+    // Check if the authenticated user is an admin
+    $isAdmin = auth()->user()->role === 'admin';
 
-// Return the view with the bookings data
-return view('bookings.user', compact('bookings'));
-    
+    // If the user is an admin, show all bookings, otherwise show bookings for the specified user
+    $query = $isAdmin
+        ? Booking::orderBy($sortField, $sortDirection) // Admin sees all bookings
+        : Booking::where('user_id', $user_id)->orderBy($sortField, $sortDirection); // Regular user sees their own bookings
+
+    $bookings = $query->get();
+
+    return view('bookings.user', compact('bookings', 'sortField', 'sortDirection'));
 }
+
+
     public function create(Room $room)
     {
         return view('bookings.create', compact('room'));
@@ -66,56 +73,55 @@ return view('bookings.user', compact('bookings'));
 
 
     public function store(Request $request, Room $room)
-{
-    // Validate the request data
-    $request->validate([
-        'date' => 'required|date',
-        'start_time' => 'required|date_format:H:i',
-        'end_time' => 'required|date_format:H:i|after:start_time',
-    ]);
-
-    // Check if there are any existing bookings for the specified room that overlap with the new booking
-    $existingBooking = Booking::where('room_id', $room->id)
-        ->where('date', $request->date)
-        ->where(function ($query) use ($request) {
-            $query->where(function ($query) use ($request) {
-                $query->where('start_time', '>=', $request->start_time)
-                    ->where('start_time', '<', $request->end_time);
+    {
+        // Validate the request data
+        $request->validate([
+            'date' => 'required|date',
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i|after:start_time',
+        ]);
+    
+        // Check if there are any existing bookings for the specified room that overlap with the new booking, excluding those with status "Ditolak"
+        $existingBooking = Booking::where('room_id', $room->id)
+            ->where('date', $request->date)
+            ->whereIn('status', ['Menunggu Pengesahan', 'Diterima'])
+            ->where(function ($query) use ($request) {
+                $query->where(function ($query) use ($request) {
+                    $query->where('start_time', '>=', $request->start_time)
+                        ->where('start_time', '<', $request->end_time);
+                })
+                ->orWhere(function ($query) use ($request) {
+                    $query->where('end_time', '>', $request->start_time)
+                        ->where('end_time', '<=', $request->end_time);
+                })
+                ->orWhere(function ($query) use ($request) {
+                    $query->where('start_time', '<', $request->start_time)
+                        ->where('end_time', '>', $request->end_time);
+                });
             })
-            ->orWhere(function ($query) use ($request) {
-                $query->where('end_time', '>', $request->start_time)
-                    ->where('end_time', '<=', $request->end_time);
-            })
-            ->orWhere(function ($query) use ($request) {
-                $query->where('start_time', '<', $request->start_time)
-                    ->where('end_time', '>', $request->end_time);
-            });
-        })
-        ->first();
-
-    // If an existing booking is found, return with an error message
-    if ($existingBooking) {
-        return redirect()->route('bookings.create', ['room' => $room->id])->with('error', 'This room is already booked for the specified date and time.');
+            ->first();
+    
+        // If an existing booking is found, return with an error message
+        if ($existingBooking) {
+            return redirect()->route('bookings.create', ['room' => $room->id])->with('error', 'Bilik ini telah ditempah pada tarikh dan masa yang sama.');
+        }
+    
+        // Create a new booking
+        Booking::create([
+            'user_id' => auth()->id(),
+            'room_id' => $room->id,
+            'date' => $request->date,
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
+            'purpose' => $request->purpose,
+            'status' => 'Menunggu Pengesahan',
+            'type' => 'rooms',
+        ]);
+    
+        // Redirect to the booking creation page with a success message
+        return redirect()->route('bookings.create', ['room' => $room->id])->with('success', 'Tempahan berjaya!');
     }
-
-    // Create a new booking
-    Booking::create([
-        'user_id' => auth()->id(),
-        'room_id' => $room->id,
-        'date' => $request->date,
-        'start_time' => $request->start_time,
-        'end_time' => $request->end_time,
-        'purpose' => $request->purpose,
-        'status' => 'Menunggu Pengesahan',
-        'type' => 'rooms',
-
-
-
-    ]);
-
-    // Redirect to the booking creation page with a success message
-    return redirect()->route('bookings.create', ['room' => $room->id])->with('success', 'Tempahan berjaya!');
-}
+    
 public function show(Booking $booking)
 {
     $room = $booking->room; // Assuming there's a relationship between Booking and Room models
@@ -190,5 +196,20 @@ public function delete(Booking $booking)
         return redirect()->route('bookings.user', ['user_id' => $booking->user_id])->with('success', 'Tempahan berjaya dikemaskini!');
     }
 
+    public function approve(Booking $booking)
+{
+    $booking->update(['status' => 'Diterima']);
+    return redirect()->route('bookings.show', ['booking' => $booking->id])->with('success', 'Tempahan berjaya diterima!');
+
     
+}
+
+public function reject(Booking $booking)
+{
+    $booking->update(['status' => 'Ditolak']);
+    return redirect()->route('bookings.show', ['booking' => $booking->id])->with('success', 'Tempahan berjaya ditolak!');
+
+    
+}
+
 }

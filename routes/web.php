@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserLoginController;
 use App\Http\Controllers\UserRegisterController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\PdfController;
+
 
 
 
@@ -32,11 +35,14 @@ Route::put('/rooms/{room}', 'RoomController@update')->name('rooms.update');
 Route::get('rooms/bookings/{booking}', 'App\Http\Controllers\BookingController@show')->name('bookings.show');
 Route::delete('rooms/bookings/{booking}/delete', 'App\Http\Controllers\BookingController@delete')->name('bookings.delete');
 
-Route::get('/bookings/{user_id}', 'App\Http\Controllers\BookingController@userBookings')->name('bookings.user');
-Route::get('/bookings/{user_id}/', 'App\Http\Controllers\BookingController@userBookings')->name('bookings.user');
+Route::get('/bookings/{user_id}', [BookingController::class, 'userBookings'])->name('bookings.user');
+
 
 Route::get('rooms/bookings/{booking}/edit','App\Http\Controllers\BookingController@edit')->name('bookings.edit');
 Route::put('rooms/bookings/{booking}/','App\Http\Controllers\BookingController@update')->name('bookings.update');
+
+Route::put('rooms/bookings/{booking}/approve', [BookingController::class, 'approve'])->name('bookings.approve');
+Route::put('rooms/bookings/{booking}/reject', [BookingController::class, 'reject'])->name('bookings.reject');
 
 
 
@@ -75,3 +81,4 @@ Route::middleware([
     })->name('dashboard');
     
 });
+
