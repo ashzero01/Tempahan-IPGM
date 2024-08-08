@@ -7,6 +7,8 @@ use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use setasign\Fpdi\Fpdi;
+use Illuminate\Support\Facades\Storage;
 
 
 class BookingController extends Controller
@@ -210,6 +212,78 @@ public function reject(Booking $booking)
     return redirect()->route('bookings.show', ['booking' => $booking->id])->with('success', 'Tempahan berjaya ditolak!');
 
     
+}
+
+
+public function generatePdf(Booking $booking)
+{
+    // Get the room and user information
+    $room = $booking->room;
+    $user = $booking->user;
+
+    // Path to the PDF template
+    $template = 'Scan.pdf';
+
+    // Coordinates for text fields
+    $coordinates = [
+        'name' => [110  , 45],
+        'ICnumber' => [70, 52],
+        'phone_number' => [160, 52],
+        'affiliation' => [125, 60],
+        'purpose' => [110, 67],
+        'room_name' => [125, 60],
+        'date' => [72, 137],
+        'start_time' => [127, 137],
+        'end_time' => [175, 137],
+    ];
+
+    // Create a new FPDI object
+    $pdf = new Fpdi();
+    $pdf->AddPage();
+    $pdf->setSourceFile(public_path("/pdf/{$template}"));
+    $templateId = $pdf->importPage(1);
+    $pdf->useTemplate($templateId);
+
+    // Set font and color
+    $pdf->SetFont('Helvetica');
+    $pdf->SetTextColor(0, 0, 0);
+
+    // Add text to the PDF at specified coordinates
+    $pdf->SetXY($coordinates['name'][0], $coordinates['name'][1]);
+    $pdf->Write(0, $booking->user->name);
+
+    $pdf->SetXY($coordinates['ICnumber'][0], $coordinates['ICnumber'][1]);
+    $pdf->Write(0, $booking->user->ICnumber);
+
+    $pdf->SetXY($coordinates['phone_number'][0], $coordinates['phone_number'][1]);
+    $pdf->Write(0, $booking->user->phone_number);
+
+    $pdf->SetXY($coordinates['affiliation'][0], $coordinates['affiliation'][1]);
+    $pdf->Write(0, $booking->user->affiliation);
+
+    $pdf->SetXY($coordinates['purpose'][0], $coordinates['purpose'][1]);
+    $pdf->Write(0, $booking->purpose);
+
+    $pdf->SetXY($coordinates['room_name'][0], $coordinates['room_name'][1]);
+    $pdf->Write(0, $booking->room_name);
+
+    $pdf->SetXY($coordinates['date'][0], $coordinates['date'][1]);
+    $pdf->Write(0, $booking->date);
+
+    $pdf->SetXY($coordinates['start_time'][0], $coordinates['start_time'][1]);
+    $pdf->Write(0, $booking->start_time);
+
+    $pdf->SetXY($coordinates['end_time'][0], $coordinates['end_time'][1]);
+    $pdf->Write(0, $booking->end_time);
+
+    $filename = 'booking_details_' . $booking->id . '_' . time() . '.pdf';
+
+    // Output PDF and return it
+    $pdfOutput = $pdf->Output('S'); // Save output to string
+
+    return response($pdfOutput, 200)
+        ->header('Content-Type', 'application/pdf')
+        ->header('Content-Disposition', "inline; filename=\"{$filename}\"");
 }
 
 }

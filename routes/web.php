@@ -82,3 +82,8 @@ Route::middleware([
     
 });
 
+
+Route::get('/fill-form', [PdfController::class, 'fillForm'])->name('fillForm');
+
+Route::get('/bookings/{booking}/pdf', [BookingController::class, 'generatePdf'])->name('bookings.generatePdf');
+

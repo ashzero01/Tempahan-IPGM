@@ -190,6 +190,7 @@
                 <div class="booking-details-right">
                     <p><span>Nama Pemohon:</span> {{ $booking->user->name }}</p>
                     <p><span>Email Pemohon:</span> {{ $booking->user->email }}</p>
+                    <p><span>IC Pemohon:</span> {{ $booking->user->ICnumber}}</p>
                     <p><span>Nombor Telefon Pemohon:</span> {{ $booking->user->phone_number }}</p>
                     <p><span>Jawatan/Jabatan Pemohon:</span> {{ $booking->user->affiliation }}</p>
                 </div>
@@ -201,9 +202,12 @@
             </a>
 
             <!-- Print Button -->
-            <div class="actions">
-                <button onclick="window.print()" class="print-button">Print</button>
-            </div>
+<div class="actions">
+    <button onclick="window.print()" class="print-button">Print</button>
+    <!-- Add PDF Download Button -->
+    <a href="{{ route('bookings.generatePdf', ['booking' => $booking->id]) }}" class="print-button no-print">Download PDF</a>
+</div>
+
         </div>
         
         <!-- Action Buttons (only for admin) -->
