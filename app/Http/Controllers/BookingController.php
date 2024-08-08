@@ -201,7 +201,7 @@ public function delete(Booking $booking)
     public function approve(Booking $booking)
 {
     $booking->update(['status' => 'Diterima']);
-    return redirect()->route('bookings.show', ['booking' => $booking->id])->with('success', 'Tempahan berjaya diterima!');
+    return redirect()->route('bookings.user', ['user_id' => $booking->user_id])->with('success', 'Tempahan berjaya diterima!');
 
     
 }
@@ -209,7 +209,7 @@ public function delete(Booking $booking)
 public function reject(Booking $booking)
 {
     $booking->update(['status' => 'Ditolak']);
-    return redirect()->route('bookings.show', ['booking' => $booking->id])->with('success', 'Tempahan berjaya ditolak!');
+    return redirect()->route('bookings.user', ['user_id' => $booking->user_id])->with('success', 'Tempahan berjaya ditolak!');
 
     
 }
@@ -237,6 +237,30 @@ public function generatePdf(Booking $booking)
         'end_time' => [175, 137],
     ];
 
+    if ($room->name === 'Test Room') {
+        $tickCoordinates = [50, 82]; // Example coordinates for 'test 1'
+    } elseif ($room->name === 'Test Room 2') {
+        $tickCoordinates = [50, 87]; // Example coordinates for 'test 2'
+    } elseif ($room->name === 'Test Room 3') {
+        $tickCoordinates = [50, 92]; // Example coordinates for 'test 3'
+    } elseif ($room->name === 'Test Room 4') {
+        $tickCoordinates = [50, 97]; // Example coordinates for 'test 4'
+    } elseif ($room->name === 'Test Room 5') {
+        $tickCoordinates = [50, 102]; // Example coordinates for 'test 5'
+    } elseif ($room->name === 'Test Room 6') {
+        $tickCoordinates = [50, 107]; // Example coordinates for 'test 6'
+    } elseif ($room->name === 'Test Room 7') {
+        $tickCoordinates = [103, 82]; // Example coordinates for 'test 7'
+    } elseif ($room->name === 'Test Room 8') {
+        $tickCoordinates = [103, 87]; // Example coordinates for 'test 8'
+    } elseif ($room->name === 'Test Room 9') {
+        $tickCoordinates = [103, 92]; // Example coordinates for 'test 9'
+    } elseif ($room->name === 'Test Room 10') {
+        $tickCoordinates = [103, 97]; // Example coordinates for 'test 10'
+    } else {
+        $tickCoordinates = [103, 102]; // Default coordinates for other rooms
+    }
+
     // Create a new FPDI object
     $pdf = new Fpdi();
     $pdf->AddPage();
@@ -245,7 +269,7 @@ public function generatePdf(Booking $booking)
     $pdf->useTemplate($templateId);
 
     // Set font and color
-    $pdf->SetFont('Helvetica');
+    $pdf->SetFont('Helvetica','BI');
     $pdf->SetTextColor(0, 0, 0);
 
     // Add text to the PDF at specified coordinates
@@ -264,8 +288,8 @@ public function generatePdf(Booking $booking)
     $pdf->SetXY($coordinates['purpose'][0], $coordinates['purpose'][1]);
     $pdf->Write(0, $booking->purpose);
 
-    $pdf->SetXY($coordinates['room_name'][0], $coordinates['room_name'][1]);
-    $pdf->Write(0, $booking->room_name);
+    $pdf->SetXY($tickCoordinates[0], $tickCoordinates[1]);
+    $pdf->Write(0, '/');
 
     $pdf->SetXY($coordinates['date'][0], $coordinates['date'][1]);
     $pdf->Write(0, $booking->date);
@@ -276,7 +300,7 @@ public function generatePdf(Booking $booking)
     $pdf->SetXY($coordinates['end_time'][0], $coordinates['end_time'][1]);
     $pdf->Write(0, $booking->end_time);
 
-    $filename = 'booking_details_' . $booking->id . '_' . time() . '.pdf';
+    $filename = 'booking_details_' . $booking->id . '.pdf';
 
     // Output PDF and return it
     $pdfOutput = $pdf->Output('S'); // Save output to string
