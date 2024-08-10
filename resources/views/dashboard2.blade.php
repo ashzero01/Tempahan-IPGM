@@ -23,7 +23,7 @@
             flex-direction: column; /* Stack header and main content vertically */
         }
 
-        
+
 
         .main-container {
             flex: 1; /* Take up remaining space */
@@ -47,7 +47,7 @@
             justify-content: center;
             gap: 16px; /* More consistent gap */
         }
-     
+
 
         /* Custom Styling for Square Buttons */
         .custom-button {
@@ -115,11 +115,11 @@
                 </a>
                 <a href="{{ route('bookings.user', ['user_id' => auth()->id()]) }}" class="custom-button">
                     Lihat Tempahan Bilik
-                </a> 
+                </a>
                 <a href="{{ route('bookings.user', ['user_id' => auth()->id()]) }}" class="custom-button">
                     Lihat Tempahan Kenderaan (Belum siap)
-                </a> 
-                <a href="{{ route('bookings.user', ['user_id' => auth()->id()]) }}" class="custom-button">
+                </a>
+                <a href="{{ route('showprofile', ['user_id' => auth()->id()]) }}" class="custom-button">
                     Kemaskini Profil (Belum siap)
                 </a>
             </div>

@@ -169,13 +169,13 @@
     <!-- Main Container -->
     <div class="main-container">
         <div>
-            <a href="javascript:history.back()" class="back-button">&#129152;</a>
+            <a href="{{ url()->previous() }}" class="back-button">&#129152;</a>
         </div>
         <!-- Page Title -->
         <div class="page-title">
             Maklumat Tempahan
         </div>
-     
+
         <!-- Main Content -->
         <div class="main-content">
             <!-- Booking Details -->
@@ -183,8 +183,9 @@
                 <div class="booking-details-left">
                     <p><span>Bilik:</span> {{ $room->name }}</p>
                     <p><span>Tarikh Untuk Tempahan:</span> {{ $booking->date }}</p>
-                    <p><span>Masa Mula:</span> {{ $booking->start_time }}</p>
-                    <p><span>Masa Tamat:</span> {{ $booking->end_time }}</p>
+                    <p><span>Hari:</span> {{ $dayDate }}</p>
+                    <p><span>Masa Mula:</span> {{ $startTime }}</p>
+                    <p><span>Masa Tamat:</span> {{ $endTime }}</p>
                     <p><span>Tujuan:</span> {{ $booking->purpose }}</p>
                 </div>
                 <div class="booking-details-right">
@@ -209,7 +210,7 @@
 </div>
 
         </div>
-        
+
         <!-- Action Buttons (only for admin) -->
         @if(auth()->user()->role === 'admin')
         <div class="actions">
@@ -230,4 +231,5 @@
         @endif
     </div>
 </body>
+
 </html>

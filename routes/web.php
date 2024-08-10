@@ -5,6 +5,8 @@ use App\Http\Controllers\UserLoginController;
 use App\Http\Controllers\UserRegisterController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PdfController;
+use App\Http\Controllers\UserController;
+
 
 
 
@@ -79,11 +81,14 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard2');
     })->name('dashboard');
-    
+
 });
 
 
 Route::get('/fill-form', [PdfController::class, 'fillForm'])->name('fillForm');
 
 Route::get('/bookings/{booking}/pdf', [BookingController::class, 'generatePdf'])->name('bookings.generatePdf');
+
+Route::get('/showprofile/{user_id}', [UserController::class, 'showProfile'])->name('showprofile');
+
 

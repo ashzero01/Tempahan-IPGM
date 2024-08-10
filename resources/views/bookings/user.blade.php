@@ -26,7 +26,7 @@
             color: #333333;
         }
 
-        
+
 
         .table-container {
             margin-top: 1rem;
@@ -138,7 +138,7 @@
 .sort-icon {
     cursor: pointer;
     display: inline-block;
-    font-size: 1rem;    
+    font-size: 1rem;
     margin-left: 0.5rem;
     color: #4B5563; /* Match header text color */
 }
@@ -162,7 +162,7 @@
 </form>
 
         </div>
-    </header> 
+    </header>
 
     <div class="main-container">
     <div class="page-title">
@@ -211,8 +211,8 @@
                                     echo $daysOfWeek[$dayIndex];
                                 @endphp
                             </td>
-                            <td>{{ $booking->start_time }}</td>
-                            <td>{{ $booking->end_time }}</td>
+                            <td>{{ $booking->formatted_start_time }}</td>
+                            <td>{{ $booking->formatted_end_time }}</td>
                             <td>{{ $booking->room->name }}</td>
                             <td>{{ $booking->purpose }}</td>
                             <td>{{ $booking->status }}</td>
@@ -239,7 +239,7 @@
             sortLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    
+
                     const field = link.getAttribute('data-field');
                     const currentDirection = link.querySelector('.sort-icon').dataset.direction;
                     const newDirection = currentDirection === 'asc' ? 'desc' : 'asc';

@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use setasign\Fpdi\Fpdi;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 
 class BookingController extends Controller
@@ -17,13 +18,13 @@ class BookingController extends Controller
     {
         // Fetch all bookings for the specified room
         $bookings = $room->bookings;
-    
-        
+
+
         return view('bookings.index', compact('bookings', 'room'));
 
     }
-    
-    
+
+
     public function getBookings(Room $room)
 {
     // Fetch all bookings of type 'rooms' for the specified room
@@ -51,6 +52,19 @@ class BookingController extends Controller
 
 public function userBookings($user_id, Request $request)
 {
+    // Define the time formatting function
+    function formatTime($time) {
+        $hour = date('H', strtotime($time));
+
+        if ($hour >= 0 && $hour < 12) {
+            return date('h:i', strtotime($time)) . " Pagi";  // Morning
+        } elseif ($hour >= 12 && $hour < 18) {
+            return date('h:i', strtotime($time)) . " Petang";  // Afternoon
+        } else {
+            return date('h:i', strtotime($time)) . " Malam";  // Evening/Night
+        }
+    }
+
     $sortField = $request->input('sortField', 'date'); // Default to 'date'
     $sortDirection = $request->input('sortDirection', 'asc'); // Default to ascending
 
@@ -63,6 +77,13 @@ public function userBookings($user_id, Request $request)
         : Booking::where('user_id', $user_id)->orderBy($sortField, $sortDirection); // Regular user sees their own bookings
 
     $bookings = $query->get();
+
+    // Apply time formatting to bookings
+    $bookings = $bookings->map(function ($booking) {
+        $booking->formatted_start_time = formatTime($booking->start_time);
+        $booking->formatted_end_time = formatTime($booking->end_time);
+        return $booking;
+    });
 
     return view('bookings.user', compact('bookings', 'sortField', 'sortDirection'));
 }
@@ -82,7 +103,7 @@ public function userBookings($user_id, Request $request)
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
         ]);
-    
+
         // Check if there are any existing bookings for the specified room that overlap with the new booking, excluding those with status "Ditolak"
         $existingBooking = Booking::where('room_id', $room->id)
             ->where('date', $request->date)
@@ -102,12 +123,12 @@ public function userBookings($user_id, Request $request)
                 });
             })
             ->first();
-    
+
         // If an existing booking is found, return with an error message
         if ($existingBooking) {
             return redirect()->route('bookings.create', ['room' => $room->id])->with('error', 'Bilik ini telah ditempah pada tarikh dan masa yang sama.');
         }
-    
+
         // Create a new booking
         Booking::create([
             'user_id' => auth()->id(),
@@ -119,15 +140,54 @@ public function userBookings($user_id, Request $request)
             'status' => 'Menunggu Pengesahan',
             'type' => 'rooms',
         ]);
-    
+
         // Redirect to the booking creation page with a success message
         return redirect()->route('bookings.create', ['room' => $room->id])->with('success', 'Tempahan berjaya!');
     }
-    
+
 public function show(Booking $booking)
 {
+
+    function DayofDate($date) {
+        // Array of days in Malay
+        $days = [
+            'Sunday' => 'Ahad',
+            'Monday' => 'Isnin',
+            'Tuesday' => 'Selasa',
+            'Wednesday' => 'Rabu',
+            'Thursday' => 'Khamis',
+            'Friday' => 'Jumaat',
+            'Saturday' => 'Sabtu'
+        ];
+
+        // Get the day name in English
+        $dayName = date('l', strtotime($date));
+
+        // Convert it to Malay, or default to English if not found
+        $dayInMalay = $days[$dayName] ?? $dayName;
+
+        // Return only the day in Malay
+        return $dayInMalay;
+    }
+
+    function formatTime($time) {
+        $hour = date('H', strtotime($time));
+
+        if ($hour >= 0 && $hour < 12) {
+            return date('h:i', strtotime($time)) . " Pagi";  // Morning
+        } elseif ($hour >= 12 && $hour < 18) {
+            return date('h:i', strtotime($time)) . " Petang";  // Afternoon
+        } else {
+            return date('h:i', strtotime($time)) . " Malam";  // Evening/Night
+        }
+    }
+    // Format the booking date
+    $dayDate = DayofDate($booking->date);
+    $startTime = formatTime($booking->start_time);
+    $endTime = formatTime($booking->end_time);
+
     $room = $booking->room; // Assuming there's a relationship between Booking and Room models
-    return view('bookings.view', compact('room', 'booking'));
+    return view('bookings.view', compact('room', 'booking', 'dayDate', 'startTime', 'endTime'));
 }
 
 
@@ -203,7 +263,7 @@ public function delete(Booking $booking)
     $booking->update(['status' => 'Diterima']);
     return redirect()->route('bookings.user', ['user_id' => $booking->user_id])->with('success', 'Tempahan berjaya diterima!');
 
-    
+
 }
 
 public function reject(Booking $booking)
@@ -211,12 +271,45 @@ public function reject(Booking $booking)
     $booking->update(['status' => 'Ditolak']);
     return redirect()->route('bookings.user', ['user_id' => $booking->user_id])->with('success', 'Tempahan berjaya ditolak!');
 
-    
+
 }
 
 
 public function generatePdf(Booking $booking)
 {
+    function formatDateWithDay($date) {
+        // Array of days in Malay
+        $days = [
+            'Sunday' => 'Ahad',
+            'Monday' => 'Isnin',
+            'Tuesday' => 'Selasa',
+            'Wednesday' => 'Rabu',
+            'Thursday' => 'Khamis',
+            'Friday' => 'Jumaat',
+            'Saturday' => 'Sabtu'
+        ];
+
+        // Get the day name in English
+        $dayName = date('l', strtotime($date));
+
+        // Convert it to Malay
+        $dayInMalay = $days[$dayName];
+
+        // Format the date as "Day, dd/mm/yyyy"
+        return date('d/m/Y', strtotime($date)) . " (" . $dayInMalay . ")";
+    }
+    function formatTime($time) {
+        $hour = date('H', strtotime($time));
+
+        if ($hour >= 0 && $hour < 12) {
+            return date('h:i', strtotime($time)) . " Pagi";  // Morning
+        } elseif ($hour >= 12 && $hour < 18) {
+            return date('h:i', strtotime($time)) . " Petang";  // Afternoon
+        } else {
+            return date('h:i', strtotime($time)) . " Malam";  // Evening/Night
+        }
+    }
+
     // Get the room and user information
     $room = $booking->room;
     $user = $booking->user;
@@ -234,7 +327,7 @@ public function generatePdf(Booking $booking)
         'room_name' => [125, 60],
         'date' => [72, 137],
         'start_time' => [127, 137],
-        'end_time' => [175, 137],
+        'end_time' => [165, 137],
     ];
 
     if ($room->name === 'Test Room') {
@@ -292,13 +385,13 @@ public function generatePdf(Booking $booking)
     $pdf->Write(0, '/');
 
     $pdf->SetXY($coordinates['date'][0], $coordinates['date'][1]);
-    $pdf->Write(0, $booking->date);
+    $pdf->Write(0, formatDateWithDay($booking->date));
 
     $pdf->SetXY($coordinates['start_time'][0], $coordinates['start_time'][1]);
-    $pdf->Write(0, $booking->start_time);
+    $pdf->Write(0, formatTime($booking->start_time));
 
     $pdf->SetXY($coordinates['end_time'][0], $coordinates['end_time'][1]);
-    $pdf->Write(0, $booking->end_time);
+    $pdf->Write(0, formatTime($booking->end_time));
 
     $filename = 'booking_details_' . $booking->id . '.pdf';
 
