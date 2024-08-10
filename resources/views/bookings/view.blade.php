@@ -194,13 +194,17 @@
                     <p><span>IC Pemohon:</span> {{ $booking->user->ICnumber}}</p>
                     <p><span>Nombor Telefon Pemohon:</span> {{ $booking->user->phone_number }}</p>
                     <p><span>Jawatan/Jabatan Pemohon:</span> {{ $booking->user->affiliation }}</p>
-                </div>
+                    @if(auth()->user()->id === $booking->user_id)
+                    <a href="{{ route('editprofile') }}" class="edit-profile-link">Kemaskini Profil</a>
+                @endif                </div>
             </div>
 
-            <!-- Edit Button -->
-            <a href="{{ route('bookings.edit', ['booking' => $booking->id]) }}" class="edit-button">
-                Edit
-            </a>
+           <!-- Edit Button (Visible only for owner or admin) -->
+           @if(auth()->user()->id === $booking->user_id || auth()->user()->role === 'admin')
+           <a href="{{ route('bookings.edit', ['booking' => $booking->id]) }}" class="edit-button">
+               Edit
+           </a>
+       @endif
 
             <!-- Print Button -->
 <div class="actions">

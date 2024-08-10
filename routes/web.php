@@ -91,4 +91,9 @@ Route::get('/bookings/{booking}/pdf', [BookingController::class, 'generatePdf'])
 
 Route::get('/showprofile/{user_id}', [UserController::class, 'showProfile'])->name('showprofile');
 
+Route::get('/editprofile', [UserController::class, 'editProfile'])->name('editprofile');
+Route::put('/updateprofile', [UserController::class, 'updateProfile'])->name('updateprofile');
+
+
+
 

@@ -119,8 +119,8 @@
                 <a href="{{ route('bookings.user', ['user_id' => auth()->id()]) }}" class="custom-button">
                     Lihat Tempahan Kenderaan (Belum siap)
                 </a>
-                <a href="{{ route('showprofile', ['user_id' => auth()->id()]) }}" class="custom-button">
-                    Kemaskini Profil (Belum siap)
+                <a href="{{ route('editprofile') }}" class="custom-button">
+                    Kemaskini Profil
                 </a>
             </div>
         </div>

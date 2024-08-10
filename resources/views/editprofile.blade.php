@@ -43,23 +43,39 @@
             flex-direction: column;
         }
 
-        .booking-details {
+        .profile-form {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
+            flex-direction: column;
         }
 
-
-        .booking-details p {
-            font-size: 1.125rem;
+        .profile-form label {
+            margin-bottom: 0.5rem;
+            font-weight: bold;
             color: #4B5563;
+        }
+
+        .profile-form input {
+            padding: 0.5rem;
+            border: 1px solid #E5E7EB;
+            border-radius: 0.375rem;
             margin-bottom: 1rem;
         }
 
-        .booking-details p span {
-            font-weight: 600;
-            color: #1F2937;
+        .profile-form button {
+            padding: 0.75rem 1.5rem;
+            background-color: #3B82F6;
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
         }
+
+        .profile-form button:hover {
+            background-color: #2563EB;
+        }
+
     </style>
 </head>
 <body>
@@ -84,26 +100,37 @@
     <!-- Main Container -->
     <div class="main-container">
         <div>
-            <a href="{{ route('dashboard') }}" class="back-button">&#129152;</a>
+            <a href="{{ url()->previous() }}" class="back-button">&#129152;</a>
         </div>
         <!-- Page Title -->
         <div class="page-title">
-            Maklumat Pengguna
+            Kemaskini Profil
         </div>
 
         <!-- Main Content -->
         <div class="main-content">
-            <!-- Booking Details -->
-            <div class="booking-details">
-                <div>
-                    <p><span>Nama Pemohon:</span> {{ $user->name }}</p>
-                    <p><span>Email Pemohon:</span> {{ $user->email }}</p>
-                    <p><span>IC Pemohon:</span> {{ $user->ICnumber}}</p>
-                    <p><span>Nombor Telefon Pemohon:</span> {{ $user->phone_number }}</p>
-                    <p><span>Jawatan/Jabatan Pemohon:</span> {{ $user->affiliation }}</p>
-                </div>
-            </div>
+            <!-- Profile Form -->
+            <form action="{{ route('updateprofile') }}" method="POST" class="profile-form">
+                @csrf
+                @method('PUT')
+                <label for="name">Nama:</label>
+                <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}" required>
 
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}" required>
+
+                <label for="ICnumber">IC:</label>
+                <input type="text" id="ICnumber" name="ICnumber" value="{{ old('ICnumber', $user->ICnumber) }}" required>
+
+                <label for="phone_number">Nombor Telefon:</label>
+                <input type="text" id="phone_number" name="phone_number" value="{{ old('phone_number', $user->phone_number) }}" required>
+
+                <label for="affiliation">Jawatan/Jabatan:</label>
+                <input type="text" id="affiliation" name="affiliation" value="{{ old('affiliation', $user->affiliation) }}" required>
+
+                <button type="submit">Simpan Perubahan</button>
+            </form>
+        </div>
+    </div>
 </body>
-
 </html>
