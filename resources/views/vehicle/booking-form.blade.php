@@ -4,35 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Date and Time Picker Example</title>
+    
     <!-- Flatpickr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
     <!-- Flatpickr JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
+    
+    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/header.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/backbutton.css') }}" rel="stylesheet">
+    
     <style>
+        /* General Styling */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
             margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #f4f4f9;
+        }
+
+        /* Main Content Styling */
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
         }
 
         .container {
             max-width: 800px;
-            margin: 0 auto;
+            width: 100%;
             padding: 20px;
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #333;
-        }
+        /* Center Button Container */
+        .page-title {
+    padding: 1.5rem;
+    font-size: 1.5rem; /* Adjust font size */
+    color: #333333;
+    border-bottom: 2px solid #E5E7EB;
+}
 
         .form-group {
             margin-bottom: 20px;
@@ -97,51 +119,76 @@
 
         .form-row .form-group {
             flex: 1;
-            min-width: 280px; /* Ensures responsiveness */
+            min-width: 280px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Book a Vehicle</h1>
-        <form action="{{ route('bookings.search') }}" method="POST">
-            @csrf
-            <!-- Date and Time Selection -->
-            <div class="form-row">
+    <!-- Header Section -->
+    <header class="header">
+        <div class="logo-container">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
+            <h2 class="header-title">Sistem Tempahan Bilik dan Kenderaan</h2>
+        </div>
+        <div class="nav-links">
+            <a>{{ auth()->user()->name }}</a>
+            <!-- Logout Form -->
+            <form method="POST" action="{{ route('logout') }}" style="display:inline;">
+                @csrf
+                <button type="submit" class="logout-button">Log Keluar</button>
+            </form>
+        </div>
+    </header>
+    <!-- End of Header Section -->
+
+    <!-- Main Content Section -->
+    <div class="main-container">
+        <div class="page-title">
+            <h1>Tempah Kenderaan</h1>
+        </div>
+        <div class="container">
+            <form action="{{ route('bookings.search') }}" method="POST">
+                @csrf
+                <!-- Date and Time Selection -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="departure_date">Tarikh Pergi</label>
+                        <input type="text" name="departure_date" id="departure_date" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="return_date">Tarikh Balik</label>
+                        <input type="text" name="return_date" id="return_date" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="departure_time">Waktu Berlepas</label>
+                        <input type="text" name="departure_time" id="departure_time" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="return_time">Waktu Pulang</label>
+                        <input type="text" name="return_time" id="return_time" class="form-control">
+                    </div>
+                </div>
+                <!-- Booking Details -->
                 <div class="form-group">
-                    <label for="departure_date">Departure Date</label>
-                    <input type="text" name="departure_date" id="departure_date" class="form-control" required>
+                    <label for="destination">Destinasi</label>
+                    <input type="text" name="destination" id="destination" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label for="return_date">Return Date</label>
-                    <input type="text" name="return_date" id="return_date" class="form-control">
+                    <label for="purpose">Tujuan</label>
+                    <input type="text" name="purpose" id="purpose" class="form-control" required>
                 </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="departure_time">Departure Time</label>
-                    <input type="text" name="departure_time" id="departure_time" class="form-control" required>
+                
+                <div class="button-container">
+                <a href="{{ route('bookings.booking-form') }}" class="btn btn-secondary">Back</a>
+                    <button type="submit" class="btn btn-success">Lanjut</button>
                 </div>
-                <div class="form-group">
-                    <label for="return_time">Return Time</label>
-                    <input type="text" name="return_time" id="return_time" class="form-control">
-                </div>
-            </div>
-            <!-- Booking Details -->
-            <div class="form-group">
-                <label for="destination">Destination</label>
-                <input type="text" name="destination" id="destination" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="purpose">Purpose</label>
-                <input type="text" name="purpose" id="purpose" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-success">Next</button>
-        </form>
+            </form>
+        </div>
     </div>
 
     <script>
-
         flatpickr.localize({
             weekdays: {
                 shorthand: ['Ahad', 'Isn', 'Sel', 'Rab', 'Kha', 'Jum', 'Sab'],
@@ -152,15 +199,6 @@
                 longhand: ['Januari', 'Februari', 'Mac', 'April', 'Mei', 'Jun', 'Julai', 'Ogos', 'September', 'Oktober', 'November', 'Disember']
             }
         });
-
-        function formatDateWithDay(date) {
-            const weekdays = ['Ahad', 'Isnin', 'Selasa', 'Rabu', 'Khamis', 'Jumaat', 'Sabtu'];
-            const day = weekdays[date.getDay()];
-            const dayFormatted = date.getDate().toString().padStart(2, '0');
-            const monthFormatted = (date.getMonth() + 1).toString().padStart(2, '0');
-            const yearFormatted = date.getFullYear();
-            return `${dayFormatted}-${monthFormatted}-${yearFormatted} (${day})`;
-        }
 
         $(document).ready(function() {
             flatpickr("#departure_date", {

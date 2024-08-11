@@ -33,40 +33,49 @@ class VehicleBookingController extends Controller
     }
 
     public function searchVehicles(Request $request)
-    {
-        
-        $validated = $request->validate([
-            'departure_date' => 'required|date',
-            'departure_time' => 'required|date_format:H:i',
-            'return_date' => 'nullable|date',
-            'return_time' => 'nullable|date_format:H:i',
-            'destination' => 'required|string',
-            'purpose' => 'required|string',
-        ]);
-    
-        $return_date = $validated['return_date'] ?? $validated['departure_date'];
-        $return_time = $validated['return_time'] ?? '23:59:59';
-    
-        $vehicles = Vehicle::whereDoesntHave('bookings', function ($query) use ($validated, $return_date, $return_time) {
-            $query->where(function ($q) use ($validated, $return_date, $return_time) {
-                // Check if the vehicle is booked during or overlapping with the selected period
-                $q->where(function ($query) use ($validated, $return_date, $return_time) {
-                    $query->whereDate('departure_date', '<=', $return_date)
-                          ->whereTime('departure_time', '<=', $return_time)
-                          ->whereDate('return_date', '>=', $validated['departure_date'])
-                          ->whereTime('return_time', '>=', $validated['departure_time']);
-                })
-                ->orWhere(function ($query) use ($validated, $return_date, $return_time) {
-                    $query->whereDate('departure_date', '<=', $validated['departure_date'])
-                          ->whereTime('departure_time', '<=', $validated['departure_time'])
-                          ->whereDate('return_date', '>=', $return_date)
-                          ->whereTime('return_time', '>=', $return_time);
-                });
+{
+    // Validate the input fields
+    $validated = $request->validate([
+        'departure_date' => 'required|date_format:d-m-Y',
+        'departure_time' => 'required|date_format:H:i',
+        'return_date' => 'nullable|date_format:d-m-Y',
+        'return_time' => 'nullable|date_format:H:i',
+        'destination' => 'required|string',
+        'purpose' => 'required|string',
+    ]);
+
+    // Format the return date and time if not provided
+    $return_date = $validated['return_date'] ?? $validated['departure_date'];
+    $return_time = $validated['return_time'] ?? '23:59:59';
+
+    // Create Carbon instances for easier manipulation
+    $departureDateTime = Carbon::createFromFormat('d-m-Y H:i', $validated['departure_date'] . ' ' . $validated['departure_time']);
+$returnDateTime = Carbon::createFromFormat('d-m-Y H:i', $return_date . ' ' . $return_time);
+
+    // Fetch vehicles that are not booked during the selected period
+    $vehicles = Vehicle::whereDoesntHave('bookings', function ($query) use ($departureDateTime, $returnDateTime) {
+        $query->where(function ($q) use ($departureDateTime, $returnDateTime) {
+            // Check if the booking is completely within the selected period
+            $q->where(function ($query) use ($departureDateTime, $returnDateTime) {
+                $query->whereDate('departure_date', '<=', $returnDateTime->format('Y-m-d'))
+                      ->whereTime('departure_time', '<=', $returnDateTime->format('H:i'))
+                      ->whereDate('return_date', '>=', $departureDateTime->format('Y-m-d'))
+                      ->whereTime('return_time', '>=', $departureDateTime->format('H:i'));
+            })
+            // Check if the selected period is completely within an existing booking
+            ->orWhere(function ($query) use ($departureDateTime, $returnDateTime) {
+                $query->whereDate('departure_date', '<=', $departureDateTime->format('Y-m-d'))
+                      ->whereTime('departure_time', '<=', $departureDateTime->format('H:i'))
+                      ->whereDate('return_date', '>=', $returnDateTime->format('Y-m-d'))
+                      ->whereTime('return_time', '>=', $returnDateTime->format('H:i'));
             });
-        })->get();
+        });
+    })->get();
+
+    return view('vehicle.select-vehicle', array_merge($validated, ['vehicles' => $vehicles]));
+}
+
     
-        return view('vehicle.select-vehicle', array_merge($validated, ['vehicles' => $vehicles]));
-    }
 
     public function showSelectForm(Request $request)
     {
