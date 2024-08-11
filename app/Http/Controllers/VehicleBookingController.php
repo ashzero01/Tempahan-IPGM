@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\VehicleBooking;
 use App\Models\Vehicle;
+use Carbon\Carbon;
 
 class VehicleBookingController extends Controller
 {
@@ -26,6 +27,7 @@ class VehicleBookingController extends Controller
 
     public function searchVehicles(Request $request)
     {
+        
         $validated = $request->validate([
             'departure_date' => 'required|date',
             'departure_time' => 'required|date_format:H:i',
@@ -75,23 +77,28 @@ class VehicleBookingController extends Controller
 
     public function store(Request $request)
     {
+        // Format departure_date and return_date correctly
+        $departure_date = Carbon::createFromFormat('d-m-Y', $request->departure_date)->format('Y-m-d');
+        $return_date = $request->return_date 
+            ? Carbon::createFromFormat('d-m-Y', $request->return_date)->format('Y-m-d')
+            : null;
+        
+        // Validate the input fields
         $validated = $request->validate([
             'vehicle_id' => 'required|exists:vehicles,id',
-            'departure_date' => 'required|date',
             'departure_time' => 'required|date_format:H:i',
-            'return_date' => 'nullable|date',
             'return_time' => 'nullable|date_format:H:i',
             'destination' => 'required|string',
             'purpose' => 'required|string',
         ]);
-
-        $returnDate = $validated['return_date'] ?? $validated['departure_date'];
-
-
+    
+        // Use formatted dates for saving
+        $returnDate = $return_date ?? $departure_date;
+    
         VehicleBooking::create([
             'user_id' => auth()->id(),
             'vehicle_id' => $validated['vehicle_id'],
-            'departure_date' => $validated['departure_date'],
+            'departure_date' => $departure_date,
             'departure_time' => $validated['departure_time'],
             'return_date' => $returnDate,
             'return_time' => $validated['return_time'] ?? null,
@@ -99,9 +106,10 @@ class VehicleBookingController extends Controller
             'purpose' => $validated['purpose'],
             'status' => 'Menunggu Pengesahan', // Default status
         ]);
-
+    
         return redirect()->route('vehicle.bookings.index')->with('success', 'Booking confirmed successfully!');
     }
+    
 
     public function delete($id)
     {
