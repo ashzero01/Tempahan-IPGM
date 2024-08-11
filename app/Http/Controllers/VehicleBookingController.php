@@ -14,10 +14,17 @@ class VehicleBookingController extends Controller
     {
         // Retrieve bookings for the authenticated user
         $user = Auth::user();
-        $bookings = VehicleBooking::where('user_id', $user->id)->get();
-
-        return view('vehicle.booking-index', compact('bookings'));
+    
+        // Group bookings by their creation timestamp
+        $bookings = VehicleBooking::where('user_id', $user->id)
+            ->get()
+            ->groupBy(function($booking) {
+                return $booking->created_at->format('Y-m-d H:i:s'); // Group by creation timestamp
+            });
+    
+        return view('vehicle.booking-index', ['bookings' => $bookings]);
     }
+    
 
     // Display the form to select date and time
     public function showBookingForm()
@@ -82,10 +89,11 @@ class VehicleBookingController extends Controller
         $return_date = $request->return_date 
             ? Carbon::createFromFormat('d-m-Y', $request->return_date)->format('Y-m-d')
             : null;
-        
+    
         // Validate the input fields
         $validated = $request->validate([
-            'vehicle_id' => 'required|exists:vehicles,id',
+            'vehicle_ids' => 'required|array', // Ensure vehicle_ids is an array
+            'vehicle_ids.*' => 'exists:vehicles,id', // Each value must exist in the vehicles table
             'departure_time' => 'required|date_format:H:i',
             'return_time' => 'nullable|date_format:H:i',
             'destination' => 'required|string',
@@ -95,20 +103,24 @@ class VehicleBookingController extends Controller
         // Use formatted dates for saving
         $returnDate = $return_date ?? $departure_date;
     
-        VehicleBooking::create([
-            'user_id' => auth()->id(),
-            'vehicle_id' => $validated['vehicle_id'],
-            'departure_date' => $departure_date,
-            'departure_time' => $validated['departure_time'],
-            'return_date' => $returnDate,
-            'return_time' => $validated['return_time'] ?? null,
-            'destination' => $validated['destination'],
-            'purpose' => $validated['purpose'],
-            'status' => 'Menunggu Pengesahan', // Default status
-        ]);
+        // Loop through each selected vehicle and create a booking
+        foreach ($validated['vehicle_ids'] as $vehicle_id) {
+            VehicleBooking::create([
+                'user_id' => auth()->id(),
+                'vehicle_id' => $vehicle_id,
+                'departure_date' => $departure_date,
+                'departure_time' => $validated['departure_time'],
+                'return_date' => $returnDate,
+                'return_time' => $validated['return_time'] ?? null,
+                'destination' => $validated['destination'],
+                'purpose' => $validated['purpose'],
+                'status' => 'Menunggu Pengesahan', // Default status
+            ]);
+        }
     
-        return redirect()->route('vehicle.bookings.index')->with('success', 'Booking confirmed successfully!');
+        return redirect()->route('vehicle.bookings.index')->with('success', 'Bookings confirmed successfully!');
     }
+    
     
 
     public function delete($id)

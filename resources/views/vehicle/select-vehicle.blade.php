@@ -1,17 +1,26 @@
 <div class="container">
-    <h1>Select a Vehicle</h1>
+    <h1>Select Vehicles</h1>
 
     <form action="{{ route('bookings.store') }}" method="POST">
         @csrf
 
-        <label for="vehicle_id">Available Vehicles</label>
-        <select name="vehicle_id" id="vehicle_id" class="form-control" required>
-            <option value="">Select a vehicle</option>
+        <label>Available Vehicles</label>
+        <div class="row">
             @foreach($vehicles as $vehicle)
-                <option value="{{ $vehicle->id }}">{{ $vehicle->name }} - {{ $vehicle->registration_number }}</option>
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <input type="checkbox" name="vehicle_ids[]" id="vehicle_{{ $vehicle->id }}" value="{{ $vehicle->id }}">
+                            <label for="vehicle_{{ $vehicle->id }}" class="d-block">
+                                <h5 class="card-title">{{ $vehicle->name }}</h5>
+                                <p class="card-text">Registration: {{ $vehicle->registration_number }}</p>
+                            </label>
+                        </div>
+                    </div>
+                </div>
             @endforeach
-        </select>
-        @error('vehicle_id')
+        </div>
+        @error('vehicle_ids')
             <div class="text-danger">{{ $message }}</div>
         @enderror
 
