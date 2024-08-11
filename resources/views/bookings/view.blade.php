@@ -169,7 +169,7 @@
     <!-- Main Container -->
     <div class="main-container">
         <div>
-            <a href="{{ url()->previous() }}" class="back-button">&#129152;</a>
+            <a href="{{ route('bookings.user', ['user_id' => auth()->id()]) }}" class="back-button">&#129152;</a>
         </div>
         <!-- Page Title -->
         <div class="page-title">

@@ -110,13 +110,13 @@
                     Tempah Bilik
                 </a>
                 <!-- Tempah Kenderaan Button -->
-                <a href="{{ route('bookings.user', ['user_id' => auth()->id()]) }}" class="custom-button">
-                    Tempah Kenderaan (Belum siap)
-                </a>
+                <a href="{{ route('bookings.booking-form') }}" class="custom-button">
+    Tempah Kenderaan (Belum siap)
+</a>
                 <a href="{{ route('bookings.user', ['user_id' => auth()->id()]) }}" class="custom-button">
                     Lihat Tempahan Bilik
                 </a>
-                <a href="{{ route('bookings.user', ['user_id' => auth()->id()]) }}" class="custom-button">
+                <a href="{{ route('vehicle.bookings.index') }}" class="custom-button">
                     Lihat Tempahan Kenderaan (Belum siap)
                 </a>
                 <a href="{{ route('editprofile') }}" class="custom-button">

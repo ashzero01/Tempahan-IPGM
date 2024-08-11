@@ -6,6 +6,11 @@ use App\Http\Controllers\UserRegisterController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VehicleBookingController;
+use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\RoomController;
+use App\Models\Vehicle;
+
 
 
 
@@ -94,6 +99,61 @@ Route::get('/showprofile/{user_id}', [UserController::class, 'showProfile'])->na
 Route::get('/editprofile', [UserController::class, 'editProfile'])->name('editprofile');
 Route::put('/updateprofile', [UserController::class, 'updateProfile'])->name('updateprofile');
 
+
+
+Route::get('/user/vehicle-bookings', [VehicleBookingController::class, 'index'])->name('vehicle.bookings.index');
+
+
+
+// Route to manage vehicle (for the admin panel)
+Route::resource('vehicles', VehicleController::class);
+
+
+// Route to list all vehicles
+Route::get('vehicles', [VehicleController::class, 'index'])->name('vehicles.index');
+
+// Route to show the form for creating a new vehicle
+Route::get('vehicles/create', [VehicleController::class, 'create'])->name('vehicles.create');
+
+// Route to store a new vehicle
+Route::post('vehicles', [VehicleController::class, 'store'])->name('vehicles.store');
+
+// Route to show the form for editing a specific vehicle
+Route::get('vehicles/{id}/edit', [VehicleController::class, 'edit'])->name('vehicles.edit');
+
+// Route to update a specific vehicle
+Route::put('vehicles/{id}', [VehicleController::class, 'update'])->name('vehicles.update');
+
+// Route to delete a specific vehicle
+Route::delete('vehicles/{id}', [VehicleController::class, 'destroy'])->name('vehicles.destroy');
+
+
+
+
+// Display the form to select date and time
+// Search for available vehicles based on the date and time
+Route::get('/vehicle/search', [VehicleBookingController::class, 'searchVehicles'])->name('bookings.search');
+
+// Search for available vehicles based on the date and time
+Route::post('/vehicle/search', [VehicleBookingController::class, 'searchVehicles'])->name('bookings.search');
+
+Route::get('/vehicle/confirm', [VehicleBookingController::class, 'showConfirmForm'])->name('bookings.confirm');
+
+
+// Show the form to confirm the booking
+Route::post('/vehicle/confirm', [VehicleBookingController::class, 'showConfirmForm'])->name('bookings.confirm');
+
+
+// Store the confirmed booking
+Route::post('/vehicle/store', [VehicleBookingController::class, 'store'])->name('bookings.store');
+
+
+Route::get('/vehicle/booking', [VehicleBookingController::class, 'showBookingForm'])->name('bookings.booking-form');
+Route::post('/vehicle/search', [VehicleBookingController::class, 'searchVehicles'])->name('bookings.search');
+Route::get('/vehicle/select', [VehicleBookingController::class, 'showSelectForm'])->name('bookings.select');
+Route::post('/vehicle/store', [VehicleBookingController::class, 'store'])->name('bookings.store');
+
+Route::delete('/vehicle/bookings/{booking}', [VehicleBookingController::class, 'delete'])->name('vehicle.bookings.destroy');
 
 
 
