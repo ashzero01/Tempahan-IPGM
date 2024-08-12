@@ -9,6 +9,8 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('fontawesome-free-6.6.0-web/css/all.min.css') }}">
+
 
     <!-- Styles -->
     <style>
@@ -81,24 +83,43 @@
 
 </head>
 <body>
-    <!-- Header Section -->
-    <header class="header">
-        <div class="logo-container">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
-            <h2 class="header-title">Sistem Tempahan Bilik dan Kenderaan</h2>
-        </div>
-        <div class="nav-links">
-            <a>{{ auth()->user()->name }}</a>
-       <!-- Logout Form -->
-       <form method="POST" action="{{ route('logout') }}" style="display:inline;">
-    @csrf
-    <button type="submit" class="logout-button">
-        Log Keluar
-    </button>
-</form>
+    
 
-        </div>
-    </header>
+<!-- Header Section -->
+<header class="header">
+    <div class="logo-container">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
+        <h2 class="header-title">Sistem Tempahan Bilik dan Kenderaan</h2>
+    </div>
+    <div class="nav-links">
+        <a href="{{ route('showprofile', ['user_id' => auth()->user()->id]) }}" class="profile-link">
+            <i class="fas fa-user-circle"></i> {{ auth()->user()->name }}
+        </a>
+
+        <!-- Admin Menu -->
+        @if(auth()->user()->role === 'admin')
+            <div class="admin-menu">
+                <a href="#" class="admin-link"><i class="fas fa-tools"></i> Admin Menu</a>
+                <div class="dropdown-content">
+                    <a href="#"><i class="fas fa-users"></i> See user list</a>
+                    <a href="vehicles"><i class="fas fa-car"></i> See vehicle list</a>
+                    <a href="#"><i class="fas fa-user-plus"></i> Add admin</a>
+                    <a href="{{ route('rooms.create') }}"><i class="fas fa-plus-square"></i> Add room</a>
+                    <a href="{{ route('vehicles.create') }}"><i class="fas fa-truck"></i> Add vehicle</a>
+                </div>
+            </div>
+        @endif
+
+        <!-- Logout Form -->
+        <form method="POST" action="{{ route('logout') }}" style="display:inline;">
+            @csrf
+            <button type="submit" class="logout-button">
+                <i class="fas fa-sign-out-alt"></i> Log Keluar
+            </button>
+        </form>
+    </div>
+</header>
+
 
     <!-- Main Content Container -->
     <div class="main-container">
@@ -108,10 +129,11 @@
                 <!-- Tempah Bilik Button -->
                 <a href="{{ route('rooms.index') }}" class="custom-button">
                     Tempah Bilik
+                    
                 </a>
                 <!-- Tempah Kenderaan Button -->
-                <a href="{{ route('bookings.booking-form') }}" class="custom-button">
-    Tempah Kenderaan (Belum siap)
+                <a href="{{ route('vehicles.showselect') }}" class="custom-button">
+                Tempah Kenderaan (Belum siap)
 </a>
                 <a href="{{ route('bookings.user', ['user_id' => auth()->id()]) }}" class="custom-button">
                     Lihat Tempahan Bilik

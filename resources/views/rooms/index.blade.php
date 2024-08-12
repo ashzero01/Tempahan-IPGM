@@ -10,9 +10,6 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
     
-
-
-
     <!-- Styles -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.2.4/dist/tailwind.min.css" rel="stylesheet">
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
@@ -29,14 +26,12 @@
             flex-direction: column; /* Stack header and main content vertically */
         }
 
-        
         .buttons-container {
             display: flex;
             justify-content: center;
             gap: 16px; /* More consistent gap */
         }
 
-       
         .room-container {
             display: flex;
             flex-wrap: wrap;
@@ -147,6 +142,7 @@
         .delete-room-button:hover {
             background-color: #cc0000; /* Darker red on hover */
         }
+
         .page-title {
             padding: 1rem;
             font-size: 2rem;
@@ -154,19 +150,36 @@
         }
 
         .button-container {
-    display: flex;
-    justify-content: space-between; /* Distribute space between buttons */
-    align-items: center; /* Vertically center the buttons */
-    margin-bottom: 20px; /* Add margin below the button container */
-}
+            display: flex;
+            justify-content: space-between; /* Distribute space between buttons */
+            align-items: center; /* Vertically center the buttons */
+            margin-bottom: 20px; /* Add margin below the button container */
+        }
 
-.add-room-button, .back-button {
-    display: inline-block;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-}
+        .add-room-button, .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .filter-button {
+            padding: 10px 20px;
+            background-color: #4a90e2;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .filter-button:hover {
+            background-color: #357bd8;
+        }
     </style>
 </head>
 <body>
@@ -177,7 +190,7 @@
             <h2 class="header-title">Sistem Tempahan Bilik dan Kenderaan</h2>
         </div>
         <div class="nav-links">
-        <a>{{ auth()->user()->name }}</a>
+            <a>{{ auth()->user()->name }}</a>
 
             <!-- Logout Form -->
             <form method="POST" action="{{ route('logout') }}" style="display:inline;">
@@ -189,55 +202,51 @@
         </div>
     </header>
 
-       <!-- Page Title Section -->
-       
+    <!-- Page Title Section -->
+    <div class="main-container">
+        <div class="page-title">
+            Tempahan Bilik
+        </div>
+        <a href="{{ route('dashboard') }}" class="back-button">&#129152;</a>
 
-<!-- Main Content Container -->
-<div class="main-container">
-    <div class="page-title">
-        Tempahan Bilik
-    </div>
-    <div class="main-content">
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="button-container">
-                    @if (auth()->user()->isAdmin())
-                        <!-- Add Room Button -->
-                        <a href="{{ route('rooms.create') }}" class="add-room-button">Tambah Bilik</a>
-                    @endif
-                    <a href="{{ route('dashboard') }}" class="back-button">&#129152;</a>
-                </div>
-                <div class="room-container">
-                    <!-- Room Boxes -->
-                    @foreach ($rooms as $room)
-                        <div class="room-box" onclick="window.location='{{ route('bookings.create', $room->id) }}';">
-                            <!-- Room Image -->
-                            <img src="{{ $room->image_url }}" alt="{{ $room->name }}" class="room-image">
-                            <!-- Room Name -->
-                            <div class="room-name">{{ $room->name }}</div>
-                            <!-- Link to room bookings -->
-                            <span class="room-link">Tempah Sekarang</span>
-                            <!-- Buttons for administrators -->
-                            @if (auth()->user()->isAdmin())
-                                <div class="admin-buttons">
-                                    <!-- Edit and delete buttons container -->
-                                    <div class="edit-delete-container">
-                                        <!-- Delete button -->
-                                        <form action="{{ route('rooms.destroy', $room->id) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="delete-room-button">Padam</button>
-                                        </form>
+        <div class="main-content">
+        <div>
+            <!-- Filter Buttons -->
+            <button class="filter-button" onclick="window.location.href='{{ route('rooms.filter', ['description' => 'bilik']) }}'">Bilik</button>
+            <button class="filter-button" onclick="window.location.href='{{ route('rooms.filter', ['description' => 'dewan']) }}'">Dewan</button>
+        </div>
+            <div class="py-12">
+                <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <div class="room-container">
+                        <!-- Room Boxes -->
+                        @foreach ($rooms as $room)
+                            <div class="room-box" onclick="window.location='{{ route('bookings.create', $room->id) }}';">
+                                <!-- Room Image -->
+                                <img src="{{ $room->image_url }}" alt="{{ $room->name }}" class="room-image">
+                                <!-- Room Name -->
+                                <div class="room-name">{{ $room->name }}</div>
+                                <!-- Link to room bookings -->
+                                <span class="room-link">Tempah Sekarang</span>
+                                <!-- Buttons for administrators -->
+                                @if (auth()->user()->isAdmin())
+                                    <div class="admin-buttons">
+                                        <!-- Edit and delete buttons container -->
+                                        <div class="edit-delete-container">
+                                            <!-- Delete button -->
+                                            <form action="{{ route('rooms.destroy', $room->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="delete-room-button">Padam</button>
+                                            </form>
+                                        </div>
                                     </div>
-                                </div>
-                            @endif
-                        </div>
-                    @endforeach
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
 </body>
 </html>

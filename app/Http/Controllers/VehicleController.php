@@ -69,4 +69,11 @@ class VehicleController extends Controller
 
         return redirect()->route('vehicles.index')->with('success', 'Vehicle deleted successfully!');
     }
+
+    public function showSelect(){
+        {
+            $vehicles = Vehicle::all(); // Retrieve all vehicles from the database
+            return view('vehicle.vehicle-show', compact('vehicles')); // Pass vehicles to the view
+        }
+    }
 }

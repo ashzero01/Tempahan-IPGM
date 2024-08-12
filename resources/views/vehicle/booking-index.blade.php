@@ -8,6 +8,8 @@
     <link href="{{ asset('css/header.css') }}" rel="stylesheet">
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('css/backbutton.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('fontawesome-free-6.6.0-web/css/all.min.css') }}">
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -191,20 +193,39 @@
 </head>
 <body>
     <!-- Header Section -->
-    <header class="header">
-        <div class="logo-container">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
-            <h2 class="header-title">Sistem Tempahan Bilik dan Kenderaan</h2>
-        </div>
-        <div class="nav-links">
-            <a>{{ auth()->user()->name }}</a>
-            <!-- Logout Form -->
-            <form method="POST" action="{{ route('logout') }}" style="display:inline;">
-                @csrf
-                <button type="submit" class="logout-button">Log Keluar</button>
-            </form>
-        </div>
-    </header>
+<header class="header">
+    <div class="logo-container">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
+        <h2 class="header-title">Sistem Tempahan Bilik dan Kenderaan</h2>
+    </div>
+    <div class="nav-links">
+        <a href="{{ route('showprofile', ['user_id' => auth()->user()->id]) }}" class="profile-link">
+            <i class="fas fa-user-circle"></i> {{ auth()->user()->name }}
+        </a>
+
+        <!-- Admin Menu -->
+        @if(auth()->user()->role === 'admin')
+            <div class="admin-menu">
+                <a href="#" class="admin-link"><i class="fas fa-tools"></i> Admin Menu</a>
+                <div class="dropdown-content">
+                    <a href="#"><i class="fas fa-users"></i> See user list</a>
+                    <a href="vehicles"><i class="fas fa-car"></i> See vehicle list</a>
+                    <a href="#"><i class="fas fa-user-plus"></i> Add admin</a>
+                    <a href="{{ route('rooms.create') }}"><i class="fas fa-plus-square"></i> Add room</a>
+                    <a href="{{ route('vehicles.create') }}"><i class="fas fa-truck"></i> Add vehicle</a>
+                </div>
+            </div>
+        @endif
+
+        <!-- Logout Form -->
+        <form method="POST" action="{{ route('logout') }}" style="display:inline;">
+            @csrf
+            <button type="submit" class="logout-button">
+                <i class="fas fa-sign-out-alt"></i> Log Keluar
+            </button>
+        </form>
+    </div>
+</header>
 
     <div class="main-container">
         <div class="page-title">

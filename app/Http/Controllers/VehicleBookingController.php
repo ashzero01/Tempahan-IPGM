@@ -231,6 +231,54 @@ public function rejectGroupedBookings($timestamp, $destination)
     return redirect()->route('vehicle.bookings.index')->with('success', 'Selected bookings have been rejected!');
 }
 
+public function bookVehicle(Vehicle $vehicle)
+{
+    return view('vehicle.vehicle-booking', compact('vehicle'));
+}
+
+public function checkVehicle(Request $request)
+{
+        // Validate the input dates
+        $validatedData = $request->validate([
+            'departure_date' => 'required|date_format:d-m-Y',
+            'return_date' => 'nullable|date_format:d-m-Y|after_or_equal:departure_date',
+            'vehicle_id' => 'required|exists:vehicles,id', // Ensure the vehicle exists
+        ]);
+
+    $departureDate = $validatedData['departure_date'];
+    $returnDate = $validatedData['return_date'] ?? $departureDate;
+
+    $departureDate = Carbon::createFromFormat('d-m-Y', $departureDate)->startOfDay();
+    $returnDate = Carbon::createFromFormat('d-m-Y', $returnDate)->endOfDay();
+
+    $vehicleId = $validatedData['vehicle_id'];
+
+    // Fetch vehicle and check availability
+    $available = !Vehicle::where('id', $vehicleId)
+        ->whereHas('bookings', function ($query) use ($departureDate, $returnDate) {
+            $query->where(function ($q) use ($departureDate, $returnDate) {
+                $q->whereBetween('departure_date', [$departureDate, $returnDate])
+                  ->orWhereBetween('return_date', [$departureDate, $returnDate])
+                  ->orWhere(function ($q) use ($departureDate, $returnDate) {
+                      $q->where('departure_date', '<=', $departureDate)
+                        ->where('return_date', '>=', $returnDate);
+                  });
+            });
+        })->exists();
+
+    if ($available) {
+        // Return JSON response indicating the vehicle is available
+        return response()->json(['available' => true]);
+    } else {
+        // Return JSON response indicating the vehicle is not available
+        return response()->json(['available' => false]);
+    }
+
+
+
+
+
     
 }
 
+}

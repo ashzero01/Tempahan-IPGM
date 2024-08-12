@@ -82,4 +82,11 @@ class RoomController extends Controller
     return redirect()->route('rooms.index');
 }
 
+public function filter($description)
+{
+    $rooms = Room::where('description', $description)->get(); // Adjust this based on your room model structure
+
+    return view('rooms.index', compact('rooms'));
+}
+
 }
