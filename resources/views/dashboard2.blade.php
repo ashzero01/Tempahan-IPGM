@@ -83,7 +83,7 @@
 
 </head>
 <body>
-    
+
 
 <!-- Header Section -->
 <header class="header">
@@ -129,11 +129,11 @@
                 <!-- Tempah Bilik Button -->
                 <a href="{{ route('rooms.index') }}" class="custom-button">
                     Tempah Bilik
-                    
+
                 </a>
                 <!-- Tempah Kenderaan Button -->
-                <a href="{{ route('vehicles.showselect') }}" class="custom-button">
-                Tempah Kenderaan (Belum siap)
+                <a href="{{ route('vehicles.book') }}" class="custom-button">
+                    Tempah Kenderaan (Belum siap)
 </a>
                 <a href="{{ route('bookings.user', ['user_id' => auth()->id()]) }}" class="custom-button">
                     Lihat Tempahan Bilik

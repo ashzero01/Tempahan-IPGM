@@ -7,13 +7,12 @@ use App\Models\Vehicle;
 
 class VehicleController extends Controller
 {
-    // Show the list of vehicles
     public function index()
-    {
-        $vehicles = Vehicle::all(); // Retrieve all vehicles from the database
-        return view('vehicle.index', compact('vehicles')); // Pass vehicles to the view
-    }
-    
+{
+    $vehicles = Vehicle::all();
+    return view('vehicles', compact('vehicles'));
+}
+
 
     // Show the form to create a new vehicle
     public function create()
@@ -70,10 +69,11 @@ class VehicleController extends Controller
         return redirect()->route('vehicles.index')->with('success', 'Vehicle deleted successfully!');
     }
 
-    public function showSelect(){
-        {
-            $vehicles = Vehicle::all(); // Retrieve all vehicles from the database
-            return view('vehicle.vehicle-show', compact('vehicles')); // Pass vehicles to the view
-        }
-    }
+    public function book()
+{
+    $vehicles = Vehicle::all();
+    return view('vehicle.book', compact('vehicles'));
+}
+
+
 }
