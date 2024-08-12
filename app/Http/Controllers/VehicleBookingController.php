@@ -11,19 +11,52 @@ use Carbon\Carbon;
 class VehicleBookingController extends Controller
 {
     public function index()
-    {
-        // Retrieve bookings for the authenticated user
-        $user = Auth::user();
+{
+    $user = Auth::user();
     
-        // Group bookings by their creation timestamp
+    // Check if the user is an admin
+    if ($user->role === 'admin') {
+        // Admin can see all bookings
+        $bookings = VehicleBooking::all()->groupBy(function($booking) {
+            return $booking->created_at->format('Y-m-d H:i:s') . '|' . $booking->destination;
+        });
+    } else {
+        // Regular users see only their own bookings
         $bookings = VehicleBooking::where('user_id', $user->id)
             ->get()
             ->groupBy(function($booking) {
-                return $booking->created_at->format('Y-m-d H:i:s'); // Group by creation timestamp
+                return $booking->created_at->format('Y-m-d H:i:s') . '|' . $booking->destination;
             });
-    
-        return view('vehicle.booking-index', ['bookings' => $bookings]);
     }
+
+    // Pass the grouped bookings to the view
+    return view('vehicle.booking-index', ['bookings' => $bookings]);
+}
+
+
+public function showGroupedBooking($timestamp, $destination)
+{
+    $user = Auth::user();
+
+    if ($user->isAdmin()) {
+        // Admin can see all bookings
+        $bookings = VehicleBooking::where('destination', $destination)
+            ->whereDate('created_at', '=', Carbon::parse($timestamp)->toDateString())
+            ->whereTime('created_at', '=', Carbon::parse($timestamp)->toTimeString())
+            ->get();
+    } else {
+        // Regular user can only see their own bookings
+        $bookings = VehicleBooking::where('user_id', $user->id)
+            ->where('destination', $destination)
+            ->whereDate('created_at', '=', Carbon::parse($timestamp)->toDateString())
+            ->whereTime('created_at', '=', Carbon::parse($timestamp)->toTimeString())
+            ->get();
+    }
+
+    // Pass the bookings to the view
+    return view('vehicle.booking-details', compact('bookings', 'timestamp', 'destination'));
+}
+
     
 
     // Display the form to select date and time
@@ -140,6 +173,64 @@ $returnDateTime = Carbon::createFromFormat('d-m-Y H:i', $return_date . ' ' . $re
     
         return redirect()->route('vehicle.bookings.index')->with('success', 'Booking deleted successfully!');
     }
+
+    public function deleteGroupedBookings($timestamp, $destination)
+{
+    $user = Auth::user();
+
+    // Determine if the user is an admin or a regular user
+    $query = VehicleBooking::where('destination', $destination)
+        ->whereDate('created_at', '=', Carbon::parse($timestamp)->toDateString())
+        ->whereTime('created_at', '=', Carbon::parse($timestamp)->toTimeString());
+
+    // Admin can delete all bookings, regular users can only delete their own
+    if (!$user->isAdmin()) {
+        $query->where('user_id', $user->id);
+    }
+
+    // Execute the deletion
+    $query->delete();
+
+    // Redirect back with a success message
+    return redirect()->route('vehicle.bookings.index')->with('success', 'Selected bookings have been deleted successfully!');
+}
+
+public function approveGroupedBookings($timestamp, $destination)
+{
+    $user = Auth::user();
+
+    // Check if the user is an admin
+    if (!$user->isAdmin()) {
+        return redirect()->route('vehicle.bookings.index')->with('error', 'Unauthorized access.');
+    }
+
+    // Find the bookings to approve
+    $bookings = VehicleBooking::where('destination', $destination)
+        ->whereDate('created_at', '=', Carbon::parse($timestamp)->toDateString())
+        ->whereTime('created_at', '=', Carbon::parse($timestamp)->toTimeString())
+        ->update(['status' => 'Diterima']);
+
+    return redirect()->route('vehicle.bookings.index')->with('success', 'Selected bookings have been approved!');
+}
+
+public function rejectGroupedBookings($timestamp, $destination)
+{
+    $user = Auth::user();
+
+    // Check if the user is an admin
+    if (!$user->isAdmin()) {
+        return redirect()->route('vehicle.bookings.index')->with('error', 'Unauthorized access.');
+    }
+
+    // Find the bookings to reject
+    $bookings = VehicleBooking::where('destination', $destination)
+        ->whereDate('created_at', '=', Carbon::parse($timestamp)->toDateString())
+        ->whereTime('created_at', '=', Carbon::parse($timestamp)->toTimeString())
+        ->update(['status' => 'Ditolak']);
+
+    return redirect()->route('vehicle.bookings.index')->with('success', 'Selected bookings have been rejected!');
+}
+
     
 }
 

@@ -189,7 +189,7 @@
             <h1>Select Vehicles</h1>
         </div>
         <div class="container">
-            <form action="{{ route('bookings.store') }}" method="POST">
+            <form action="{{ route('vehicle.bookings.store') }}" method="POST">
                 @csrf
                 <div class="form-group">
                     <label>Available Vehicles</label>

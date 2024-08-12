@@ -9,7 +9,7 @@
     <p><strong>Destination:</strong> {{ $destination }}</p>
     <p><strong>Purpose:</strong> {{ $purpose }}</p>
 
-    <form action="{{ route('bookings.store') }}" method="POST">
+    <form action="{{ route('vehicle.bookings.store') }}" method="POST">
         @csrf
 
         <input type="hidden" name="vehicle_id" value="{{ $vehicle->id }}">
