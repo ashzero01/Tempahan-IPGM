@@ -74,7 +74,6 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-
     // Vehicle Routes
 
     Route::get('/vehicles/book', [VehicleController::class, 'book'])->name('vehicles.book');

@@ -11,7 +11,6 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('fontawesome-free-6.6.0-web/css/all.min.css') }}">
 
-
     <!-- Styles -->
     <style>
         body {
@@ -25,13 +24,21 @@
             flex-direction: column; /* Stack header and main content vertically */
         }
 
-
+        .header {
+            background-color: #fff; /* Optional: ensure header background is solid */
+            padding: 10px 20px; /* Adjust padding */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
         .main-container {
             flex: 1; /* Take up remaining space */
             display: flex;
-            justify-content: center;
+            flex-direction: column; /* Stack breadcrumb and main content vertically */
             align-items: center;
+            padding: 20px;
         }
 
         .main-content {
@@ -44,14 +51,14 @@
             box-sizing: border-box; /* Ensure padding and border are included in the width and height */
         }
 
+
         .buttons-container {
             display: flex;
-            justify-content: center;
+            flex-wrap: wrap; /* Allow buttons to wrap if necessary */
             gap: 16px; /* More consistent gap */
+            justify-content: center;
         }
 
-
-        /* Custom Styling for Square Buttons */
         .custom-button {
             width: 150px; /* Set width */
             height: 150px; /* Set height */
@@ -75,15 +82,14 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-
-
     </style>
 
-<link href="{{ asset('css/header.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/header.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/breadcrumb.css') }}" rel="stylesheet">
+
 
 </head>
 <body>
-
 
 <!-- Header Section -->
 <header class="header">
@@ -120,32 +126,35 @@
     </div>
 </header>
 
+<!-- Breadcrumb Section -->
+<div class="breadcrumb">
+    <a href="#" class="active">Halaman Utama</a>
+</div>
 
-    <!-- Main Content Container -->
-    <div class="main-container">
-        <div class="main-content">
-            <!-- Buttons Container -->
-            <div class="buttons-container">
-                <!-- Tempah Bilik Button -->
-                <a href="{{ route('rooms.index') }}" class="custom-button">
-                    Tempah Bilik
-
-                </a>
-                <!-- Tempah Kenderaan Button -->
-                <a href="{{ route('vehicles.book') }}" class="custom-button">
-                    Tempah Kenderaan (Belum siap)
-</a>
-                <a href="{{ route('bookings.user', ['user_id' => auth()->id()]) }}" class="custom-button">
-                    Lihat Tempahan Bilik
-                </a>
-                <a href="{{ route('vehicle.bookings.index') }}" class="custom-button">
-                    Lihat Tempahan Kenderaan (Belum siap)
-                </a>
-                <a href="{{ route('editprofile') }}" class="custom-button">
-                    Kemaskini Profil
-                </a>
-            </div>
+<!-- Main Content Container -->
+<div class="main-container">
+    <div class="main-content">
+        <!-- Buttons Container -->
+        <div class="buttons-container">
+            <!-- Tempah Bilik Button -->
+            <a href="{{ route('rooms.index') }}" class="custom-button">
+                Tempah Bilik
+            </a>
+            <!-- Tempah Kenderaan Button -->
+            <a href="{{ route('vehicles.book') }}" class="custom-button">
+                Tempah Kenderaan (Belum siap)
+            </a>
+            <a href="{{ route('bookings.user', ['user_id' => auth()->id()]) }}" class="custom-button">
+                Lihat Tempahan Bilik
+            </a>
+            <a href="{{ route('vehicle.bookings.index') }}" class="custom-button">
+                Lihat Tempahan Kenderaan (Belum siap)
+            </a>
+            <a href="{{ route('editprofile') }}" class="custom-button">
+                Kemaskini Profil
+            </a>
         </div>
     </div>
+</div>
 </body>
 </html>

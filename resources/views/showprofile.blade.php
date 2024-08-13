@@ -7,6 +7,8 @@
     <link href="{{ asset('css/header.css') }}" rel="stylesheet">
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('css/backbutton.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/breadcrumb.css') }}" rel="stylesheet">
+
 
     <style>
         body {
@@ -80,12 +82,13 @@
             </form>
         </div>
     </header>
-
+    <div class="breadcrumb">
+    <a href="{{ route('dashboard') }}">Halaman Utama</a>
+    <span>&gt;</span> 
+    <a href="#" class="active">Profil</a>
+</div>
     <!-- Main Container -->
     <div class="main-container">
-        <div>
-            <a href="{{ route('dashboard') }}" class="back-button">&#129152;</a>
-        </div>
         <!-- Page Title -->
         <div class="page-title">
             Maklumat Pengguna
@@ -103,6 +106,10 @@
                     <p><span>Jawatan/Jabatan Pemohon:</span> {{ $user->affiliation }}</p>
                 </div>
             </div>
+
+            <a href="{{ route('editprofile') }}" class="custom-button">
+                Kemaskini Profil
+            </a>
 
 </body>
 

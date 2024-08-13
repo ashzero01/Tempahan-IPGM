@@ -181,6 +181,8 @@
             background-color: #357bd8;
         }
     </style>
+        <link href="{{ asset('css/breadcrumb.css') }}" rel="stylesheet">
+
 </head>
 <body>
     <!-- Header Section -->
@@ -202,12 +204,19 @@
         </div>
     </header>
 
+    <!-- Breadcrumb Section -->
+<!-- Breadcrumb Section -->
+<div class="breadcrumb">
+<a href="{{ route('dashboard') }}">Halaman Utama</a>
+    <span>&gt;</span>
+    <a href="#" class="active">Senarai Bilik dan Dewan</a>
+</div>
+
     <!-- Page Title Section -->
     <div class="main-container">
         <div class="page-title">
             Tempahan Bilik
         </div>
-        <a href="{{ route('dashboard') }}" class="back-button">&#129152;</a>
 
         <div class="main-content">
         <div>

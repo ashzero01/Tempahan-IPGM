@@ -146,6 +146,9 @@
             }
         }
     </style>
+
+<link href="{{ asset('css/breadcrumb.css') }}" rel="stylesheet">
+
 </head>
 <body>
     <!-- Header Section -->
@@ -166,11 +169,17 @@
         </div>
     </header>
 
+     <!-- Breadcrumb Section -->
+<div class="breadcrumb">
+<a href="{{ route('dashboard') }}">Halaman Utama</a>
+    <span>&gt;</span> 
+    <a href="{{ route('bookings.user', ['user_id' => auth()->id()]) }}">Senarai Tempahan Bilik dan Dewan</a>
+    <span>&gt;</span>
+    <a href="#" class="active">Maklumat Tempahan</a>
+</div>
+
     <!-- Main Container -->
     <div class="main-container">
-        <div>
-            <a href="{{ route('bookings.user', ['user_id' => auth()->id()]) }}" class="back-button">&#129152;</a>
-        </div>
         <!-- Page Title -->
         <div class="page-title">
             Maklumat Tempahan

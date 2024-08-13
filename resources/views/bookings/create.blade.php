@@ -6,25 +6,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="{{ asset('css/header.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/table.css') }}" rel="stylesheet">
+
     <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
+      
         .header-container {
             display: flex;
             justify-content: space-between;
@@ -234,6 +219,7 @@
 
 
     </style>
+        <link href="{{ asset('css/breadcrumb.css') }}" rel="stylesheet">
 
 </head>
 <body>
@@ -256,6 +242,16 @@
         </div>
     </header>
 
+    <!-- Breadcrumb Section -->
+<div class="breadcrumb">
+<a href="{{ route('dashboard') }}">Halaman Utama</a>
+    <span>&gt;</span> 
+    <a href="/rooms">Senarai Bilik dan Dewan</a>
+    <span>&gt;</span>
+    <a href="#">Proses Tempahan</a>
+
+</div>
+
 
     <div class="main-container">
     <div class="main-content">
@@ -263,7 +259,6 @@
             <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
             <div class="text-2xl flex justify-between items-center">
             <h2>Tempah   {{ $room->name }}</h2>
-    <a href="{{ route('rooms.index') }}" class="back-button">&#129152;</a>
 </div>
 
                 @if(session('success'))

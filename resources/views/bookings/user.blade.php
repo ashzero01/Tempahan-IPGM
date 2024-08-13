@@ -143,6 +143,9 @@
     color: #4B5563; /* Match header text color */
 }
     </style>
+
+<link href="{{ asset('css/breadcrumb.css') }}" rel="stylesheet">
+
 </head>
 <body>
  <!-- Header Section -->
@@ -164,6 +167,13 @@
         </div>
     </header>
 
+        <!-- Breadcrumb Section -->
+<div class="breadcrumb">
+<a href="{{ route('dashboard') }}">Halaman Utama</a>
+    <span>&gt;</span> 
+    <a href="#" class="active">Senarai Tempahan Bilik dan Dewan</a>
+</div>
+
     <div class="main-container">
     <div class="page-title">
         Senarai Tempahan Bilik
@@ -176,7 +186,6 @@
         <button class="filter-button" data-status="Diterima">Diterima</button>
         <button class="filter-button" data-status="Ditolak">Ditolak</button>
     </div>
-    <a href="{{ route('dashboard') }}" class="back-button">&#129152;</a>
 </div>
             <div class="table-container">
                 <table>

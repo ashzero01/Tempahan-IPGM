@@ -1,0 +1,95 @@
+/* table.css */
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: #F3F4F6; /* Light gray background for header */
+}
+
+th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+th {
+    font-size: 0.875rem; /* Consistent font size */
+    font-weight: 600;
+    color: #4B5563; /* Consistent text color */
+    text-transform: uppercase;
+    padding: 0.75rem; /* Consistent padding */
+    border: none; /* Remove any borders */
+    background: none; /* Ensure no background color */
+    position: relative; /* For sorting icon positioning */
+}
+
+td {
+    font-size: 0.875rem;
+    color: #6B7280; /* Lighter gray for table content */
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* Light gray for alternate rows */
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1; /* Slightly darker gray on hover */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+/* Sorting Icon Styling */
+.sort-link {
+    color: inherit; /* Ensure link color inherits from header */
+    text-decoration: none; /* Remove underline */
+}
+
+.sort-link:hover {
+    color: #2563EB; /* Optional: Change color on hover */
+}
+
+.sort-icon {
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1rem;
+    margin-left: 0.5rem;
+    color: #4B5563; /* Match header text color */
+}
+
+/* Action Buttons Styling */
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.view-button,
+.delete-button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.view-button {
+    background-color: #3B82F6; /* Blue background color */
+}
+
+.view-button:hover {
+    background-color: #2563EB; /* Darker blue on hover */
+}
+
+.delete-button {
+    background-color: #F87171; /* Red background color */
+}
+
+.delete-button:hover {
+    background-color: #EF4444; /* Darker red on hover */
+}

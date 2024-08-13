@@ -10,191 +10,218 @@ use Carbon\Carbon;
 
 class VehicleBookingController extends Controller
 {
+    // Display a list of bookings
     public function index()
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
-    // Check if the user is an admin
-    if ($user->role === 'admin') {
-        // Admin can see all bookings
-        $bookings = VehicleBooking::all()->groupBy(function($booking) {
-            return $booking->created_at->format('Y-m-d H:i:s') . '|' . $booking->destination;
-        });
-    } else {
-        // Regular users see only their own bookings
-        $bookings = VehicleBooking::where('user_id', $user->id)
-            ->get()
-            ->groupBy(function($booking) {
+        if ($user->role === 'admin') {
+            // Admin can see all bookings
+            $bookings = VehicleBooking::all()->groupBy(function($booking) {
                 return $booking->created_at->format('Y-m-d H:i:s') . '|' . $booking->destination;
             });
+        } else {
+            // Regular users see only their own bookings
+            $bookings = VehicleBooking::where('user_id', $user->id)
+                ->get()
+                ->groupBy(function($booking) {
+                    return $booking->created_at->format('Y-m-d H:i:s') . '|' . $booking->destination;
+                });
+        }
+
+        return view('vehicle.booking-index', ['bookings' => $bookings]);
     }
 
-    // Pass the grouped bookings to the view
-    return view('vehicle.booking-index', ['bookings' => $bookings]);
-}
+    // Show detailed information of a grouped booking
+    public function showGroupedBooking($timestamp, $destination)
+    {
+        $user = Auth::user();
 
+        if ($user->isAdmin()) {
+            $bookings = VehicleBooking::where('destination', $destination)
+                ->whereDate('created_at', '=', Carbon::parse($timestamp)->toDateString())
+                ->whereTime('created_at', '=', Carbon::parse($timestamp)->toTimeString())
+                ->get();
+        } else {
+            $bookings = VehicleBooking::where('user_id', $user->id)
+                ->where('destination', $destination)
+                ->whereDate('created_at', '=', Carbon::parse($timestamp)->toDateString())
+                ->whereTime('created_at', '=', Carbon::parse($timestamp)->toTimeString())
+                ->get();
+        }
 
-public function showGroupedBooking($timestamp, $destination)
-{
-    $user = Auth::user();
-
-    if ($user->isAdmin()) {
-        // Admin can see all bookings
-        $bookings = VehicleBooking::where('destination', $destination)
-            ->whereDate('created_at', '=', Carbon::parse($timestamp)->toDateString())
-            ->whereTime('created_at', '=', Carbon::parse($timestamp)->toTimeString())
-            ->get();
-    } else {
-        // Regular user can only see their own bookings
-        $bookings = VehicleBooking::where('user_id', $user->id)
-            ->where('destination', $destination)
-            ->whereDate('created_at', '=', Carbon::parse($timestamp)->toDateString())
-            ->whereTime('created_at', '=', Carbon::parse($timestamp)->toTimeString())
-            ->get();
+        return view('vehicle.booking-details', compact('bookings', 'timestamp', 'destination'));
     }
 
-    // Pass the bookings to the view
-    return view('vehicle.booking-details', compact('bookings', 'timestamp', 'destination'));
-}
-
-
-
+    // Delete a single booking
     public function delete($id)
     {
-        $booking = VehicleBooking::findOrFail($id); // Use findOrFail to handle cases where the ID does not exist
+        $booking = VehicleBooking::findOrFail($id);
 
         $booking->delete();
 
         return redirect()->route('vehicle.bookings.index')->with('success', 'Booking deleted successfully!');
     }
 
+    // Delete all bookings in a group
     public function deleteGroupedBookings($timestamp, $destination)
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
-    // Determine if the user is an admin or a regular user
-    $query = VehicleBooking::where('destination', $destination)
-        ->whereDate('created_at', '=', Carbon::parse($timestamp)->toDateString())
-        ->whereTime('created_at', '=', Carbon::parse($timestamp)->toTimeString());
+        $query = VehicleBooking::where('destination', $destination)
+            ->whereDate('created_at', '=', Carbon::parse($timestamp)->toDateString())
+            ->whereTime('created_at', '=', Carbon::parse($timestamp)->toTimeString());
 
-    // Admin can delete all bookings, regular users can only delete their own
-    if (!$user->isAdmin()) {
-        $query->where('user_id', $user->id);
+        if (!$user->isAdmin()) {
+            $query->where('user_id', $user->id);
+        }
+
+        $query->delete();
+
+        return redirect()->route('vehicle.bookings.index')->with('success', 'Selected bookings have been deleted successfully!');
     }
 
-    // Execute the deletion
-    $query->delete();
+    // Approve all bookings in a group
+    public function approveGroupedBookings($timestamp, $destination)
+    {
+        $user = Auth::user();
 
-    // Redirect back with a success message
-    return redirect()->route('vehicle.bookings.index')->with('success', 'Selected bookings have been deleted successfully!');
-}
+        if (!$user->isAdmin()) {
+            return redirect()->route('vehicle.bookings.index')->with('error', 'Unauthorized access.');
+        }
 
-public function approveGroupedBookings($timestamp, $destination)
-{
-    $user = Auth::user();
+        $query = $this->getGroupedBookingQuery($timestamp, $destination);
+        $query->update(['status' => 'Diterima']);
 
-    // Check if the user is an admin
-    if (!$user->isAdmin()) {
-        return redirect()->route('vehicle.bookings.index')->with('error', 'Unauthorized access.');
+        return redirect()->route('vehicle.bookings.index')->with('success', 'Selected bookings have been approved!');
     }
 
-    // Find the bookings to approve
-    $bookings = VehicleBooking::where('destination', $destination)
-        ->whereDate('created_at', '=', Carbon::parse($timestamp)->toDateString())
-        ->whereTime('created_at', '=', Carbon::parse($timestamp)->toTimeString())
-        ->update(['status' => 'Diterima']);
+    // Reject all bookings in a group
+    public function rejectGroupedBookings($timestamp, $destination)
+    {
+        $user = Auth::user();
 
-    return redirect()->route('vehicle.bookings.index')->with('success', 'Selected bookings have been approved!');
-}
+        if (!$user->isAdmin()) {
+            return redirect()->route('vehicle.bookings.index')->with('error', 'Unauthorized access.');
+        }
 
-public function rejectGroupedBookings($timestamp, $destination)
-{
-    $user = Auth::user();
+        $query = $this->getGroupedBookingQuery($timestamp, $destination);
+        $query->update(['status' => 'Ditolak']);
 
-    // Check if the user is an admin
-    if (!$user->isAdmin()) {
-        return redirect()->route('vehicle.bookings.index')->with('error', 'Unauthorized access.');
+        return redirect()->route('vehicle.bookings.index')->with('success', 'Selected bookings have been rejected!');
     }
 
-    // Find the bookings to reject
-    $bookings = VehicleBooking::where('destination', $destination)
-        ->whereDate('created_at', '=', Carbon::parse($timestamp)->toDateString())
-        ->whereTime('created_at', '=', Carbon::parse($timestamp)->toTimeString())
-        ->update(['status' => 'Ditolak']);
+    // Show the booking form for a specific vehicle
+    public function createBooking(Vehicle $vehicle)
+    {
+        return view('vehicle.booking-form', compact('vehicle'));
+    }
 
-    return redirect()->route('vehicle.bookings.index')->with('success', 'Selected bookings have been rejected!');
-}
-
-
-// VehicleBookingController.php
-public function createBooking(Vehicle $vehicle)
-{
-    return view('vehicle.booking-form', compact('vehicle'));
-}
-
-public function checkAvailability(Request $request, Vehicle $vehicle)
-{
-    $request->validate([
-        'departure_date' => 'required|date',
-        'return_date' => 'required|date|after_or_equal:departure_date',
-    ]);
-
-    $availability = $this->checkVehicleAvailability($vehicle, $request->departure_date, $request->return_date);
-
-    if ($availability) {
-        return redirect()->route('vehicles.booking.details.final', [
-            'vehicle' => $vehicle->id,
-            'departure_date' => $request->departure_date,
-            'return_date' => $request->return_date
+    // Check availability of a vehicle for the selected dates
+    public function checkAvailability(Request $request, Vehicle $vehicle)
+    {
+        $request->validate([
+            'departure_date' => 'required|date',
+            'return_date' => 'nullable|date|after_or_equal:departure_date',
+        ], [
+            'departure_date.required' => 'Tarikh Pergi diperlukan.',
+            'departure_date.date' => 'Tarikh Pergi mesti dalam format tarikh yang sah.',
+            'return_date.date' => 'Tarikh Pulang mesti dalam format tarikh yang sah.',
+            'return_date.after_or_equal' => 'Tarikh Pulang mesti selepas atau sama dengan Tarikh Bertolak.',
         ]);
-    } else {
-        return redirect()->back()->with('error', 'Vehicle is not available for the selected dates.');
+
+        // Convert dates to YYYY-MM-DD format
+        $departureDate = Carbon::createFromFormat('d-m-Y', $request->departure_date)->format('Y-m-d');
+        $returnDate = $request->return_date ? Carbon::createFromFormat('d-m-Y', $request->return_date)->format('Y-m-d') : $departureDate;
+
+        $availability = $this->checkVehicleAvailability($vehicle, $departureDate, $returnDate);
+
+        if ($availability) {
+            return redirect()->route('vehicles.booking.details.final', [
+                'vehicle' => $vehicle->id,
+                'departure_date' => $request->departure_date,
+                'return_date' => $request->return_date ?? $request->departure_date // Ensure return_date is included in query parameters
+            ]);
+        } else {
+            session()->flash('error', 'Kenderaan tidak tersedia untuk tarikh yang dipilih.');
+            return redirect()->back();
+        }
     }
-}
 
-private function checkVehicleAvailability($vehicle, $departureDate, $returnDate)
-{
-    // Implement your logic to check availability
-    // For example, check if there are any bookings within the date range
-    return !VehicleBooking::where('vehicle_id', $vehicle->id)
-        ->where(function ($query) use ($departureDate, $returnDate) {
-            $query->whereBetween('departure_date', [$departureDate, $returnDate])
-                  ->orWhereBetween('return_date', [$departureDate, $returnDate]);
-        })->exists();
-}
+    // Check if a vehicle is available for the given date range
+    private function checkVehicleAvailability($vehicle, $departureDate, $returnDate)
+    {
+        return !VehicleBooking::where('vehicle_id', $vehicle->id)
+            ->where(function ($query) use ($departureDate, $returnDate) {
+                $query->where(function ($query) use ($departureDate, $returnDate) {
+                    $query->whereBetween('departure_date', [$departureDate, $returnDate])
+                          ->orWhereBetween('return_date', [$departureDate, $returnDate]);
+                })
+                ->orWhere(function ($query) use ($departureDate, $returnDate) {
+                    $query->where('departure_date', '<=', $departureDate)
+                          ->where('return_date', '>=', $returnDate);
+                });
+            })
+            ->exists();
+    }
 
-// VehicleBookingController.php
-public function finalBookingForm(Request $request, Vehicle $vehicle)
-{
-    $departureDate = $request->query('departure_date');
-    $returnDate = $request->query('return_date');
-    return view('vehicle.final-booking-form', compact('vehicle', 'departureDate', 'returnDate'));
-}
+    // Show the final booking form
+    public function finalBookingForm(Request $request, Vehicle $vehicle)
+    {
+        $departureDate = $request->query('departure_date');
+        $returnDate = $request->query('return_date');
+        return view('vehicle.final-booking-form', compact('vehicle', 'departureDate', 'returnDate'));
+    }
 
-public function storeBooking(Request $request, Vehicle $vehicle)
-{
-    $request->validate([
-        'departure_time' => 'required|date_format:H:i',
-        'return_time' => 'required|date_format:H:i',
-        'destination' => 'required|string',
-        'purpose' => 'required|string',
-    ]);
+    // Store a new booking
+    public function storeBooking(Request $request, Vehicle $vehicle)
+    {
+        $request->validate([
+            'departure_time' => 'required|string',
+            'return_time' => 'required|string',
+            'destination' => 'required|string',
+            'purpose' => 'required|string',
+        ]);
 
-    VehicleBooking::create([
-        'vehicle_id' => $vehicle->id,
-        'user_id' => Auth::id(),
-        'departure_date' => $request->departure_date,
-        'return_date' => $request->return_date,
-        'departure_time' => $request->departure_time,
-        'return_time' => $request->return_time,
-        'destination' => $request->destination,
-        'purpose' => $request->purpose,
-        'status' => 'Pending'
-    ]);
+        // Convert 12-hour format to 24-hour format for storage
+        $departureTime24 = date('H:i', strtotime($request->departure_time));
+        $returnTime24 = date('H:i', strtotime($request->return_time));
 
-    return redirect()->route('vehicle.bookings.index')->with('success', 'Booking created successfully!');
-}
+        // Convert dates to YYYY-MM-DD format
+        $departureDate = Carbon::createFromFormat('d-m-Y', $request->departure_date)->format('Y-m-d');
+        $returnDate = Carbon::createFromFormat('d-m-Y', $request->return_date)->format('Y-m-d');
 
+        $availability = $this->checkVehicleAvailability($vehicle, $departureDate, $returnDate);
 
+        if (!$availability) {
+            return redirect()->back()->withErrors(['error' => 'Vehicle is not available for the selected dates.']);
+        }
 
+        VehicleBooking::create([
+            'vehicle_id' => $vehicle->id,
+            'user_id' => Auth::id(),
+            'departure_date' => $departureDate,
+            'return_date' => $returnDate,
+            'departure_time' => $departureTime24,
+            'return_time' => $returnTime24,
+            'destination' => $request->destination,
+            'purpose' => $request->purpose,
+            'status' => 'Menunggu Pengesahan'
+        ]);
+
+        return redirect()->route('vehicle.bookings.index')->with('success', 'Booking created successfully!');
+    }
+
+    private function getGroupedBookingQuery($timestamp, $destination)
+    {
+        $query = VehicleBooking::where('destination', $destination)
+            ->whereDate('created_at', '=', Carbon::parse($timestamp)->toDateString())
+            ->whereTime('created_at', '=', Carbon::parse($timestamp)->toTimeString());
+
+        if (!Auth::user()->isAdmin()) {
+            $query->where('user_id', Auth::id());
+        }
+
+        return $query;
+    }
 }

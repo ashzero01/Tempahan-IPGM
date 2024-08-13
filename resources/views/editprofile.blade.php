@@ -77,6 +77,9 @@
         }
 
     </style>
+
+<link href="{{ asset('css/breadcrumb.css') }}" rel="stylesheet">
+
 </head>
 <body>
     <!-- Header Section -->
@@ -97,11 +100,16 @@
         </div>
     </header>
 
+    <div class="breadcrumb">
+    <a href="{{ route('dashboard') }}">Halaman Utama</a>
+    <span>&gt;</span> 
+    <a href="{{ route('showprofile', ['user_id' => auth()->user()->id]) }}">Profil</a>
+    <span>&gt;</span>
+    <a href="#" class="active">Kemaskini Profil</a>
+</div>
+
     <!-- Main Container -->
     <div class="main-container">
-        <div>
-            <a href="{{ url()->previous() }}" class="back-button">&#129152;</a>
-        </div>
         <!-- Page Title -->
         <div class="page-title">
             Kemaskini Profil

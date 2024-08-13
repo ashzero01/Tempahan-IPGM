@@ -8,7 +8,9 @@
     <link href="{{ asset('css/header.css') }}" rel="stylesheet">
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('css/backbutton.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/breadcrumb.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('fontawesome-free-6.6.0-web/css/all.min.css') }}">
+
 
     <style>
         body {
@@ -189,6 +191,12 @@
             font-size: 1.25rem;
             color: #6B7280;
         }
+
+        /* Ensure the new column aligns well with others */
+        .booking-table th:nth-child(8),
+        .booking-table td:nth-child(8) {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -227,6 +235,14 @@
     </div>
 </header>
 
+<div class="breadcrumb">
+    <a href="{{ route('dashboard') }}">Halaman Utama</a>
+    <span>&gt;</span>
+    <a href="#" class="active">Senarai Tempahan Kenderaan</a>
+
+    </div>
+
+
     <div class="main-container">
         <div class="page-title">
             Senarai Tempahan Kenderaan
@@ -238,7 +254,6 @@
                 <button class="filter-button" data-status="Diterima">Diterima</button>
                 <button class="filter-button" data-status="Ditolak">Ditolak</button>
             </div>
-            <a href="{{ route('dashboard') }}" class="back-button">&#129152;</a>
             <div class="table-container" id="table-container">
                 @foreach($bookings as $key => $groupedBookings)
                 @php
@@ -276,6 +291,7 @@
                                     <th>Destinasi</th>
                                     <th>Tujuan</th>
                                     <th>Kenderaan</th>
+                                    <th>Bilangan Hari</th> <!-- New Column Header -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -284,6 +300,11 @@
                                     $firstBooking = true;
                                 @endphp
                                 @foreach($groupedBookings as $booking)
+                                    @php
+                                        $departureDate = \Carbon\Carbon::parse($booking->departure_date);
+                                        $returnDate = \Carbon\Carbon::parse($booking->return_date);
+                                        $numberOfDays = $departureDate->lte($returnDate) ? $returnDate->diffInDays($departureDate) + 1 : 1;
+                                    @endphp
                                     @if($firstBooking || $currentVehicle != $booking->vehicle->name)
                                         <tr data-status="{{ $booking->status }}">
                                             @if($firstBooking)
@@ -294,9 +315,10 @@
                                                 <td>{{ $booking->destination }}</td>
                                                 <td>{{ $booking->purpose }}</td>
                                             @else
-                                                <td colspan="6"></td>
+                                                <td colspan="7"></td>
                                             @endif
                                             <td>{{ $booking->vehicle->name }}</td>
+                                            <td>{{ $numberOfDays }}</td> <!-- New Column Data -->
                                         </tr>
                                         @php
                                             $currentVehicle = $booking->vehicle->name;
@@ -304,8 +326,9 @@
                                         @endphp
                                     @else
                                         <tr data-status="{{ $booking->status }}">
-                                            <td colspan="6"></td>
+                                            <td colspan="7"></td>
                                             <td>{{ $booking->vehicle->name }}</td>
+                                            <td>{{ $numberOfDays }}</td> <!-- New Column Data -->
                                         </tr>
                                     @endif
                                 @endforeach
@@ -322,7 +345,7 @@
 
    <!-- JavaScript -->
    <script>
-            document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', () => {
             const filterButtons = document.querySelectorAll('.filter-button');
             const bookingSections = document.querySelectorAll('.booking-section');
             const noBookingsMessage = document.getElementById('no-bookings-message');
