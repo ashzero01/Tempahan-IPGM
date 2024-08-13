@@ -105,13 +105,13 @@
         <!-- Admin Menu -->
         @if(auth()->user()->role === 'admin')
             <div class="admin-menu">
-                <a href="#" class="admin-link"><i class="fas fa-tools"></i> Admin Menu</a>
+                <a href="#" class="admin-link"><i class="fas fa-tools"></i>Menu Admin</a>
                 <div class="dropdown-content">
-                    <a href="#"><i class="fas fa-users"></i> See user list</a>
-                    <a href="vehicles"><i class="fas fa-car"></i> See vehicle list</a>
-                    <a href="#"><i class="fas fa-user-plus"></i> Add admin</a>
-                    <a href="{{ route('rooms.create') }}"><i class="fas fa-plus-square"></i> Add room</a>
-                    <a href="{{ route('vehicles.create') }}"><i class="fas fa-truck"></i> Add vehicle</a>
+                    <a href="{{route('users.list')}}"><i class="fas fa-users"></i> Senarai Pengguna</a>
+                    <a href="{{route('vehicles.book')}}"><i class="fas fa-car"></i> Senarai Kenderaan</a>
+                    <a href="{{route('showAddAdminForm')}}"><i class="fas fa-user-plus"></i> Tambah Admin</a>
+                    <a href="{{ route('rooms.create') }}"><i class="fas fa-plus-square"></i> Tambah Bilik</a>
+                    <a href="{{ route('vehicles.create') }}"><i class="fas fa-truck"></i> Tambah Kenderaan</a>
                 </div>
             </div>
         @endif

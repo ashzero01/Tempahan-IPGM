@@ -85,5 +85,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/fill-form', [PdfController::class, 'fillForm'])->name('fillForm');
     Route::get('/bookings/{booking}/pdf', [BookingController::class, 'generatePdf'])->name('bookings.generatePdf');
 
+
+    Route::get('/users', [UserController::class, 'listUsers'])->name('users.list');
+    Route::delete('/users/{user_id}', [UserController::class, 'deleteUser'])->name('users.delete');
+
+    Route::get('/admin/add', [UserController::class, 'showAddAdminForm'])->name('showAddAdminForm');
+    Route::post('/admin/add', [UserController::class, 'addAdmin'])->name('addadmin');
+    
+
 });
 

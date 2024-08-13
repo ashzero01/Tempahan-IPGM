@@ -1,10 +1,10 @@
 /* Breadcrumb Container */
 .breadcrumb {
-    margin: 20px 0; /* Space above and below the breadcrumb */
-    padding: 10px 15px; /* Padding for better touch targets */
+    margin: 10px 0; /* Reduced space above and below the breadcrumb */
+    padding: 8px 12px; /* Adjusted padding for a tighter fit */
     background-color: #ffffff; /* Solid white background for contrast */
     border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Strong shadow for depth */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Lighter shadow for subtle depth */
     display: flex; /* Flexbox for alignment */
     align-items: center; /* Center items vertically */
 }
@@ -13,8 +13,8 @@
 .breadcrumb a {
     color: #007bff; /* Link color */
     text-decoration: none; /* Remove underline */
-    font-size: 16px; /* Font size for readability */
-    margin-right: 12px; /* Space between links */
+    font-size: 14px; /* Slightly smaller font size for a tighter look */
+    margin-right: 8px; /* Reduced space between links */
     font-weight: 500; /* Slightly bolder font */
     transition: color 0.3s, text-decoration 0.3s; /* Smooth transition effects */
 }
@@ -22,7 +22,7 @@
 /* Breadcrumb Separator */
 .breadcrumb span {
     color: #6c757d; /* Separator color */
-    margin-right: 12px; /* Space after separator */
+    margin-right: 8px; /* Reduced space after separator */
 }
 
 /* Breadcrumb Link Hover */

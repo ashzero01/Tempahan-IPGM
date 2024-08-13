@@ -44,5 +44,49 @@ public function updateProfile(Request $request)
     return redirect()->route('showprofile', ['user_id' => $user->id])->with('success', 'Profil berjaya dikemaskini!');
 }
 
+public function listUsers()
+{
+    $users = User::all(); // Fetch all users
+    return view('users-list', compact('users')); // Pass the users data to the users list view
+}
+public function deleteUser($user_id)
+{
+    $user = User::findOrFail($user_id); // Fetch the user by ID
+    $user->delete(); // Delete the user
+    return redirect()->route('users.list')->with('success', 'Pengguna berjaya dipadam!');
+
+}
+
+public function showAddAdminForm()
+{
+    return view('add-admin'); // Return the view for the add admin form
+}
+
+public function addAdmin(Request $request)
+{
+    // Validate the request data
+    $validatedData = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255|unique:users',
+        'ICnumber' => 'required|string|max:12',
+        'phone_number' => 'required|string|max:15',
+        'affiliation' => 'required|string|max:255',
+        'role' => 'required|string|in:admin,user', // Ensure the role is valid
+    ]);
+
+    // Create a new user with the validated data and 'admin' role
+    $admin = User::create([
+        'name' => $validatedData['name'],
+        'email' => $validatedData['email'],
+        'ICnumber' => $validatedData['ICnumber'],
+        'phone_number' => $validatedData['phone_number'],
+        'affiliation' => $validatedData['affiliation'],
+        'role' => 'admin', // Assign the role as 'admin'
+    ]);
+
+    return redirect()->route('users.list')->with('success', 'Admin berjaya ditambah!');
+}
+
+
 }
 

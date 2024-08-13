@@ -7,9 +7,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="{{ asset('css/header.css') }}" rel="stylesheet">
     <link href="{{ asset('css/table.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/en.js"></script> <!-- Optional: localization -->
+    <!-- Your custom CSS and JS links -->
 
     <style>
+
+      /* Button Container Styles */
+.button-container {
+    display: flex;
+    gap: 10px; /* Space between buttons */
+    align-items: center; /* Vertically center the buttons */
+}
+
+.view-button {
+    background-color: #38c172;
+    color: white;
+    font-weight: bold;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.view-button:hover {
+    background-color: #32a852;
+}
+
+.view-button:active {
+    background-color: #2d8e46;
+}
+
+.delete-button {
+    background-color: #e3342f;
+    color: white;
+    font-weight: bold;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.delete-button:hover {
+    background-color: #cc1f1a;
+}
+
+.delete-button:active {
+    background-color: #b02a3a;
+}
       
+      header {
+    margin-bottom: 0; /* Ensure there's no margin at the bottom of the header */
+    padding-bottom: 10px; /* Adjust padding if needed */
+}
+
         .header-container {
             display: flex;
             justify-content: space-between;
@@ -20,7 +78,6 @@
         .container {
             display: flex;
             justify-content: space-between;
-            padding-top: 10px;
             width: 100%;
         }
 
@@ -176,13 +233,15 @@
             flex-direction: column; /* Stack header and main content vertically */
         }
 
+        
 
         .main-container {
-            flex: 1; /* Take up remaining space */
-            display: flex;
-            flex-direction: column; /* Stack content vertically */
-            align-items: center; /* Center content horizontally */
-        }
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 0; /* Reduce this value to decrease the space */
+}
 
         .main-content {
             background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
@@ -260,7 +319,16 @@
             <div class="text-2xl flex justify-between items-center">
             <h2>Tempah   {{ $room->name }}</h2>
 </div>
-
+    <!-- Display validation errors -->
+    @if ($errors->any())
+                                <div class="alert alert-danger mt-4">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                 @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
@@ -286,9 +354,6 @@
                                         <div id="dayButtons"></div>
                                     </div>
                                     <input type="hidden" id="booking_date" name="date">
-                                    @error('date')
-                                    <span class="text-red-500">{{ $message }}</span>
-                                    @enderror
                                 </div>
                                 <div style="margin-top: 10px;display: flex; align-items: center;">
                                     <label for="start_time">Masa:</label>
@@ -308,28 +373,17 @@
                                     <label for="purpose">Tujuan:</label>
                                     <input type="text" id="purpose" name="purpose" required>
                                 </div>
-                                <button type="submit" class="booking-button">Book Room</button>
+                                <button type="submit" class="booking-button">Tempah Bilik</button>
                             </form>
-                            <!-- Display validation errors -->
-                            @if ($errors->any())
-                                <div class="alert alert-danger mt-4">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
+                        
                         </div>
                         <div class="table-container">
                             <table id="bookingDetails">
                                 <thead>
                                 <tr>
                                     <th>Tarikh</th>
-                                    <th>Hari</th>
                                     <th>Masa Mula</th>
                                     <th>Masa Tamat</th>
-                                    <th>Tujuan</th>
                                     <th>Status</th>
                                     <th>Tindakan</th>
                                 </tr>
@@ -472,7 +526,8 @@ function formatTime(time) {
         });
 
         // Function to fetch and display booking details for a specific date
-        function fetchAndDisplayBookingDetails(date) {
+        // Function to fetch and display booking details for a specific date
+function fetchAndDisplayBookingDetails(date) {
     const roomId = '{{ $room->id }}';
     const endpoint = `{{ route('bookings.json1', ['room' => $room->id]) }}?date=${date}`;
 
@@ -498,30 +553,31 @@ function formatTime(time) {
                 const endTime = formatTime(booking.end_time);
                 const dayOfWeek = getDayOfWeek(booking.date); // Get the day of the week
                 const purpose = booking.purpose; // Fetch the purpose value from the booking object
-                let viewButton = `<a href="{{ route('bookings.show', ['booking' => ':bookingId']) }}">View</a>`;
-                viewButton = viewButton.replace(':bookingId', booking.id);
-                let deleteButton = ''; // Initialize delete button as empty string
-                if (isAdmin || booking.user_id == userId) { // Check if the user is an admin or if the booking belongs to the user
-                    deleteButton = `<button type="submit" onclick="return confirm('Anda pasti untuk padamkan tempahan ini?')">Delete</button>`;
-                }
+
+                // Construct URLs dynamically
+                const viewUrl = `{{ route('bookings.show', ['booking' => '__BOOKING_ID__']) }}`.replace('__BOOKING_ID__', booking.id);
+                const deleteUrl = `{{ route('bookings.destroy', ['room' => $room->id, 'booking' => '__BOOKING_ID__']) }}`.replace('__BOOKING_ID__', booking.id);
+
+                const deleteButton = isAdmin || booking.user_id == userId ? 
+                    `<button type="submit" onclick="return confirm('Anda pasti untuk padamkan tempahan ini?')" class="delete-button">Delete</button>` : '';
+
                 row.innerHTML = `
                     <td>${booking.date}</td>
-                    <td>${dayOfWeek}</td> <!-- Display the day of the week -->
                     <td>${startTime}</td>
                     <td>${endTime}</td>
-                    <td>${purpose}</td>
                     <td>${booking.status}</td> <!-- Display the status -->
 
                     <td>
-                    ${viewButton}
-                        <form action="{{ route('bookings.destroy', ['room' => $room->id, 'booking' => ':bookingId']) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            ${deleteButton} <!-- Include delete button based on condition -->
-                        </form>
+                        <div class="button-container">
+                            <a href="${viewUrl}" class="view-button">View</a>
+                            <form action="${deleteUrl}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                ${deleteButton}
+                            </form>
+                        </div>
                     </td>
                 `;
-                row.querySelector('form').action = row.querySelector('form').action.replace(':bookingId', booking.id);
                 tbody.appendChild(row);
             });
 
@@ -531,4 +587,5 @@ function formatTime(time) {
 }
 
     });
+    
 </script>

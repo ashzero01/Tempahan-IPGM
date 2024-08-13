@@ -97,12 +97,18 @@ public function userBookings($user_id, Request $request)
 
     public function store(Request $request, Room $room)
     {
-        // Validate the request data
-        $request->validate([
-            'date' => 'required|date',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time',
-        ]);
+          // Validate the request data
+    $request->validate([
+        'date' => 'required|date',
+        'start_time' => 'required|date_format:H:i',
+        'end_time' => 'required|date_format:H:i|after:start_time',
+    ], [
+        'date.required' => 'Tarikh perlu dipilih.',
+        'date.date' => 'Tarikh perlu dalam format yang betul.',
+        'start_time.required' => 'Masa mula perlu diisi.',
+        'end_time.required' => 'Masa tamat perlu diisi.',
+        'end_time.after' => 'Masa tamat perlu selepas masa mula.',
+    ]);
 
         // Check if there are any existing bookings for the specified room that overlap with the new booking, excluding those with status "Ditolak"
         $existingBooking = Booking::where('room_id', $room->id)
