@@ -13,6 +13,7 @@ class Vehicle extends Model
         'name',
         'registration_number',
         'type',
+        'image',
         'status',
         'description',
     ];

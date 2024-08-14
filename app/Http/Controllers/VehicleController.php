@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Vehicle;
 
-class VehicleController extends Controller
-{
-    public function index()
-{
-    $vehicles = Vehicle::all();
-    return view('vehicles', compact('vehicles'));
-}
+    class VehicleController extends Controller
+    {
+        public function index()
+    {
+        $vehicles = Vehicle::all();
+        return view('vehicles', compact('vehicles'));
+    }
 
 
     // Show the form to create a new vehicle
@@ -22,19 +22,25 @@ class VehicleController extends Controller
 
     // Store a newly created vehicle in the database
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'registration_number' => 'required|string|unique:vehicles|max:255',
-            'type' => 'required|string|max:255',
-            'status' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-        ]);
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'registration_number' => 'required|string|unique:vehicles|max:255',
+        'type' => 'required|string|max:255',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'status' => 'nullable|string|max:255',
+        'description' => 'nullable|string',
+    ]);
 
-        Vehicle::create($validated);
-
-        return redirect()->route('vehicles.index')->with('success', 'Vehicle created successfully!');
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('images', 'public');
+        $validated['image'] = $imagePath;
     }
+
+    Vehicle::create($validated);
+
+    return redirect()->route('vehicles.book')->with('success', 'Vehicle created successfully!');
+}
 
     // Show the form to edit a specific vehicle
     public function edit($id)
@@ -50,6 +56,7 @@ class VehicleController extends Controller
             'name' => 'required|string|max:255',
             'registration_number' => 'required|string|unique:vehicles,registration_number,' . $id . '|max:255',
             'type' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'status' => 'nullable|string|max:255',
             'description' => 'nullable|string',
         ]);

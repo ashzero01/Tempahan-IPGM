@@ -15,15 +15,15 @@ class RoomsTableSeeder extends Seeder
     public function run()
     {
         DB::table('rooms')->insert([
-            ['name' => 'Dewan Wawasan', 'description' => 'dewan', 'image' => 'dewanwawasan.jpg'],
-            ['name' => 'Dewan Bakti', 'description' => 'dewan', 'image' => 'dewanbakti.jpg'],
-            ['name' => 'Dewan Kuliah K39', 'description' => 'dewan', 'image' => 'dewankuliahk39.jpg'],
-            ['name' => 'Dewan Gerko', 'description' => 'dewan', 'image' => 'dewangerko.jpg'],
-            ['name' => 'Bilik Seminar(DK3)', 'description' => 'bilik', 'image' => 'bilikseminar(dk3).jpg'],
-            ['name' => 'Dewan Asrama', 'description' => 'dewan', 'image' => 'dewanasrama.jpg'],
-            ['name' => 'Dewan KDP', 'description' => 'dewan', 'image' => 'dewankdp.jpg'],
-            ['name' => 'Bilik Mesy. Gerakan', 'description' => 'bilik', 'image' => 'bilikgerakan.jpg'],
-            ['name' => 'Bilik Kuliah Mahpoor Baba', 'description' => 'bilik', 'image' => 'bilikkuliahmahpoorbaba.jpg'],
+            ['name' => 'Dewan Wawasan', 'description' => 'dewan', 'image' => 'images/dewanwawasan.jpg'],
+            ['name' => 'Dewan Bakti', 'description' => 'dewan', 'image' => 'images/dewanbakti.jpg'],
+            ['name' => 'Dewan Kuliah K39', 'description' => 'dewan', 'image' => 'images/dewankuliahk39.jpg'],
+            ['name' => 'Dewan Gerko', 'description' => 'dewan', 'image' => 'images/dewangerko.jpg'],
+            ['name' => 'Bilik Seminar(DK3)', 'description' => 'bilik', 'image' => 'images/bilikseminar(dk3).jpg'],
+            ['name' => 'Dewan Asrama', 'description' => 'dewan', 'image' => 'images/dewanasrama.jpg'],
+            ['name' => 'Dewan KDP', 'description' => 'dewan', 'image' => 'images/dewankdp.jpg'],
+            ['name' => 'Bilik Mesy. Gerakan', 'description' => 'bilik', 'image' => 'images/bilikgerakan.jpg'],
+            ['name' => 'Bilik Kuliah Mahpoor Baba', 'description' => 'bilik', 'image' => 'images/bilikkuliahmahpoorbaba.jpg'],
         ]);
     }
 }

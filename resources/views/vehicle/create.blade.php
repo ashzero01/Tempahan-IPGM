@@ -7,7 +7,7 @@
         @endif
 
         <!-- Vehicle creation form -->
-        <form action="{{ route('vehicles.store') }}" method="POST">
+        <form action="{{ route('vehicles.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="form-group">
@@ -41,6 +41,14 @@
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
+
+            <div class="form-group">
+            <label for="image">Image</label>
+            <input type="file" name="image" id="image" class="form-control">
+            @error('image')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
 
             <div class="form-group">
                 <label for="description">Description</label>

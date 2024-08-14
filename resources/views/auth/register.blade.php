@@ -159,10 +159,6 @@
                     <input id="name" type="text" name="name" required autofocus>
                 </div>
 
-                <div>
-                    <label for="email" style="display: block; margin-bottom: 0.5rem;">Emel</label>
-                    <input id="email" type="email" name="email" required>
-                </div>
 
                 <div>
                     <label for="ICnumber" style="display: block; margin-bottom: 0.5rem;">No Kad Pengenalan</label>
@@ -175,7 +171,7 @@
                 </div>
 
                 <div>
-                    <label for="affiliation" style="display: block; margin-bottom: 0.5rem;">Afiliasi</label>
+                    <label for="affiliation" style="display: block; margin-bottom: 0.5rem;">Jawatan/Jabatan</label>
                     <input id="affiliation" type="text" name="affiliation">
                 </div>
 

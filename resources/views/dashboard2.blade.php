@@ -14,80 +14,82 @@
     <!-- Styles -->
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: url('{{ asset('images/background.jpg') }}') no-repeat center center fixed;
-            background-size: cover;
-            min-height: 100vh; /* Ensure the body takes up full viewport height */
-            display: flex;
-            flex-direction: column; /* Stack header and main content vertically */
-        }
-
-        .header {
-            background-color: #fff; /* Optional: ensure header background is solid */
-            padding: 10px 20px; /* Adjust padding */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .main-container {
-            flex: 1; /* Take up remaining space */
-            display: flex;
-            flex-direction: column; /* Stack breadcrumb and main content vertically */
-            align-items: center;
-            padding: 20px;
-        }
-
-        .main-content {
-            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
-            padding: 20px; /* Adjust padding */
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            max-width: 1000px; /* Set a maximum width */
-            width: 100%; /* Ensure it takes up the full width available */
-            box-sizing: border-box; /* Ensure padding and border are included in the width and height */
-        }
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('{{ asset('images/background.jpg') }}') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh; /* Ensure the body takes up full viewport height */
+    display: flex;
+    flex-direction: column; /* Stack header and main content vertically */
+}
 
 
-        .buttons-container {
-            display: flex;
-            flex-wrap: wrap; /* Allow buttons to wrap if necessary */
-            gap: 16px; /* More consistent gap */
-            justify-content: center;
-        }
+.main-container {
+    flex: 1; /* Take up remaining space */
+    display: flex;
+    flex-direction: column; /* Stack breadcrumb and main content vertically */
+    align-items: center;
+    justify-content: center; /* Center content vertically */
+    padding: 20px;
+}
 
-        .custom-button {
-            width: 150px; /* Set width */
-            height: 150px; /* Set height */
-            padding: 10px;
-            background-color: #007bff; /* Same color for all buttons */
-            text-decoration: none; /* Remove underline */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            text-align: center;
-            color: #ffffff; /* White text color */
-            font-size: 18px;
-        }
+.main-content {
+    background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
+    padding: 20px; /* Adjust padding */
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    max-width: 1000px; /* Set a maximum width */
+    width: 100%; /* Ensure it takes up the full width available */
+    box-sizing: border-box; /* Ensure padding and border are included in the width and height */
+}
 
-        .custom-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
+.buttons-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow buttons to wrap if necessary */
+    gap: 16px; /* More consistent gap */
+    justify-content: center; /* Center buttons horizontally */
+    align-items: center; /* Center buttons vertically */
+    height: 100%; /* Ensure it takes up the full height available */
+}
 
+.custom-button {
+    width: 150px; /* Set width */
+    height: 150px; /* Set height */
+    padding: 10px;
+    background-color: #007bff; /* Same color for all buttons */
+    text-decoration: none; /* Remove underline */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column; /* Stack icon and text vertically */
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    text-align: center;
+    color: #ffffff; /* White text color */
+    font-size: 18px;
+    text-transform: uppercase; /* Make text uppercase */
+}
+
+.button-icon {
+    font-size: 40px; /* Large icon size */
+    margin-bottom: 10px; /* Space between icon and text */
+}
+
+.button-text {
+    font-size: 16px; /* Adjust text size */
+}
+
+.custom-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
     </style>
 
     <link href="{{ asset('css/header.css') }}" rel="stylesheet">
     <link href="{{ asset('css/breadcrumb.css') }}" rel="stylesheet">
-
-
 </head>
 <body>
 
@@ -138,20 +140,48 @@
         <div class="buttons-container">
             <!-- Tempah Bilik Button -->
             <a href="{{ route('rooms.index') }}" class="custom-button">
-                Tempah Bilik
+                <div class="button-icon">
+                    <i class="fas fa-door-open"></i>
+                </div>
+                <div class="button-text">
+                    Tempah Bilik dan Dewan
+                </div>
             </a>
             <!-- Tempah Kenderaan Button -->
             <a href="{{ route('vehicles.book') }}" class="custom-button">
-                Tempah Kenderaan (Belum siap)
+                <div class="button-icon">
+                    <i class="fas fa-car"></i>
+                </div>
+                <div class="button-text">
+                    Tempah Kenderaan
+                </div>
             </a>
+            <!-- Lihat Tempahan Bilik Button -->
             <a href="{{ route('bookings.user', ['user_id' => auth()->id()]) }}" class="custom-button">
-                Lihat Tempahan Bilik
+                <div class="button-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="button-text">
+                    Lihat Tempahan Bilik dan Dewan
+                </div>
             </a>
+            <!-- Lihat Tempahan Kenderaan Button -->
             <a href="{{ route('vehicle.bookings.index') }}" class="custom-button">
-                Lihat Tempahan Kenderaan (Belum siap)
+                <div class="button-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="button-text">
+                    Lihat Tempahan Kenderaan
+                </div>
             </a>
+            <!-- Kemaskini Profil Button -->
             <a href="{{ route('editprofile') }}" class="custom-button">
-                Kemaskini Profil
+                <div class="button-icon">
+                    <i class="fas fa-user-edit"></i>
+                </div>
+                <div class="button-text">
+                    Kemaskini Profil
+                </div>
             </a>
         </div>
     </div>

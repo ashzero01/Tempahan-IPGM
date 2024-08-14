@@ -37,9 +37,11 @@ class RoomController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images'), $imageName);
-            $data['image'] = $imageName;
+            $image->move(storage_path('app/public/images'), $imageName);
+            // Save the image path in the database as 'images/filename'
+            $data['image'] = 'images/' . $imageName;
         }
+        
 
         Room::create($data);
 

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Sistem Tempahan IPGMKKB</title>
+    <title>Book a Room</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -15,21 +15,16 @@
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('css/header.css') }}" rel="stylesheet">
     <link href="{{ asset('css/backbutton.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/breadcrumb.css') }}" rel="stylesheet">
 
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0; 
-            min-height: 100vh; /* Ensure the body takes up full viewport height */
+            min-height: 100vh;
             display: flex;
-            flex-direction: column; /* Stack header and main content vertically */
-        }
-
-        .buttons-container {
-            display: flex;
-            justify-content: center;
-            gap: 16px; /* More consistent gap */
+            flex-direction: column;
         }
 
         .room-container {
@@ -40,13 +35,13 @@
         }
 
         .room-box {
-            width: calc(25%); /* Adjust the width as needed */
+            width: calc(25%);
             padding: 28px;
             background-color: #ffffff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 2px;
+            border-radius: 8px;
             transition: transform 0.3s ease;
-            cursor: pointer; /* Add cursor pointer */
+            cursor: pointer;
         }
 
         .room-box:hover {
@@ -79,117 +74,57 @@
             color: #357bd8;
         }
 
-        .add-room-button {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #4a90e2;
-            color: #ffffff;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: bold;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-        }
-
-        .add-room-button:hover {
-            background-color: #357bd8;
-        }
-
-        .delete-room-button-wrapper {
-            display: flex;
-            justify-content: flex-end; /* Align button to the right */
-            margin-top: 10px; /* Add margin for spacing */
-        }
-
-        .admin-buttons {
-            display: flex;
-            justify-content: flex-end; /* Align buttons to the right */
-            margin-top: 10px; /* Add margin for spacing */
-        }
-
-        .edit-delete-container {
-            display: flex;
-        }
-
-        .edit-room-button,
-        .delete-room-button {
-            padding: 6px 12px; /* Adjust padding to make the buttons smaller */
-            font-size: 14px; /* Adjust font size to make the button text smaller */
-            font-weight: bold;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-        }
-
-        .edit-room-button {
-            background-color: #4a90e2; /* Blue color for edit button */
-            color: #ffffff;
-            border: none;
-            border-radius: 4px 0 0 4px; /* Rounded border for left edge */
-        }
-
-        .edit-room-button:hover {
-            background-color: #357bd8; /* Darker blue on hover */
-        }
-
-        .delete-room-button {
-            background-color: #ff0000; /* Red color for delete button */
-            color: #ffffff;
-            border: none;
-            border-radius: 0 4px 4px 0; /* Rounded border for right edge */
-        }
-
-        .delete-room-button:hover {
-            background-color: #cc0000; /* Darker red on hover */
-        }
-
         .page-title {
             padding: 1rem;
             font-size: 2rem;
             color: #333333;
         }
 
-        .button-container {
+        .filter-buttons {
+            margin: 20px 0;
             display: flex;
-            justify-content: space-between; /* Distribute space between buttons */
-            align-items: center; /* Vertically center the buttons */
-            margin-bottom: 20px; /* Add margin below the button container */
+            gap: 10px;
         }
 
-        .add-room-button, .back-button {
+        .filter-button {
+            background-color: #E5E7EB;
+            color: #333333;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.3s ease;
+            flex: 0 1 auto; /* Allow buttons to shrink but not grow */
+            min-width: 120px; /* Ensure buttons have a minimum width */
+        }
+
+        .filter-button.active {
+            background-color: #3B82F6;
+            color: white;
+        }
+
+        .back-button {
             display: inline-block;
             padding: 10px 20px;
             text-decoration: none;
             border-radius: 4px;
-            transition: background-color 0.3s ease;
-        }
-
-        .filter-button {
-            padding: 10px 20px;
             background-color: #4a90e2;
-            color: #ffffff;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: bold;
-            text-decoration: none;
-            cursor: pointer;
+            color: white;
             transition: background-color 0.3s ease;
         }
 
-        .filter-button:hover {
+        .back-button:hover {
             background-color: #357bd8;
         }
     </style>
-        <link href="{{ asset('css/breadcrumb.css') }}" rel="stylesheet">
-
 </head>
 <body>
     <!-- Header Section -->
     <header class="header">
         <div class="logo-container">
             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
-            <h2 class="header-title">Sistem Tempahan Bilik dan Kenderaan</h2>
+            <h2 class="header-title">Sistem Tempahan Bilik</h2>
         </div>
         <div class="nav-links">
             <a>{{ auth()->user()->name }}</a>
@@ -204,58 +139,68 @@
         </div>
     </header>
 
-    <!-- Breadcrumb Section -->
-<!-- Breadcrumb Section -->
-<div class="breadcrumb">
-<a href="{{ route('dashboard') }}">Halaman Utama</a>
-    <span>&gt;</span>
-    <a href="#" class="active">Senarai Bilik dan Dewan</a>
-</div>
+    <div class="breadcrumb">
+        <a href="{{ route('dashboard') }}">Halaman Utama</a>
+        <span>&gt;</span>
+        <a href="#" class="active">Senarai Bilik dan Dewan</a>
+    </div>
 
     <!-- Page Title Section -->
     <div class="main-container">
         <div class="page-title">
-            Tempahan Bilik
+            Senarai Bilik dan Dewan
         </div>
-
         <div class="main-content">
-        <div>
-            <!-- Filter Buttons -->
-            <button class="filter-button" onclick="window.location.href='{{ route('rooms.filter', ['description' => 'bilik']) }}'">Bilik</button>
-            <button class="filter-button" onclick="window.location.href='{{ route('rooms.filter', ['description' => 'dewan']) }}'">Dewan</button>
-        </div>
-            <div class="py-12">
-                <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div class="room-container">
-                        <!-- Room Boxes -->
-                        @foreach ($rooms as $room)
-                            <div class="room-box" onclick="window.location='{{ route('bookings.create', $room->id) }}';">
-                                <!-- Room Image -->
-                                <img src="{{ $room->image_url }}" alt="{{ $room->name }}" class="room-image">
-                                <!-- Room Name -->
-                                <div class="room-name">{{ $room->name }}</div>
-                                <!-- Link to room bookings -->
-                                <span class="room-link">Tempah Sekarang</span>
-                                <!-- Buttons for administrators -->
-                                @if (auth()->user()->isAdmin())
-                                    <div class="admin-buttons">
-                                        <!-- Edit and delete buttons container -->
-                                        <div class="edit-delete-container">
-                                            <!-- Delete button -->
-                                            <form action="{{ route('rooms.destroy', $room->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="delete-room-button">Padam</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
-                        @endforeach
+            <div class="filter-buttons">
+                <button class="filter-button active" data-type="">Semua Bilik</button>
+                <button class="filter-button" data-type="bilik">Bilik</button>
+                <button class="filter-button" data-type="dewan">Dewan</button>
+            </div>
+
+            <div class="room-container">
+                <!-- Room Boxes -->
+                @foreach ($rooms as $room)
+                    <div class="room-box" data-type="{{ $room->description }}" onclick="window.location='{{ route('bookings.create', $room->id) }}';">
+                        <!-- Room Image -->
+                        <img src="{{ $room->image ? asset('storage/' . $room->image) : asset('images/default-room.jpg') }}" alt="{{ $room->name }}" class="room-image">
+                        <!-- Room Name -->
+                        <div class="room-name">{{ $room->name }}</div>
+                        <!-- Link to room bookings -->
+                        <span class="room-link">Tempah Sekarang</span>
                     </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const filterButtons = document.querySelectorAll('.filter-button');
+            const roomBoxes = document.querySelectorAll('.room-box');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+
+                    // Add active class to the clicked button
+                    button.classList.add('active');
+
+                    // Filter rooms
+                    const selectedType = button.getAttribute('data-type');
+
+                    roomBoxes.forEach(box => {
+                        const roomType = box.getAttribute('data-type');
+
+                        if (selectedType === '' || roomType === selectedType) {
+                            box.style.display = 'block';
+                        } else {
+                            box.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>

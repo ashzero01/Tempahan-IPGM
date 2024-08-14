@@ -80,6 +80,33 @@
             color: #333333;
         }
 
+        .filter-buttons {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+
+        }
+
+        .filter-button {
+            background-color: #E5E7EB;
+            color: #333333;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.3s ease;
+            flex: 0 1 auto; /* Allow buttons to shrink but not grow */
+            min-width: 120px; /* Ensure buttons have a minimum width */
+
+
+        }
+
+        .filter-button.active {
+            background-color: #3B82F6;
+            color: white;
+        }
+
         .back-button {
             display: inline-block;
             padding: 10px 20px;
@@ -116,10 +143,10 @@
     </header>
 
     <div class="breadcrumb">
-    <a href="{{ route('dashboard') }}">Halaman Utama</a>
-    <span>&gt;</span>
-    <a href="#" class="active">Senarai Kenderaan</a>
-</div>
+        <a href="{{ route('dashboard') }}">Halaman Utama</a>
+        <span>&gt;</span>
+        <a href="#" class="active">Senarai Kenderaan</a>
+    </div>
 
     <!-- Page Title Section -->
     <div class="main-container">
@@ -127,12 +154,20 @@
             Tempahan Kenderaan
         </div>
         <div class="main-content">
+            <div class="filter-buttons">
+                <button class="filter-button active" data-type="">Semua Kenderaan</button>
+                <button class="filter-button" data-type="bas">Bas</button>
+                <button class="filter-button" data-type="kereta">Kereta</button>
+                <button class="filter-button" data-type="van">Van</button>
+                <button class="filter-button" data-type="pajero">Pajero</button>
+            </div>
+
             <div class="vehicle-container">
                 <!-- Vehicle Boxes -->
                 @foreach ($vehicles as $vehicle)
-                    <div class="vehicle-box" onclick="window.location='{{ route('vehicles.booking.details', $vehicle->id) }}';">
+                    <div class="vehicle-box" data-type="{{ $vehicle->type }}" onclick="window.location='{{ route('vehicles.booking.details', $vehicle->id) }}';">
                         <!-- Vehicle Image -->
-                        <img src="{{ $vehicle->image_url }}" alt="{{ $vehicle->name }}" class="vehicle-image">
+                        <img src="{{ $vehicle->image ? asset('storage/' . $vehicle->image) : asset('images/default-vehicle.jpg') }}" alt="{{ $vehicle->name }}" class="vehicle-image">
                         <!-- Vehicle Name -->
                         <div class="vehicle-name">{{ $vehicle->name }}</div>
                         <!-- Link to vehicle bookings -->
@@ -142,5 +177,35 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const filterButtons = document.querySelectorAll('.filter-button');
+            const vehicleBoxes = document.querySelectorAll('.vehicle-box');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+
+                    // Add active class to the clicked button
+                    button.classList.add('active');
+
+                    // Filter vehicles
+                    const selectedType = button.getAttribute('data-type');
+
+                    vehicleBoxes.forEach(box => {
+                        const vehicleType = box.getAttribute('data-type');
+
+                        if (selectedType === '' || vehicleType === selectedType) {
+                            box.style.display = 'block';
+                        } else {
+                            box.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>

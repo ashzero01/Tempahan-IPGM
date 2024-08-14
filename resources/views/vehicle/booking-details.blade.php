@@ -10,7 +10,6 @@
     <link href="{{ asset('css/backbutton.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('fontawesome-free-6.6.0-web/css/all.min.css') }}">
 
-
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -96,7 +95,44 @@
         .delete-button:hover {
             background-color: #EF4444;
         }
+
+        .user-info-table {
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .user-info-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .user-info-table thead {
+            background-color: #F3F4F6;
+        }
+
+        .user-info-table th, .user-info-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .user-info-table th {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #4B5563;
+            text-transform: uppercase;
+            position: relative;
+        }
+
+        .user-info-table td {
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+        
     </style>
+
+<link href="{{ asset('css/header.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/breadcrumb.css') }}" rel="stylesheet">
 </head>
 <body>
   <!-- Header Section -->
@@ -134,83 +170,115 @@
     </div>
 </header>
 
+<!-- Breadcrumb Section -->
+<div class="breadcrumb">
+    <a href="{{ route('dashboard') }}">Halaman Utama</a>
+    <span>&gt;</span>
+    <a href="{{ route('vehicle.bookings.index') }}">Senarai Tempahan Kenderaan</a>
+    <span>&gt;</span>
+    <a href="#" class="active">Butiran Tempahan Kenderaan</a>
+</div>
+
+
     <!-- Main Content Section -->
     <div class="main-container">
-    <div>
-    <a href="{{ route('vehicle.bookings.index') }}" class="back-button">&#129152;</a>
-        </div>
         <div class="page-title">
             Butiran Tempahan untuk {{ $destination }} pada {{ $timestamp }}
         </div>
-    <div class="main-content">
-        @if($bookings->isEmpty())
-            <p>Tiada tempahan dijumpai.</p>
-        @else
-            <div class="table-container">
-                <h2>Maklumat Tempahan</h2>
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>Destinasi</th>
-                            <td>{{ $destination }}</td>
-                        </tr>
-                        <tr>
-                            <th>Tujuan</th>
-                            <td>{{ $bookings->first()->purpose }}</td>
-                        </tr>
-                        <tr>
-                            <th>Tarikh Bertolak</th>
-                            <td>{{ $bookings->first()->departure_date }}</td>
-                        </tr>
-                        <tr>
-                            <th>Masa Bertolak</th>
-                            <td>{{ $bookings->first()->departure_time }}</td>
-                        </tr>
-                        <tr>
-                            <th>Tarikh Pulang</th>
-                            <td>{{ $bookings->first()->return_date }}</td>
-                        </tr>
-                        <tr>
-                            <th>Masa Pulang</th>
-                            <td>{{ $bookings->first()->return_time }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div class="main-content">
+            @if($bookings->isEmpty())
+                <p>Tiada tempahan dijumpai.</p>
+            @else
+                
 
-            <div class="table-container">
-                <h2>Kenderaan Ditempah</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Kenderaan</th>
-                            <th>No Plat Pendaftaran</th>
-                            <th>Jenis Kenderaan</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($bookings as $booking)
+                <!-- Booking Details Table -->
+                <div class="table-container">
+                    <h2>Maklumat Tempahan</h2>
+                    <table>
+                        <tbody>
                             <tr>
-                                <td>{{ $booking->vehicle->name }}</td>
-                                <td>{{ $booking->vehicle->registration_number }}</td>
-                                <td>{{ $booking->vehicle->type }}</td>
+                                <th>Destinasi</th>
+                                <td>{{ $destination }}</td>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @endif
+                            <tr>
+                                <th>Tujuan</th>
+                                <td>{{ $bookings->first()->purpose }}</td>
+                            </tr>
+                            <tr>
+                                <th>Tarikh Bertolak</th>
+                                <td>{{ $bookings->first()->departure_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>Masa Bertolak</th>
+                                <td>{{ $bookings->first()->departure_time }}</td>
+                            </tr>
+                            <tr>
+                                <th>Tarikh Pulang</th>
+                                <td>{{ $bookings->first()->return_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>Masa Pulang</th>
+                                <td>{{ $bookings->first()->return_time }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Vehicle Details Table -->
+                <div class="table-container">
+                    <h2>Kenderaan Ditempah</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Kenderaan</th>
+                                <th>No Plat Pendaftaran</th>
+                                <th>Jenis Kenderaan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($bookings as $booking)
+                                <tr>
+                                    <td>{{ $booking->vehicle->name }}</td>
+                                    <td>{{ $booking->vehicle->registration_number }}</td>
+                                    <td>{{ $booking->vehicle->type }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
+
+            <!-- User Information Table -->
+                <div class="table-container">
+                    <h2>Maklumat Pemohon</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nama Pemohon</th>
+                                <th>No Telefon</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                <tr>
+                                    <td>{{ $bookings->first()->user->name }}</td>
+                                    <td>{{ $bookings->first()->user->phone_number }}</td>
+                                </tr>
+                        </tbody>
+                    </table>
+        </div>
+
+        
     </div>
+
+    <!-- Approve/Reject Buttons -->
     <form action="{{ route('vehicle.bookings.approve', [$timestamp, $destination]) }}" method="POST">
-    @csrf
-    <button type="submit" class="btn btn-success">Approve</button>
-</form>
+            @csrf
+            <button type="submit" class="btn btn-success">Approve</button>
+        </form>
 
-<form action="{{ route('vehicle.bookings.reject', [$timestamp, $destination]) }}" method="POST">
-    @csrf
-    <button type="submit" class="btn btn-danger">Reject</button>
-</form>
-
-    </div>
+        <form action="{{ route('vehicle.bookings.reject', [$timestamp, $destination]) }}" method="POST">
+            @csrf
+            <button type="submit" class="btn btn-danger">Reject</button>
+        </form>
 </body>
 </html>

@@ -18,6 +18,7 @@ class CreateVehiclesTable extends Migration
             $table->string('name'); // Vehicle name or model
             $table->string('registration_number')->unique(); // Vehicle registration number
             $table->string('type'); // Type of vehicle (e.g., car, van, bus)
+            $table->string('image')->nullable(); // Add image attribute to store the vehicle image
             $table->string('status')->default('Available'); // Vehicle status (e.g., Available, In Use, Maintenance)
             $table->text('description')->nullable(); // Description of the vehicle
             $table->timestamps(); // Timestamps for created_at and updated_at

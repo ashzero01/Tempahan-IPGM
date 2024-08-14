@@ -33,7 +33,6 @@ public function updateProfile(Request $request)
 
     $validatedData = $request->validate([
         'name' => 'required|string|max:255',
-        'email' => 'required|email|max:255',
         'ICnumber' => 'required|string|max:12',
         'phone_number' => 'required|string|max:15',
         'affiliation' => 'required|string|max:255',
@@ -67,7 +66,6 @@ public function addAdmin(Request $request)
     // Validate the request data
     $validatedData = $request->validate([
         'name' => 'required|string|max:255',
-        'email' => 'required|email|max:255|unique:users',
         'ICnumber' => 'required|string|max:12',
         'phone_number' => 'required|string|max:15',
         'affiliation' => 'required|string|max:255',
@@ -77,7 +75,6 @@ public function addAdmin(Request $request)
     // Create a new user with the validated data and 'admin' role
     $admin = User::create([
         'name' => $validatedData['name'],
-        'email' => $validatedData['email'],
         'ICnumber' => $validatedData['ICnumber'],
         'phone_number' => $validatedData['phone_number'],
         'affiliation' => $validatedData['affiliation'],
