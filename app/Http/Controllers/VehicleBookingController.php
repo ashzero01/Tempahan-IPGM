@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\VehicleBooking;
 use App\Models\Vehicle;
 use Carbon\Carbon;
+use setasign\Fpdi\Fpdi;
+use Illuminate\Support\Facades\Response;
 
 class VehicleBookingController extends Controller
 {
@@ -200,6 +202,7 @@ class VehicleBookingController extends Controller
         VehicleBooking::create([
             'vehicle_id' => $vehicle->id,
             'user_id' => Auth::id(),
+            'unit_name' => $request->unit_name,
             'departure_date' => $departureDate,
             'return_date' => $returnDate,
             'departure_time' => $departureTime24,
@@ -224,4 +227,174 @@ class VehicleBookingController extends Controller
 
         return $query;
     }
+
+    public function generatePdf($timestamp, $destination)
+{
+
+    function formatTime($time)
+    {
+        $hour = (int)date('H', strtotime($time));
+        $minute = date('i', strtotime($time));
+    
+        if ($hour >= 0 && $hour < 12) {
+            $period = 'Pagi';  // Morning
+            $hour12 = $hour === 0 ? 12 : $hour;
+        } elseif ($hour >= 12 && $hour < 19) {
+            $period = 'Petang';  // Afternoon
+            $hour12 = $hour === 12 ? 12 : $hour - 12;
+        } else {
+            $period = 'Malam';  // Night
+            $hour12 = $hour === 12 ? 12 : $hour - 12;
+        }
+    
+        return sprintf('%d:%02d %s', $hour12, $minute, $period);
+    }
+    $bookings = VehicleBooking::where('destination', $destination)
+        ->whereDate('created_at', '=', Carbon::parse($timestamp)->toDateString())
+        ->whereTime('created_at', '=', Carbon::parse($timestamp)->toTimeString())
+        ->get();
+
+    // Resolve the template path using public_path()
+    $templatePath = public_path('pdf/kenderaan.pdf');
+    
+    if (!file_exists($templatePath)) {
+        return response()->json(['error' => 'Template file not found.'], 404);
+    }
+
+    // Initialize FPDI
+    $pdf = new Fpdi();
+
+    // Set the source file (import the existing PDF template)
+    $pdf->setSourceFile($templatePath);
+
+    // Import the first page of the template
+    $template = $pdf->importPage(1);
+    $pdf->AddPage();
+    $pdf->useTemplate($template);
+
+    // Define coordinates
+    $coordinates = [
+        'unit_name' => [100, 102],
+        'affiliation' => [52, 232],
+        'departure_date' => [66, 116],
+        'return_date' => [134, 116],
+        'departure_time' => [66, 126],
+        'return_time' => [134, 126],
+        'destination' => [100, 137],
+        'purpose' => [100, 146],
+        'vehicle_type' => [90, 165],
+        'vehicle_count' => [175, 165],
+        'name'=> [52, 212],
+        'ICnumber' => [52, 222],
+        'phone_number' => [52, 251],
+        'book_date' => [52, 242],
+
+
+
+    ];
+
+    // Set font
+    $pdf->SetFont('Helvetica', '', 12);
+
+    // Set the content using coordinates
+
+
+    
+
+
+
+    $pdf->SetXY($coordinates['unit_name'][0], $coordinates['unit_name'][1]);
+    $pdf->Cell(0, 10, $bookings->first()->unit_name);  // Replace with actual data
+
+    $pdf->SetXY($coordinates['destination'][0], $coordinates['destination'][1]);
+    $pdf->Cell(0, 10, $destination);  // Replace with actual data
+
+    $pdf->SetXY($coordinates['departure_date'][0], $coordinates['departure_date'][1]);
+    $pdf->Cell(0, 10, Carbon::parse($bookings->first()->departure_date)->toDateString());  // Replace with actual data
+
+    $pdf->SetXY($coordinates['return_date'][0], $coordinates['return_date'][1]);
+    $pdf->Cell(0, 10, Carbon::parse($bookings->first()->return_date)->toDateString());  // Replace with actual data
+
+    $pdf->SetXY($coordinates['departure_time'][0], $coordinates['departure_time'][1]);
+    $pdf->Cell(0, 10, formatTime($bookings->first()->departure_time));  // Replace with actual data
+
+    $pdf->SetXY($coordinates['return_time'][0], $coordinates['return_time'][1]);
+    $pdf->Cell(0, 10, formatTime($bookings->first()->return_time));  // Replace with actual data
+
+    $pdf->SetXY($coordinates['purpose'][0], $coordinates['purpose'][1]);
+    $pdf->Cell(0, 10, $bookings->first()->purpose);  // Replace with actual data
+
+    $vehicleTypes = $bookings->pluck('vehicle.type')->unique()->implode(', ');
+
+    // Set vehicle type in PDF
+    $pdf->SetXY($coordinates['vehicle_type'][0], $coordinates['vehicle_type'][1]);
+    $pdf->Cell(0, 10, $vehicleTypes);
+
+    $vehicleCount = $bookings->count();
+
+
+    $pdf->SetXY($coordinates['vehicle_count'][0], $coordinates['vehicle_count'][1]);
+    $pdf->Cell(0, 10, $vehicleCount);
+
+
+    $pdf->SetXY($coordinates['name'][0], $coordinates['name'][1]);
+    $pdf->Cell(0, 10, $bookings->first()->user->name);  // Replace with actual data
+
+    $pdf->SetXY($coordinates['ICnumber'][0], $coordinates['ICnumber'][1]);
+    $pdf->Cell(0, 10, $bookings->first()->user->ICnumber);  // Replace with actual data
+
+    $pdf->SetXY($coordinates['affiliation'][0], $coordinates['affiliation'][1]);
+    $pdf->Cell(0, 10, $bookings->first()->user->affiliation);  // Replace with actual data
+
+    $pdf->SetXY($coordinates['book_date'][0], $coordinates['book_date'][1]);
+    $pdf->Cell(0, 10, $bookings->first()->created_at->toDateString());  // Replace with actual data
+
+    $pdf->SetXY($coordinates['phone_number'][0], $coordinates['phone_number'][1]);
+    $pdf->Cell(0, 10, $bookings->first()->user->phone_number);  // Replace with actual data
+
+
+    // Add table headers and booking details as needed
+
+    // Output the PDF as a download
+    return Response::make($pdf->Output('S', 'booking.pdf'), 200, [
+        'Content-Type' => 'application/pdf',
+        'Content-Disposition' => 'inline; filename="booking.pdf"'
+    ]);
+
+}
+
+    public function showDriverForm($timestamp, $destination)
+    {
+        $user = Auth::user();
+
+        if (!$user->isAdmin()) {
+            return redirect()->route('vehicle.bookings.index')->with('error', 'Unauthorized access.');
+        }
+
+        return view('vehicle.assign-driver', compact('timestamp', 'destination'));
+    }
+
+    public function assignDriverGrouped(Request $request, $timestamp, $destination)
+{
+    $user = Auth::user();
+
+    if (!$user->isAdmin()) {
+        return redirect()->route('vehicle.bookings.index')->with('error', 'Unauthorized access.');
+    }
+
+    $request->validate([
+        'driver_name' => 'required|string|max:255',
+    ]);
+
+    $query = $this->getGroupedBookingQuery($timestamp, $destination);
+    $query->update(['driver_name' => $request->input('driver_name')]);
+
+    return redirect()->route('vehicle.bookings.show', ['timestamp' => $timestamp, 'destination' => $destination])
+    ->with('success', 'Driver assigned successfully!');}
+
+
+
+
+
+    
 }

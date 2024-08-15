@@ -61,6 +61,8 @@ Route::middleware(['auth'])->group(function () {
     // Vehicle Booking Routes
     Route::get('/user/vehicle-bookings', [VehicleBookingController::class, 'index'])->name('vehicle.bookings.index');
     Route::get('/user/vehicle-bookings/{timestamp}/{destination}', [VehicleBookingController::class, 'showGroupedBooking'])->name('vehicle.bookings.show');
+    Route::get('/user/vehicle-bookings/{timestamp}/{destination}/assign-driver', [VehicleBookingController::class, 'showDriverForm'])->name('vehicle.bookings.assign.driver');
+    Route::post('/user/vehicle-bookings/{timestamp}/{destination}/assign-driver', [VehicleBookingController::class, 'assignDriverGrouped'])->name('vehicle.bookings.assign.driver');
     Route::post('vehicle/bookings/{timestamp}/{destination}/approve', [VehicleBookingController::class, 'approveGroupedBookings'])->name('vehicle.bookings.approve');
     Route::post('vehicle/bookings/{timestamp}/{destination}/reject', [VehicleBookingController::class, 'rejectGroupedBookings'])->name('vehicle.bookings.reject');
     Route::delete('/vehicle/bookings/{booking}', [VehicleBookingController::class, 'delete'])->name('vehicle.bookings.destroy');
@@ -84,7 +86,7 @@ Route::middleware(['auth'])->group(function () {
     // Fill Form and PDF Routes
     Route::get('/fill-form', [PdfController::class, 'fillForm'])->name('fillForm');
     Route::get('/bookings/{booking}/pdf', [BookingController::class, 'generatePdf'])->name('bookings.generatePdf');
-
+    Route::get('user/vehicle-bookings/{timestamp}/{destination}/pdf', [VehicleBookingController::class, 'generatePdf'])->name('vehicle.bookings.generatePdf');
 
     Route::get('/users', [UserController::class, 'listUsers'])->name('users.list');
     Route::delete('/users/{user_id}', [UserController::class, 'deleteUser'])->name('users.delete');
@@ -92,6 +94,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/add', [UserController::class, 'showAddAdminForm'])->name('showAddAdminForm');
     Route::post('/admin/add', [UserController::class, 'addAdmin'])->name('addadmin');
     
+    
+
 
 });
 

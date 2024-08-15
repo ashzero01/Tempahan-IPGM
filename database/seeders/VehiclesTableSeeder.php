@@ -47,6 +47,14 @@ class VehiclesTableSeeder extends Seeder
                 'image' => 'images/van.jpg',
                 'description' => 'A spacious bus for large groups.'
             ],
+
+            [
+                'name' => 'Coaster',
+                'type' => 'mini bus',
+                'registration_number' => 'ABC1239',
+                'image' => 'images/coaster.jpg',
+                'description' => 'A mini bus for medium groups.'
+            ],
             // Add more vehicle data as needed
         ];
 

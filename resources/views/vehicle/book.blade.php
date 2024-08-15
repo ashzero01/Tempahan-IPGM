@@ -160,6 +160,7 @@
                 <button class="filter-button" data-type="kereta">Kereta</button>
                 <button class="filter-button" data-type="van">Van</button>
                 <button class="filter-button" data-type="pajero">Pajero</button>
+                <button class="filter-button" data-type="mini bus">Bas Mini</button>
             </div>
 
             <div class="vehicle-container">

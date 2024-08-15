@@ -57,28 +57,33 @@
         }
 
         .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem; /* Space between columns */
-        }
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem; /* Space between columns */
+}
 
-        .input-container {
-            position: relative;
-            width: 100%;
-            margin-bottom: 1rem;
-        }
+.full-width {
+    grid-column: span 2;
+}
 
-        .input-container input[type="text"] {
-            width: 100%;
-            padding: 0.75rem;
-            padding-left: 2.5rem; /* Add padding to accommodate icon */
-            border: 1px solid #D1D5DB;
-            border-radius: 0.375rem;
-            box-sizing: border-box;
-            font-size: 1.125rem; /* Increase text size */
-            text-align: center; /* Horizontally center the text */
-            line-height: 1.5; /* Adjust line height for vertical alignment */
-        }
+.input-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.input-container input[type="text"] {
+    width: 100%;
+    padding: 0.75rem;
+    padding-left: 2.5rem; /* Add padding to accommodate icon */
+    border: 1px solid #D1D5DB;
+    border-radius: 0.375rem;
+    box-sizing: border-box;
+    font-size: 1.125rem; /* Increase text size */
+    text-align: center; /* Horizontally center the text */
+    line-height: 1.5; /* Adjust line height for vertical alignment */
+}
+
 
         .input-container .icon {
             position: absolute;
@@ -161,51 +166,62 @@
             <form action="{{ route('vehicles.booking.store', $vehicle->id) }}" method="POST">
                 @csrf
                 <div class="form-grid">
-                    <div>
-                        <label for="departure_date">Tarikh Pergi:</label>
-                        <div class="input-container">
-                            <i class="icon icon-calendar fas fa-calendar-alt"></i>
-                            <input type="text" id="departure_date_display" value="{{ $departureDate }}" readonly>
-                            <input type="hidden" name="departure_date" value="{{ $departureDate }}">
-                        </div>
-                    </div>
-                    <div>
-                        <label for="return_date">Tarikh Balik:</label>
-                        <div class="input-container">
-                            <i class="icon icon-calendar fas fa-calendar-alt"></i>
-                            <input type="text" id="return_date_display" value="{{ $returnDate }}" readonly>
-                            <input type="hidden" name="return_date" value="{{ $returnDate }}">
-                        </div>
-                    </div>
-                    <div>
-                        <label for="departure_time">Masa Bertolak:</label>
-                        <div class="input-container">
-                            <i class="icon icon-clock fas fa-clock"></i>
-                            <input type="text" id="departure_time" name="departure_time" required placeholder="Pilih Masa Bertolak">
-                        </div>
-                    </div>
-                    <div>
-                        <label for="return_time">Masa Pulang:</label>
-                        <div class="input-container">
-                            <i class="icon icon-clock fas fa-clock"></i>
-                            <input type="text" id="return_time" name="return_time" required placeholder="Pilih Masa Pulang">
-                        </div>
-                    </div>
-                    <div>
-                        <label for="destination">Destinasi:</label>
-                        <div class="input-container">
-                            <i class="icon icon-location fas fa-map-marker-alt"></i>
-                            <input type="text" id="destination" name="destination" required placeholder="Nyatakan Destinasi">
-                        </div>
-                    </div>
-                    <div>
-                        <label for="purpose">Tujuan:</label>
-                        <div class="input-container">
-                            <i class="icon icon-purpose fas fa-briefcase"></i>
-                            <input type="text" id="purpose" name="purpose" required placeholder="Nyatakan Tujuan">
-                        </div>
-                    </div>
-                </div>
+    <div>
+        <label for="departure_date">Tarikh Pergi:</label>
+        <div class="input-container">
+            <i class="icon icon-calendar fas fa-calendar-alt"></i>
+            <input type="text" id="departure_date_display" value="{{ $departureDate }}" readonly>
+            <input type="hidden" name="departure_date" value="{{ $departureDate }}">
+        </div>
+    </div>
+    <div>
+        <label for="return_date">Tarikh Balik:</label>
+        <div class="input-container">
+            <i class="icon icon-calendar fas fa-calendar-alt"></i>
+            <input type="text" id="return_date_display" value="{{ $returnDate }}" readonly>
+            <input type="hidden" name="return_date" value="{{ $returnDate }}">
+        </div>
+    </div>
+    <div>
+        <label for="departure_time">Masa Bertolak:</label>
+        <div class="input-container">
+            <i class="icon icon-clock fas fa-clock"></i>
+            <input type="text" id="departure_time" name="departure_time" required placeholder="Pilih Masa Bertolak">
+        </div>
+    </div>
+    <div>
+        <label for="return_time">Masa Pulang:</label>
+        <div class="input-container">
+            <i class="icon icon-clock fas fa-clock"></i>
+            <input type="text" id="return_time" name="return_time" required placeholder="Pilih Masa Pulang">
+        </div>
+    </div>
+    
+    <!-- Unit Field on its Own Row -->
+    <div class="full-width">
+        <label for="unit_name">Nama Unit:</label>
+        <div class="input-container">
+            <i class="icon icon-location fas fa-map-marker-alt"></i>
+            <input type="text" id="unit_name" name="unit_name" required placeholder="Nyatakan Unit">
+        </div>
+    </div>
+    
+    <!-- Destination and Purpose on the Same Row -->
+    <div>
+        <label for="destination">Destinasi:</label>
+        <div class="input-container">
+            <i class="icon icon-location fas fa-map-marker-alt"></i>
+            <input type="text" id="destination" name="destination" required placeholder="Nyatakan Destinasi">
+        </div>
+    </div>
+    <div>
+        <label for="purpose">Tujuan:</label>
+        <div class="input-container">
+            <i class="icon icon-purpose fas fa-briefcase"></i>
+            <input type="text" id="purpose" name="purpose" required placeholder="Nyatakan Tujuan">
+        </div>
+    </div>
+</div>
                 <button type="submit">Sahkan Tempahan</button>
             </form>
         </div>

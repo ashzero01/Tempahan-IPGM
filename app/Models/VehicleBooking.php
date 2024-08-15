@@ -12,6 +12,7 @@ class VehicleBooking extends Model
     protected $fillable = [
         'user_id',
         'vehicle_id',
+        'unit_name',
         'departure_date',
         'departure_time',
         'return_date',

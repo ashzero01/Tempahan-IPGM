@@ -336,23 +336,23 @@ public function generatePdf(Booking $booking)
         'end_time' => [165, 137],
     ];
 
-    if ($room->name === 'Test Room') {
+    if ($room->name === 'Dewan Wawasan') {
         $tickCoordinates = [50, 82]; // Example coordinates for 'test 1'
-    } elseif ($room->name === 'Test Room 2') {
+    } elseif ($room->name === 'Dewan Bakti') {
         $tickCoordinates = [50, 87]; // Example coordinates for 'test 2'
-    } elseif ($room->name === 'Test Room 3') {
+    } elseif ($room->name === 'Dewan Kuliah K39') {
         $tickCoordinates = [50, 92]; // Example coordinates for 'test 3'
-    } elseif ($room->name === 'Test Room 4') {
+    } elseif ($room->name === 'Dewan Gerko') {
         $tickCoordinates = [50, 97]; // Example coordinates for 'test 4'
-    } elseif ($room->name === 'Test Room 5') {
+    } elseif ($room->name === 'Bilik Seminar(DK3') {
         $tickCoordinates = [50, 102]; // Example coordinates for 'test 5'
-    } elseif ($room->name === 'Test Room 6') {
+    } elseif ($room->name === 'Dewan Asrama') {
         $tickCoordinates = [50, 107]; // Example coordinates for 'test 6'
-    } elseif ($room->name === 'Test Room 7') {
+    } elseif ($room->name === 'Dewan KDP') {
         $tickCoordinates = [103, 82]; // Example coordinates for 'test 7'
-    } elseif ($room->name === 'Test Room 8') {
+    } elseif ($room->name === 'Bilik Mesy. Gerakans') {
         $tickCoordinates = [103, 87]; // Example coordinates for 'test 8'
-    } elseif ($room->name === 'Test Room 9') {
+    } elseif ($room->name === 'Bilik Kuliah Mahpoor Baba') {
         $tickCoordinates = [103, 92]; // Example coordinates for 'test 9'
     } elseif ($room->name === 'Test Room 10') {
         $tickCoordinates = [103, 97]; // Example coordinates for 'test 10'
