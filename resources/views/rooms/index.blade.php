@@ -48,12 +48,20 @@
             transform: translateY(-5px);
         }
 
-        .room-image {
+        .room-images {
+            position: relative;
             width: 100%;
-            height: 200px;
-            object-fit: cover;
+            height: 200px; /* Adjust as needed */
+            overflow: hidden;
             border-radius: 8px;
-            margin-bottom: 10px;
+        }
+
+        .room-images img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: opacity 1s ease-in-out;
         }
 
         .room-name {
@@ -142,6 +150,8 @@
     <div class="breadcrumb">
         <a href="{{ route('dashboard') }}">Halaman Utama</a>
         <span>&gt;</span>
+        <a href="{{ route('bookings.user', ['user_id' => auth()->id()]) }}">Senarai Tempahan Bilik dan Dewan</a>
+        <span>&gt;</span>
         <a href="#" class="active">Senarai Bilik dan Dewan</a>
     </div>
 
@@ -161,8 +171,12 @@
                 <!-- Room Boxes -->
                 @foreach ($rooms as $room)
                     <div class="room-box" data-type="{{ $room->description }}" onclick="window.location='{{ route('bookings.create', $room->id) }}';">
-                        <!-- Room Image -->
-                        <img src="{{ $room->image ? asset('storage/' . $room->image) : asset('images/default-room.jpg') }}" alt="{{ $room->name }}" class="room-image">
+                        <!-- Room Images -->
+                        <div class="room-images">
+                            @foreach (json_decode($room->images) as $index => $image)
+                                <img src="{{ asset('storage/' . $image) }}" alt="{{ $room->name }}" class="room-image" style="{{ $index > 0 ? 'display: none;' : '' }}">
+                            @endforeach
+                        </div>
                         <!-- Room Name -->
                         <div class="room-name">{{ $room->name }}</div>
                         <!-- Link to room bookings -->

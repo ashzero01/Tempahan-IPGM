@@ -186,6 +186,7 @@
         <button class="filter-button" data-status="Diterima">Diterima</button>
         <button class="filter-button" data-status="Ditolak">Ditolak</button>
     </div>
+    <a href="{{ route('rooms.index') }}" class="view-button">Tempah Bilik dan Dewan</a>
 </div>
             <div class="table-container">
                 <table>

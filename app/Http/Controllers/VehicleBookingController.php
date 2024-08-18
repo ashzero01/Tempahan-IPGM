@@ -193,7 +193,13 @@ class VehicleBookingController extends Controller
         $departureDate = Carbon::createFromFormat('d-m-Y', $request->departure_date)->format('Y-m-d');
         $returnDate = Carbon::createFromFormat('d-m-Y', $request->return_date)->format('Y-m-d');
 
+            // Custom validation for the time
+    if ($departureDate == $returnDate && $departureTime24 > $returnTime24) {
+        return redirect()->back()->withErrors(['departure_time' => 'Masa bertolak mesti sebelum masa pulang.']);
+    }
+
         $availability = $this->checkVehicleAvailability($vehicle, $departureDate, $returnDate);
+
 
         if (!$availability) {
             return redirect()->back()->withErrors(['error' => 'Vehicle is not available for the selected dates.']);
@@ -230,7 +236,6 @@ class VehicleBookingController extends Controller
 
     public function generatePdf($timestamp, $destination)
 {
-
     function formatTime($time)
     {
         $hour = (int)date('H', strtotime($time));
@@ -249,30 +254,30 @@ class VehicleBookingController extends Controller
     
         return sprintf('%d:%02d %s', $hour12, $minute, $period);
     }
+
     $bookings = VehicleBooking::where('destination', $destination)
         ->whereDate('created_at', '=', Carbon::parse($timestamp)->toDateString())
         ->whereTime('created_at', '=', Carbon::parse($timestamp)->toTimeString())
         ->get();
 
-    // Resolve the template path using public_path()
-    $templatePath = public_path('pdf/kenderaan.pdf');
+    // Paths to the template files
+    $templatePath1 = public_path('pdf/kenderaan.pdf');
+    $templatePath2 = public_path('pdf/kenderaan2.pdf');
     
-    if (!file_exists($templatePath)) {
+    if (!file_exists($templatePath1) || !file_exists($templatePath2)) {
         return response()->json(['error' => 'Template file not found.'], 404);
     }
 
     // Initialize FPDI
     $pdf = new Fpdi();
 
-    // Set the source file (import the existing PDF template)
-    $pdf->setSourceFile($templatePath);
-
-    // Import the first page of the template
-    $template = $pdf->importPage(1);
+    // Import the first page of the first template
+    $pdf->setSourceFile($templatePath1);
+    $template1 = $pdf->importPage(1);
     $pdf->AddPage();
-    $pdf->useTemplate($template);
+    $pdf->useTemplate($template1);
 
-    // Define coordinates
+    // Define coordinates for the first page
     $coordinates = [
         'unit_name' => [100, 102],
         'affiliation' => [52, 232],
@@ -288,80 +293,81 @@ class VehicleBookingController extends Controller
         'ICnumber' => [52, 222],
         'phone_number' => [52, 251],
         'book_date' => [52, 242],
-
-
-
     ];
 
     // Set font
     $pdf->SetFont('Helvetica', '', 12);
 
-    // Set the content using coordinates
-
-
-    
-
-
-
+    // Set the content using coordinates for the first page
     $pdf->SetXY($coordinates['unit_name'][0], $coordinates['unit_name'][1]);
-    $pdf->Cell(0, 10, $bookings->first()->unit_name);  // Replace with actual data
+    $pdf->Cell(0, 10, $bookings->first()->unit_name);
 
     $pdf->SetXY($coordinates['destination'][0], $coordinates['destination'][1]);
-    $pdf->Cell(0, 10, $destination);  // Replace with actual data
+    $pdf->Cell(0, 10, $destination);
 
     $pdf->SetXY($coordinates['departure_date'][0], $coordinates['departure_date'][1]);
-    $pdf->Cell(0, 10, Carbon::parse($bookings->first()->departure_date)->toDateString());  // Replace with actual data
+    $pdf->Cell(0, 10, Carbon::parse($bookings->first()->departure_date)->toDateString());
 
     $pdf->SetXY($coordinates['return_date'][0], $coordinates['return_date'][1]);
-    $pdf->Cell(0, 10, Carbon::parse($bookings->first()->return_date)->toDateString());  // Replace with actual data
+    $pdf->Cell(0, 10, Carbon::parse($bookings->first()->return_date)->toDateString());
 
     $pdf->SetXY($coordinates['departure_time'][0], $coordinates['departure_time'][1]);
-    $pdf->Cell(0, 10, formatTime($bookings->first()->departure_time));  // Replace with actual data
+    $pdf->Cell(0, 10, formatTime($bookings->first()->departure_time));
 
     $pdf->SetXY($coordinates['return_time'][0], $coordinates['return_time'][1]);
-    $pdf->Cell(0, 10, formatTime($bookings->first()->return_time));  // Replace with actual data
+    $pdf->Cell(0, 10, formatTime($bookings->first()->return_time));
 
     $pdf->SetXY($coordinates['purpose'][0], $coordinates['purpose'][1]);
-    $pdf->Cell(0, 10, $bookings->first()->purpose);  // Replace with actual data
+    $pdf->Cell(0, 10, $bookings->first()->purpose);
 
     $vehicleTypes = $bookings->pluck('vehicle.type')->unique()->implode(', ');
-
-    // Set vehicle type in PDF
     $pdf->SetXY($coordinates['vehicle_type'][0], $coordinates['vehicle_type'][1]);
     $pdf->Cell(0, 10, $vehicleTypes);
 
     $vehicleCount = $bookings->count();
-
-
     $pdf->SetXY($coordinates['vehicle_count'][0], $coordinates['vehicle_count'][1]);
     $pdf->Cell(0, 10, $vehicleCount);
 
-
     $pdf->SetXY($coordinates['name'][0], $coordinates['name'][1]);
-    $pdf->Cell(0, 10, $bookings->first()->user->name);  // Replace with actual data
+    $pdf->Cell(0, 10, $bookings->first()->user->name);
 
     $pdf->SetXY($coordinates['ICnumber'][0], $coordinates['ICnumber'][1]);
-    $pdf->Cell(0, 10, $bookings->first()->user->ICnumber);  // Replace with actual data
+    $pdf->Cell(0, 10, $bookings->first()->user->ICnumber);
 
     $pdf->SetXY($coordinates['affiliation'][0], $coordinates['affiliation'][1]);
-    $pdf->Cell(0, 10, $bookings->first()->user->affiliation);  // Replace with actual data
+    $pdf->Cell(0, 10, $bookings->first()->user->affiliation);
 
     $pdf->SetXY($coordinates['book_date'][0], $coordinates['book_date'][1]);
-    $pdf->Cell(0, 10, $bookings->first()->created_at->toDateString());  // Replace with actual data
+    $pdf->Cell(0, 10, $bookings->first()->created_at->toDateString());
 
     $pdf->SetXY($coordinates['phone_number'][0], $coordinates['phone_number'][1]);
-    $pdf->Cell(0, 10, $bookings->first()->user->phone_number);  // Replace with actual data
+    $pdf->Cell(0, 10, $bookings->first()->user->phone_number);
 
+    // Add a second page from the second template
+    $pdf->AddPage();
+    $pdf->setSourceFile($templatePath2);
+    $template2 = $pdf->importPage(1);
+    $pdf->useTemplate($template2);
 
-    // Add table headers and booking details as needed
+    // Define coordinates for the second page
+    $secondPageCoordinates = [
+        'driver' => [92, 112],
+        // Add more coordinates as needed
+    ];
+
+    // Set content for the second page using coordinates
+    $pdf->SetFont('Helvetica', '', 12);
+
+    $pdf->SetXY($secondPageCoordinates['driver'][0], $secondPageCoordinates['driver'][1]);
+    $pdf->Cell(0, 10, $bookings->first()->driver_name);
 
     // Output the PDF as a download
     return Response::make($pdf->Output('S', 'booking.pdf'), 200, [
         'Content-Type' => 'application/pdf',
         'Content-Disposition' => 'inline; filename="booking.pdf"'
     ]);
-
 }
+
 
     public function showDriverForm($timestamp, $destination)
     {

@@ -197,6 +197,39 @@
         .booking-table td:nth-child(8) {
             text-align: center;
         }
+
+        .filter-actions-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.new-action-button-container {
+    margin-left: auto;
+}
+
+.new-action-button {
+    background-color: #3B82F6;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.new-action-button:hover {
+    background-color: #2563EB;
+}
+
     </style>
 </head>
 <body>
@@ -248,12 +281,18 @@
             Senarai Tempahan Kenderaan
         </div>
         <div class="main-content">
-            <div class="filter-buttons">
-                <button class="filter-button" data-status="">Semua Status</button>
-                <button class="filter-button" data-status="Menunggu Pengesahan">Menunggu Pengesahan</button>
-                <button class="filter-button" data-status="Diterima">Diterima</button>
-                <button class="filter-button" data-status="Ditolak">Ditolak</button>
-            </div>
+        <div class="filter-actions-container">
+    <div class="filter-buttons">
+        <button class="filter-button" data-status="">Semua Status</button>
+        <button class="filter-button" data-status="Menunggu Pengesahan">Menunggu Pengesahan</button>
+        <button class="filter-button" data-status="Diterima">Diterima</button>
+        <button class="filter-button" data-status="Ditolak">Ditolak</button>
+    </div>
+    <div class="new-action-button-container">
+        <a href="{{ route('vehicles.book') }}" class="new-action-button">Tempah Kenderaan</a>
+    </div>
+</div>
+            
             <div class="table-container" id="table-container">
                 @foreach($bookings as $key => $groupedBookings)
                 @php

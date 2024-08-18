@@ -209,16 +209,23 @@
   $formatTime = function ($time) {
       $hour = $time->format('g'); // 12-hour format without leading zero
       $minute = $time->format('i'); // Minutes
-      $suffix = 'pagi'; // Default suffix
+      $suffix = 'Pagi'; // Default suffix
 
       if ($time->hour >= 19) {
-          $suffix = 'malam';
+          $suffix = 'Malam';
       } elseif ($time->hour >= 12) {
-          $suffix = 'petang';
+          $suffix = 'Petang';
       }
 
       return $hour . ':' . $minute . ' ' . $suffix;
   };
+
+  \Carbon\Carbon::setLocale('ms');
+
+  $departureDate = \Carbon\Carbon::parse($bookings->first()->departure_date);
+    $returnDate = \Carbon\Carbon::parse($bookings->first()->return_date);
+    $departureDay = $departureDate->translatedFormat('l'); // Get the day in Malay (e.g., "Isnin")
+    $returnDay = $returnDate->translatedFormat('l'); // Get the day in Malay (e.g., "Isnin")
 @endphp
 
               <!-- Booking Details Table -->
@@ -236,7 +243,7 @@
                           </tr>
                           <tr>
                               <td class="title-cell">Tarikh Bertolak</td>
-                              <td class="info-cell">{{ $bookings->first()->departure_date }}</td>
+                              <td class="info-cell">{{ $departureDate->format('d/m/Y') }} ({{ $departureDay }})</td>
                           </tr>
                           <tr>
                               <td class="title-cell">Masa Bertolak</td>
@@ -244,7 +251,7 @@
                           </tr>
                           <tr>
                               <td class="title-cell">Tarikh Pulang</td>
-                              <td class="info-cell">{{ $bookings->first()->return_date }}</td>
+                              <td class="info-cell">{{ $returnDate->format('d/m/Y') }} ({{ $returnDay }})</td>
                           </tr>
                           <tr>
                               <td class="title-cell">Masa Pulang</td>

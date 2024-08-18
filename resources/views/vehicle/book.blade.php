@@ -145,6 +145,8 @@
     <div class="breadcrumb">
         <a href="{{ route('dashboard') }}">Halaman Utama</a>
         <span>&gt;</span>
+        <a href="{{ route('vehicle.bookings.index') }}">Senarai Tempahan Kenderaan</a>
+        <span>&gt;</span>
         <a href="#" class="active">Senarai Kenderaan</a>
     </div>
 

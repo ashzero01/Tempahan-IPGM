@@ -17,7 +17,7 @@ class CreateRoomsTable extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->string('image')->nullable(); // Add image attribute
+            $table->json('images')->nullable(); // Update column to handle multiple images
             $table->timestamps();
         });
     }

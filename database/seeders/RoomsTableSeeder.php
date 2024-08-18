@@ -15,15 +15,22 @@ class RoomsTableSeeder extends Seeder
     public function run()
     {
         DB::table('rooms')->insert([
-            ['name' => 'Dewan Wawasan', 'description' => 'dewan', 'image' => 'images/dewanwawasan.jpg'],
-            ['name' => 'Dewan Bakti', 'description' => 'dewan', 'image' => 'images/dewanbakti.jpg'],
-            ['name' => 'Dewan Kuliah K39', 'description' => 'dewan', 'image' => 'images/dewankuliahk39.jpg'],
-            ['name' => 'Dewan Gerko', 'description' => 'dewan', 'image' => 'images/dewangerko.jpg'],
-            ['name' => 'Bilik Seminar(DK3)', 'description' => 'bilik', 'image' => 'images/bilikseminar(dk3).jpg'],
-            ['name' => 'Dewan Asrama', 'description' => 'dewan', 'image' => 'images/dewanasrama.jpg'],
-            ['name' => 'Dewan KDP', 'description' => 'dewan', 'image' => 'images/dewankdp.jpg'],
-            ['name' => 'Bilik Mesy. Gerakan', 'description' => 'bilik', 'image' => 'images/bilikgerakan.jpg'],
-            ['name' => 'Bilik Kuliah Mahpoor Baba', 'description' => 'bilik', 'image' => 'images/bilikkuliahmahpoorbaba.jpg'],
+            [
+                'name' => 'Dewan Wawasan',
+                'description' => 'dewan',
+                'images' => json_encode([
+                    'images/dewanwawasan.jpg',
+                    'images/dewanwawasan2.jpg'
+                ])
+            ],
+            ['name' => 'Dewan Bakti', 'description' => 'dewan', 'images' => json_encode(['images/dewanbakti.jpg','images/dewanbakti2.jpg'])],
+            ['name' => 'Dewan Kuliah K39', 'description' => 'dewan', 'images' => json_encode(['images/dewankuliah(k39).jpg','images/dewankuliah(k39)2.jpg'])],
+            ['name' => 'Dewan Gerko', 'description' => 'dewan', 'images' => json_encode(['images/dewangerko.jpg','images/dewangerko2.jpg'])],
+            ['name' => 'Bilik Seminar(DK3)', 'description' => 'bilik', 'images' => json_encode(['images/bilikseminar(dk3).jpg','images/bilikseminar(dk3)2.jpg'])],
+            ['name' => 'Dewan Asrama', 'description' => 'dewan', 'images' => json_encode(['images/dewanasrama.jpg','images/dewanasrama2.jpg'])],
+            ['name' => 'Dewan KDP', 'description' => 'dewan', 'images' => json_encode(['images/dewankdp.jpg','images/dewankdp2.jpg'])],
+            ['name' => 'Bilik Mesy. Gerakan', 'description' => 'bilik', 'images' => json_encode(['images/bilikgerakan.jpg','images/bilikgerakan2.jpg'])],
+            ['name' => 'Bilik Kuliah Mahpoor Baba', 'description' => 'bilik', 'images' => json_encode(['images/bilikkuliahmahpoorbaba.jpg','images/bilikkuliahmahpoorbaba2.jpg'])],
         ]);
     }
 }
