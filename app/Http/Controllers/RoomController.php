@@ -24,29 +24,29 @@ class RoomController extends Controller
 
     public function store(Request $request)
     {
+
+     
         $data = $request->validate([
             'name' => 'required',
             'description' => 'required',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048' // Validate multiple images
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048' // Validate the image upload
         ]);
-    
-        $imagePaths = [];
-    
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $imageName = time() . '-' . $image->getClientOriginalName();
-                $image->move(storage_path('app/public/images'), $imageName);
-                $imagePaths[] = 'images/' . $imageName;
-            }
+
+
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(storage_path('app/public/images'), $imageName);
+            // Save the image path in the database as 'images/filename'
+            $data['image'] = 'images/' . $imageName;
         }
-    
-        $data['images'] = json_encode($imagePaths); // Convert array to JSON
-    
+        
+
         Room::create($data);
-    
+
         return response()->json(['message' => 'Room created successfully'], 200);
     }
-    
 
     public function destroy(Room $room)
     {
@@ -64,20 +64,20 @@ class RoomController extends Controller
     $data = $request->validate([
         'name' => 'required',
         'description' => 'required',
-        'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048' // Validate multiple images
+        'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048' // Validate the image upload
     ]);
 
-    $imagePaths = json_decode($room->images, true) ?? []; // Existing images
 
-    if ($request->hasFile('images')) {
-        foreach ($request->file('images') as $image) {
-            $imageName = time() . '-' . $image->getClientOriginalName();
-            $image->move(public_path('images'), $imageName);
-            $imagePaths[] = 'images/' . $imageName;
-        }
+
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('images'), $imageName);
+        $data['image'] = $imageName;
+    } else {
+        // If no new image is uploaded, retain the existing image
+        $data['image'] = $room->image;
     }
-
-    $data['images'] = json_encode($imagePaths); // Update with new images
 
     $room->update($data);
 

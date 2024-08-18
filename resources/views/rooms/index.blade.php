@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Sistem Tempahan IPGMKKB</title>
+    <title>Book a Room</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -48,20 +48,12 @@
             transform: translateY(-5px);
         }
 
-        .room-images {
-            position: relative;
+        .room-image {
             width: 100%;
-            height: 200px; /* Adjust as needed */
-            overflow: hidden;
-            border-radius: 8px;
-        }
-
-        .room-images img {
-            position: absolute;
-            width: 100%;
-            height: 100%;
+            height: 200px;
             object-fit: cover;
-            transition: opacity 1s ease-in-out;
+            border-radius: 8px;
+            margin-bottom: 10px;
         }
 
         .room-name {
@@ -125,24 +117,6 @@
         .back-button:hover {
             background-color: #357bd8;
         }
-
-        .delete-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #ef4444;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.75rem;
-            transition: background-color 0.3s ease;
-        }
-
-        .delete-button:hover {
-            background-color: #dc2626;
-        }
     </style>
 </head>
 <body>
@@ -150,7 +124,7 @@
     <header class="header">
         <div class="logo-container">
             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
-            <h2 class="header-title">Sistem Tempahan Bilik dan Kenderaan</h2>
+            <h2 class="header-title">Sistem Tempahan Bilik</h2>
         </div>
         <div class="nav-links">
             <a>{{ auth()->user()->name }}</a>
@@ -167,8 +141,6 @@
 
     <div class="breadcrumb">
         <a href="{{ route('dashboard') }}">Halaman Utama</a>
-        <span>&gt;</span>
-        <a href="{{ route('bookings.user', ['user_id' => auth()->id()]) }}">Senarai Tempahan Bilik dan Dewan</a>
         <span>&gt;</span>
         <a href="#" class="active">Senarai Bilik dan Dewan</a>
     </div>
@@ -189,24 +161,12 @@
                 <!-- Room Boxes -->
                 @foreach ($rooms as $room)
                     <div class="room-box" data-type="{{ $room->description }}" onclick="window.location='{{ route('bookings.create', $room->id) }}';">
-                        <!-- Room Images -->
-                        <div class="room-images">
-                            @foreach (json_decode($room->images) as $index => $image)
-                                <img src="{{ asset('storage/' . $image) }}" alt="{{ $room->name }}" class="room-image" style="{{ $index > 0 ? 'display: none;' : '' }}">
-                            @endforeach
-                        </div>
+                        <!-- Room Image -->
+                        <img src="{{ $room->image ? asset('storage/' . $room->image) : asset('images/default-room.jpg') }}" alt="{{ $room->name }}" class="room-image">
                         <!-- Room Name -->
                         <div class="room-name">{{ $room->name }}</div>
                         <!-- Link to room bookings -->
                         <span class="room-link">Tempah Sekarang</span>
-
-                        @if(auth()->user()->role === 'admin')
-                            <form method="POST" action="{{ route('rooms.destroy', $room->id) }}" style="position:absolute; top:10px; right:10px;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="delete-button">Hapus</button>
-                            </form>
-                        @endif
                     </div>
                 @endforeach
             </div>
