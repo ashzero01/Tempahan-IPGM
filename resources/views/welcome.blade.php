@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Laravel</title>
+    <title>Sistem Tempahan IPGMKKB</title>
 
     <!-- Styles -->
     <style>
@@ -60,7 +60,7 @@
     border-radius: 0.5rem;
     margin: 2rem auto;
     max-width: 600px;
-    margin-top: 10rem; /* Adjust this value as needed */
+    margin-top: 5rem; /* Adjust this value as needed */
 }
 
 .main-content h1 {
@@ -114,6 +114,8 @@
 }
 
     </style>
+    
+    <link rel="stylesheet" href="{{ asset('css/about.css') }}">
 </head>
 <body>
 
@@ -149,6 +151,11 @@
             </form>
         </div>
     </div>
-
+    <footer class="about-footer">
+        <p>&copy; {{ date('Y') }} by Amierul Syahmi</p>
+        <a href="{{ route('about-guest') }}" class="footer-link">Tentang Kami</a>
+    </footer>
 </body>
+
+
 </html>

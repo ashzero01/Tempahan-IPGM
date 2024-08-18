@@ -10,6 +10,8 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('fontawesome-free-6.6.0-web/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/about.css') }}">
+
 
     <!-- Styles -->
     <style>
@@ -186,5 +188,12 @@
         </div>
     </div>
 </div>
+
+
+<footer class="about-footer">
+        <p>&copy; {{ date('Y') }} by Amierul Syahmi</p>
+        <a href="{{ route('about') }}" class="footer-link">Tentang Kami</a>
+    </footer>
 </body>
+
 </html>

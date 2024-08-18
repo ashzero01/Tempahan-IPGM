@@ -1,0 +1,46 @@
+/* Ensure the body takes the full height and use flexbox layout */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column; /* Stack content vertically */
+}
+
+.main-content {
+    flex: 1; /* Take up the remaining space */
+    text-align: center;
+    padding: 2rem;
+    background-color: rgba(255, 255, 255, 0.8); /* White background with opacity */
+    border-radius: 0.5rem;
+    margin: 2rem auto;
+    max-width: 600px;
+    margin-top: 5rem; /* Adjust this value as needed */
+}
+
+footer {
+    background-color: rgba(248, 249, 250, 0.9); /* Slightly transparent to blend with the background */
+    color: #333; /* Dark text color for contrast */
+    padding: 10px 15px; /* Adjust padding for compactness */
+    text-align: center; /* Center align text */
+    border-top: 1px solid #007bff; /* Thinner border on top */
+    width: 100%; /* Full width */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+footer p {
+    margin: 0; /* Remove default margin */
+    font-size: 14px; /* Smaller font size */
+}
+
+footer .footer-link {
+    color: #007bff; /* Link color */
+    text-decoration: none; /* Remove underline */
+    font-weight: normal; /* Normal font weight */
+}
+
+footer .footer-link:hover {
+    text-decoration: underline; /* Add underline on hover */
+}

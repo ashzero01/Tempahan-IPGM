@@ -16,6 +16,10 @@ Route::middleware('guest')->group(function () {
         return view('welcome');
     })->name('welcome');
 
+    Route::get('/about-guest', function () {
+        return view('about-guest');
+    })->name('about-guest');
+
     // Authentication Routes
     Route::get('/user/login', function () {
         if (auth()->check()) {
@@ -96,6 +100,10 @@ Route::middleware(['auth'])->group(function () {
     
     
 
+
+    Route::get('/about', function () {
+        return view('about');
+    })->name('about');
 
 });
 
