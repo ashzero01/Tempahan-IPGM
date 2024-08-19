@@ -14,15 +14,15 @@ class VehiclesTableSeeder extends Seeder
             [
                 'name' => 'Bas 1',
                 'type' => 'bas',
-                'registration_number' => 'ABC1234',
+                'registration_number' => 'BGJ 1263',
                 'image' => 'images/bas1.jpg',
                 'description' => 'A comfortable sedan with advanced features.'
             ],
             [
-                'name' => 'Bas2',
+                'name' => 'Bas 2',
                 'type' => 'bas',
                 'registration_number' => 'ABC1235',
-                'image' => 'images/bas2.jpg',
+                'image' => 'images/bas1.jpg',
                 'description' => 'A versatile van for various needs.'
             ],
             [
@@ -35,7 +35,7 @@ class VehiclesTableSeeder extends Seeder
             [
                 'name' => 'Kereta 1',
                 'type' => 'kereta',
-                'registration_number' => 'ABC1237',
+                'registration_number' => 'DAY 674',
                 'image' => 'images/kereta.jpg',
                 'description' => 'A spacious bus for large groups.'
             ],
@@ -43,7 +43,7 @@ class VehiclesTableSeeder extends Seeder
             [
                 'name' => 'Van 1',
                 'type' => 'van',
-                'registration_number' => 'ABC1238',
+                'registration_number' => 'VFR 3802',
                 'image' => 'images/van.jpg',
                 'description' => 'A spacious bus for large groups.'
             ],

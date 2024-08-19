@@ -60,6 +60,11 @@ class RoomsTableSeeder extends Seeder
                 'description' => 'bilik',
                 'image' => 'images/bilikkuliahmahpoorbaba.jpg'
             ],
+            [
+                'name' => 'Bilik Mesy. Gigih',
+                'description' => 'bilik',
+                'image' => 'images/bilikgigih.jpg'
+            ]
         ]);
     }
 }
