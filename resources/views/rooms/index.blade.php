@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Book a Room</title>
+    <title>Sistem Tempahan IPGM</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -162,7 +162,7 @@
                 @foreach ($rooms as $room)
                     <div class="room-box" data-type="{{ $room->description }}" onclick="window.location='{{ route('bookings.create', $room->id) }}';">
                         <!-- Room Image -->
-                        <img src="{{ $room->image ? asset('storage/' . $room->image) : asset('images/default-room.jpg') }}" alt="{{ $room->name }}" class="room-image">
+                        <img src="{{ asset(($room->image ? $room->image : 'default-room.jpg')) }}" alt="{{ $room->name }}" class="room-image">
                         <!-- Room Name -->
                         <div class="room-name">{{ $room->name }}</div>
                         <!-- Link to room bookings -->

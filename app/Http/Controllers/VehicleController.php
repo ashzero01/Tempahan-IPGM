@@ -33,8 +33,10 @@ use App\Models\Vehicle;
     ]);
 
     if ($request->hasFile('image')) {
-        $imagePath = $request->file('image')->store('images', 'public');
-        $validated['image'] = $imagePath;
+        $image = $request->file('image');
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('images'), $imageName);
+        $validated['image'] = 'images/' . $imageName;
     }
 
     Vehicle::create($validated);

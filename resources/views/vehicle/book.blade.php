@@ -170,7 +170,7 @@
                 @foreach ($vehicles as $vehicle)
                     <div class="vehicle-box" data-type="{{ $vehicle->type }}" onclick="window.location='{{ route('vehicles.booking.details', $vehicle->id) }}';">
                         <!-- Vehicle Image -->
-                        <img src="{{ $vehicle->image ? asset('storage/' . $vehicle->image) : asset('images/default-vehicle.jpg') }}" alt="{{ $vehicle->name }}" class="vehicle-image">
+                        <img src="{{ asset(($vehicle->image ? $vehicle->image : 'default-vehicle.jpg')) }}" alt="{{ $vehicle->name }}" class="vehicle-image">
                         <!-- Vehicle Name -->
                         <div class="vehicle-name">{{ $vehicle->name }}</div>
                         <!-- Link to vehicle bookings -->
