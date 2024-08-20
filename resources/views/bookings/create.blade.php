@@ -305,6 +305,8 @@
 <div class="breadcrumb">
 <a href="{{ route('dashboard') }}">Halaman Utama</a>
     <span>&gt;</span> 
+    <a href="{{ route('bookings.user', ['user_id' => auth()->id()]) }}">Senarai Tempahan Bilik dan Dewan</a>
+    <span>&gt;</span>
     <a href="/rooms">Senarai Bilik dan Dewan</a>
     <span>&gt;</span>
     <a href="#">Proses Tempahan</a>

@@ -148,7 +148,7 @@ public function userBookings($user_id, Request $request)
         ]);
 
         // Redirect to the booking creation page with a success message
-        return redirect()->route('bookings.create', ['room' => $room->id])->with('success', 'Tempahan berjaya!');
+        return redirect()->route('bookings.user', ['user_id' => auth()->id(), 'room' => $room->id])->with('success', 'Tempahan berjaya!');
     }
 
 public function show(Booking $booking)

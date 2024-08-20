@@ -211,37 +211,41 @@
            <!-- Edit Button (Visible only for owner or admin) -->
            @if(auth()->user()->id === $booking->user_id || auth()->user()->role === 'admin')
            <a href="{{ route('bookings.edit', ['booking' => $booking->id]) }}" class="edit-button">
-               Edit
+               Kemaskini
            </a>
        @endif
 
             <!-- Print Button -->
 <div class="actions">
-    <button onclick="window.print()" class="print-button">Print</button>
     <!-- Add PDF Download Button -->
-    <a href="{{ route('bookings.generatePdf', ['booking' => $booking->id]) }}" class="print-button no-print">Download PDF</a>
+    <a href="{{ route('bookings.generatePdf', ['booking' => $booking->id]) }}" class="print-button no-print">Muat Turun Borang</a>
 </div>
 
         </div>
 
         <!-- Action Buttons (only for admin) -->
-        @if(auth()->user()->role === 'admin')
-        <div class="actions">
-            <!-- Approve Button -->
+@if(auth()->user()->role === 'admin')
+    <div class="actions">
+        <!-- Approve Button -->
+        @if($booking->status !== 'Ditolak')
             <form method="POST" action="{{ route('bookings.approve', ['booking' => $booking->id]) }}" style="display:inline;">
                 @csrf
                 @method('PUT')
                 <button type="submit" class="approve-button">Terima</button>
             </form>
+        @endif
 
-            <!-- Reject Button -->
+        <!-- Reject Button -->
+        @if($booking->status !== 'Diterima')
             <form method="POST" action="{{ route('bookings.reject', ['booking' => $booking->id]) }}" style="display:inline;">
                 @csrf
                 @method('PUT')
                 <button type="submit" class="reject-button">Tolak</button>
             </form>
-        </div>
         @endif
+    </div>
+@endif
+
     </div>
 </body>
 
