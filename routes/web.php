@@ -84,6 +84,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/vehicles/book', [VehicleController::class, 'book'])->name('vehicles.book');
     Route::resource('vehicles', VehicleController::class)->except(['show']);
+    Route::delete('vehicles/book/delete/{id}', [VehicleController::class, 'destroy'])->name('vehicles.destroy');
+
 
 
 

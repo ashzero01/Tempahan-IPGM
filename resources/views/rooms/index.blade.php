@@ -9,6 +9,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('fontawesome-free-6.6.0-web/css/all.min.css') }}">
     
     <!-- Styles -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.2.4/dist/tailwind.min.css" rel="stylesheet">
@@ -42,6 +43,7 @@
             border-radius: 8px;
             transition: transform 0.3s ease;
             cursor: pointer;
+            position: relative;
         }
 
         .room-box:hover {
@@ -104,6 +106,24 @@
             color: white;
         }
 
+        .delete-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-button:hover {
+            background-color: #d32f2f;
+        }
+
         .back-button {
             display: inline-block;
             padding: 10px 20px;
@@ -124,16 +144,32 @@
     <header class="header">
         <div class="logo-container">
             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
-            <h2 class="header-title">Sistem Tempahan Bilik</h2>
+            <h2 class="header-title">Sistem Tempahan Bilik dan Kenderaan</h2>
         </div>
         <div class="nav-links">
-            <a>{{ auth()->user()->name }}</a>
+            <a href="{{ route('showprofile', ['user_id' => auth()->user()->id]) }}" class="profile-link">
+                <i class="fas fa-user-circle"></i> {{ auth()->user()->name }}
+            </a>
+
+            <!-- Admin Menu -->
+            @if(auth()->user()->role === 'admin')
+                <div class="admin-menu">
+                    <a href="#" class="admin-link"><i class="fas fa-tools"></i> Menu Admin</a>
+                    <div class="dropdown-content">
+                        <a href="{{route('users.list')}}"><i class="fas fa-users"></i> Senarai Pengguna</a>
+                        <a href="{{route('vehicles.book')}}"><i class="fas fa-car"></i> Senarai Kenderaan</a>
+                        <a href="{{route('showAddAdminForm')}}"><i class="fas fa-user-plus"></i> Tambah Admin</a>
+                        <a href="{{ route('rooms.create') }}"><i class="fas fa-plus-square"></i> Tambah Bilik</a>
+                        <a href="{{ route('vehicles.create') }}"><i class="fas fa-truck"></i> Tambah Kenderaan</a>
+                    </div>
+                </div>
+            @endif
 
             <!-- Logout Form -->
             <form method="POST" action="{{ route('logout') }}" style="display:inline;">
                 @csrf
                 <button type="submit" class="logout-button">
-                    Log Keluar
+                    <i class="fas fa-sign-out-alt"></i> Log Keluar
                 </button>
             </form>
         </div>
@@ -162,13 +198,25 @@
             <div class="room-container">
                 <!-- Room Boxes -->
                 @foreach ($rooms as $room)
-                    <div class="room-box" data-type="{{ $room->description }}" onclick="window.location='{{ route('bookings.create', $room->id) }}';">
+                    <div class="room-box" data-type="{{ $room->description }}" onclick="handleRoomClick('{{ route('bookings.create', $room->id) }}', event)">
                         <!-- Room Image -->
                         <img src="{{ asset(($room->image ? $room->image : 'default-room.jpg')) }}" alt="{{ $room->name }}" class="room-image">
                         <!-- Room Name -->
                         <div class="room-name">{{ $room->name }}</div>
                         <!-- Link to room bookings -->
                         <span class="room-link">Tempah Sekarang</span>
+
+                        <!-- Delete Button for Admin -->
+                       <!-- Delete Button for Admin -->
+@if(auth()->user()->role === 'admin')
+    <form action="{{ route('rooms.destroy', $room->id) }}" method="POST" style="display: inline;">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="delete-button" onclick="return confirm('Are you sure you want to delete this room?'); event.stopPropagation();">
+            <i class="fas fa-trash"></i> Hapus
+        </button>
+    </form>
+@endif
                     </div>
                 @endforeach
             </div>
@@ -203,6 +251,19 @@
                 });
             });
         });
+
+        function handleRoomClick(url, event) {
+            // Only trigger the booking if not clicking on delete button
+            if (!event.target.classList.contains('delete-button')) {
+                window.location.href = url;
+            }
+        }
+
+        function confirmDelete(url) {
+            if (confirm('Are you sure you want to delete this room?')) {
+                window.location.href = url;
+            }
+        }
     </script>
 </body>
 </html>

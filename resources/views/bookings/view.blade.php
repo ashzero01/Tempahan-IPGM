@@ -7,6 +7,9 @@
     <link href="{{ asset('css/header.css') }}" rel="stylesheet">
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('css/backbutton.css') }}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('fontawesome-free-6.6.0-web/css/all.min.css') }}">
 
     <style>
         body {
@@ -158,16 +161,34 @@
             <h2 class="header-title">Sistem Tempahan Bilik dan Kenderaan</h2>
         </div>
         <div class="nav-links">
-            <a>{{ auth()->user()->name }}</a>
+            <a href="{{ route('showprofile', ['user_id' => auth()->user()->id]) }}" class="profile-link">
+                <i class="fas fa-user-circle"></i> {{ auth()->user()->name }}
+            </a>
+
+            <!-- Admin Menu -->
+            @if(auth()->user()->role === 'admin')
+                <div class="admin-menu">
+                    <a href="#" class="admin-link"><i class="fas fa-tools"></i> Menu Admin</a>
+                    <div class="dropdown-content">
+                        <a href="{{route('users.list')}}"><i class="fas fa-users"></i> Senarai Pengguna</a>
+                        <a href="{{route('vehicles.book')}}"><i class="fas fa-car"></i> Senarai Kenderaan</a>
+                        <a href="{{route('showAddAdminForm')}}"><i class="fas fa-user-plus"></i> Tambah Admin</a>
+                        <a href="{{ route('rooms.create') }}"><i class="fas fa-plus-square"></i> Tambah Bilik</a>
+                        <a href="{{ route('vehicles.create') }}"><i class="fas fa-truck"></i> Tambah Kenderaan</a>
+                    </div>
+                </div>
+            @endif
+
             <!-- Logout Form -->
             <form method="POST" action="{{ route('logout') }}" style="display:inline;">
                 @csrf
                 <button type="submit" class="logout-button">
-                    Log Keluar
+                    <i class="fas fa-sign-out-alt"></i> Log Keluar
                 </button>
             </form>
         </div>
     </header>
+
 
      <!-- Breadcrumb Section -->
 <div class="breadcrumb">
@@ -199,7 +220,6 @@
                 </div>
                 <div class="booking-details-right">
                     <p><span>Nama Pemohon:</span> {{ $booking->user->name }}</p>
-                    <p><span>Email Pemohon:</span> {{ $booking->user->email }}</p>
                     <p><span>IC Pemohon:</span> {{ $booking->user->ICnumber}}</p>
                     <p><span>Nombor Telefon Pemohon:</span> {{ $booking->user->phone_number }}</p>
                     <p><span>Jawatan/Jabatan Pemohon:</span> {{ $booking->user->affiliation }}</p>
@@ -211,7 +231,7 @@
            <!-- Edit Button (Visible only for owner or admin) -->
            @if(auth()->user()->id === $booking->user_id || auth()->user()->role === 'admin')
            <a href="{{ route('bookings.edit', ['booking' => $booking->id]) }}" class="edit-button">
-               Kemaskini
+               Kemaskini Tempahan
            </a>
        @endif
 

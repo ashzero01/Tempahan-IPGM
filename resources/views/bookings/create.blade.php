@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/en.js"></script> <!-- Optional: localization -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('fontawesome-free-6.6.0-web/css/all.min.css') }}">
     <!-- Your custom CSS and JS links -->
 
     <style>
@@ -282,24 +285,41 @@
 
 </head>
 <body>
-    <!-- Header Section -->
-    <header class="header">
+   <!-- Header Section -->
+   <header class="header">
         <div class="logo-container">
             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
             <h2 class="header-title">Sistem Tempahan Bilik dan Kenderaan</h2>
         </div>
         <div class="nav-links">
-        <a>{{ auth()->user()->name }}</a>
+            <a href="{{ route('showprofile', ['user_id' => auth()->user()->id]) }}" class="profile-link">
+                <i class="fas fa-user-circle"></i> {{ auth()->user()->name }}
+            </a>
+
+            <!-- Admin Menu -->
+            @if(auth()->user()->role === 'admin')
+                <div class="admin-menu">
+                    <a href="#" class="admin-link"><i class="fas fa-tools"></i> Menu Admin</a>
+                    <div class="dropdown-content">
+                        <a href="{{route('users.list')}}"><i class="fas fa-users"></i> Senarai Pengguna</a>
+                        <a href="{{route('vehicles.book')}}"><i class="fas fa-car"></i> Senarai Kenderaan</a>
+                        <a href="{{route('showAddAdminForm')}}"><i class="fas fa-user-plus"></i> Tambah Admin</a>
+                        <a href="{{ route('rooms.create') }}"><i class="fas fa-plus-square"></i> Tambah Bilik</a>
+                        <a href="{{ route('vehicles.create') }}"><i class="fas fa-truck"></i> Tambah Kenderaan</a>
+                    </div>
+                </div>
+            @endif
 
             <!-- Logout Form -->
             <form method="POST" action="{{ route('logout') }}" style="display:inline;">
                 @csrf
                 <button type="submit" class="logout-button">
-                    Log Keluar
+                    <i class="fas fa-sign-out-alt"></i> Log Keluar
                 </button>
             </form>
         </div>
     </header>
+
 
     <!-- Breadcrumb Section -->
 <div class="breadcrumb">
@@ -372,8 +392,10 @@
                                     @enderror
                                 </div>
                                 <div>
-                                    <label for="purpose">Tujuan:</label>
-                                    <input type="text" id="purpose" name="purpose" required>
+                                                                    <div>
+    <label for="purpose">Tujuan (60 patah perkataan):</label>
+    <input type="text" id="purpose" name="purpose" required maxlength="60" style="width: 100%; padding: 8px; border-radius: 5px;">
+</div>
                                 </div>
                                 <button type="submit" class="booking-button">Tempah Bilik</button>
                             </form>
@@ -497,23 +519,35 @@ function formatTime(time) {
         }
         monthSelect.value = new Date().getMonth() + 1;
 
-        // Function to generate day buttons for a given year and month
         function generateDayButtons(year, month) {
-            dayButtonsContainer.innerHTML = '';
-            const daysInMonth = new Date(year, month, 0).getDate();
+    dayButtonsContainer.innerHTML = '';
+    const daysInMonth = new Date(year, month, 0).getDate();
+    const today = new Date(); // Get today's date
+    const yesterday = new Date(today); // Create a copy of today's date
+    yesterday.setDate(today.getDate() - 1); // Subtract one day to get yesterday's date
 
-            for (let day = 1; day <= daysInMonth; day++) {
-                const button = document.createElement('button');
-                button.type = 'button';
-                button.classList.add('date-btn');
-                button.textContent = day;
-                button.setAttribute('data-date', `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`);
-                dayButtonsContainer.appendChild(button);
-            }
+    for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(year, month - 1, day); // Create a date object for the current day
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.classList.add('date-btn');
+        button.textContent = day;
 
-            // Fetch booking data after generating day buttons
-            fetchBookingData();
+        // Disable buttons for past dates
+        if (date < yesterday) {
+            button.disabled = true;
+            button.classList.add('disabled'); // Add a class for styling disabled buttons
+        } else {
+            button.setAttribute('data-date', `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`);
         }
+
+        dayButtonsContainer.appendChild(button);
+    }
+
+    // Fetch booking data after generating day buttons
+    fetchBookingData();
+}
+
 
         // Generate day buttons for the current year and month by default
         generateDayButtons(new Date().getFullYear(), new Date().getMonth() + 1);
@@ -545,9 +579,6 @@ function fetchAndDisplayBookingDetails(date) {
             tbody.innerHTML = '';
             const userId = '{{ auth()->id() }}'; // Get the ID of the authenticated user
             const isAdmin = '{{ auth()->user()->isAdmin() }}'; // Check if the authenticated user is an admin
-
-            // Filter bookings to include only those with type "rooms"
-            const filteredBookings = bookings.filter(booking => booking.type === 'rooms');
 
             filteredBookings.forEach(booking => {
                 const row = document.createElement('tr');

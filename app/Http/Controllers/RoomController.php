@@ -45,7 +45,7 @@ class RoomController extends Controller
 
         Room::create($data);
 
-        return response()->json(['message' => 'Room created successfully'], 200);
+        return redirect()->route('rooms.index')->with('success', 'Room created successfully');
     }
 
     public function destroy(Room $room)

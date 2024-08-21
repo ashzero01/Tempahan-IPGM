@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+@php
+    \Carbon\Carbon::setLocale('ms');
+@endphp
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Tempahan IPGMKKB</title>
@@ -8,6 +11,9 @@
     <link href="{{ asset('css/header.css') }}" rel="stylesheet">
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('css/backbutton.css') }}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('fontawesome-free-6.6.0-web/css/all.min.css') }}">
 
 
     <style>
@@ -149,23 +155,39 @@
 </head>
 <body>
  <!-- Header Section -->
- <header class="header">
-        <div class="logo-container">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
-            <h2 class="header-title">Sistem Tempahan Bilik dan Kenderaan</h2>
-        </div>
-        <div class="nav-links">
-            <a>{{ auth()->user()->name }}</a>
-       <!-- Logout Form -->
-       <form method="POST" action="{{ route('logout') }}" style="display:inline;">
-    @csrf
-    <button type="submit" class="logout-button">
-        Log Keluar
-    </button>
-</form>
+<header class="header">
+    <div class="logo-container">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
+        <h2 class="header-title">Sistem Tempahan Bilik dan Kenderaan</h2>
+    </div>
+    <div class="nav-links">
+        <a href="{{ route('showprofile', ['user_id' => auth()->user()->id]) }}" class="profile-link">
+            <i class="fas fa-user-circle"></i> {{ auth()->user()->name }}
+        </a>
 
-        </div>
-    </header>
+        <!-- Admin Menu -->
+        @if(auth()->user()->role === 'admin')
+            <div class="admin-menu">
+                <a href="#" class="admin-link"><i class="fas fa-tools"></i>Menu Admin</a>
+                <div class="dropdown-content">
+                    <a href="{{route('users.list')}}"><i class="fas fa-users"></i> Senarai Pengguna</a>
+                    <a href="{{route('vehicles.book')}}"><i class="fas fa-car"></i> Senarai Kenderaan</a>
+                    <a href="{{route('showAddAdminForm')}}"><i class="fas fa-user-plus"></i> Tambah Admin</a>
+                    <a href="{{ route('rooms.create') }}"><i class="fas fa-plus-square"></i> Tambah Bilik</a>
+                    <a href="{{ route('vehicles.create') }}"><i class="fas fa-truck"></i> Tambah Kenderaan</a>
+                </div>
+            </div>
+        @endif
+
+        <!-- Logout Form -->
+        <form method="POST" action="{{ route('logout') }}" style="display:inline;">
+            @csrf
+            <button type="submit" class="logout-button">
+                <i class="fas fa-sign-out-alt"></i> Log Keluar
+            </button>
+        </form>
+    </div>
+</header>
 
         <!-- Breadcrumb Section -->
 <div class="breadcrumb">
@@ -200,7 +222,6 @@
                                     Tarikh
                                 </a>
                             </th>
-                            <th>Hari</th>
                             <th>Masa Mula</th>
                             <th>Masa Tamat</th>
                             <th>Bilik</th>
@@ -212,15 +233,18 @@
                     <tbody id="booking-table-body">
                         @foreach($bookings as $booking)
                         <tr data-status="{{ $booking->status }}">
-                            <td>{{ $booking->date }}</td>
-                            <td>
-                                @php
-                                    $daysOfWeek = ['Ahad', 'Isnin', 'Selasa', 'Rabu', 'Khamis', 'Jumaat', 'Sabtu'];
-                                    $date = new DateTime($booking->date);
-                                    $dayIndex = $date->format('w'); // Numeric representation of day (0 for Sunday, 6 for Saturday)
-                                    echo $daysOfWeek[$dayIndex];
-                                @endphp
-                            </td>
+                        @php
+    // Parse the date
+    $date = \Carbon\Carbon::parse($booking->date);
+
+    // Get the localized day name and format the date
+    $dayName = $date->translatedFormat('l'); // Translated day name
+    $formattedDate = $date->translatedFormat('j F Y'); // Translated date format
+@endphp
+
+<td>
+    {{ $formattedDate }} ({{ $dayName }})
+</td>
                             <td>{{ $booking->formatted_start_time }}</td>
                             <td>{{ $booking->formatted_end_time }}</td>
                             <td>{{ $booking->room->name }}</td>

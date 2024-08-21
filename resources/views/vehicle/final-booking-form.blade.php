@@ -6,6 +6,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('fontawesome-free-6.6.0-web/css/all.min.css') }}">
     
     <!-- Styles -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.2.4/dist/tailwind.min.css" rel="stylesheet">
@@ -13,6 +14,7 @@
     <link href="{{ asset('css/header.css') }}" rel="stylesheet">
     <link href="{{ asset('css/backbutton.css') }}" rel="stylesheet">
     <link href="{{ asset('css/breadcrumb.css') }}" rel="stylesheet">
+    
 
     <!-- Flatpickr -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -125,18 +127,37 @@
     <header class="header">
         <div class="logo-container">
             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
-            <h2 class="header-title">Sistem Tempahan Kenderaan</h2>
+            <h2 class="header-title">Sistem Tempahan Bilik dan Kenderaan</h2>
         </div>
         <div class="nav-links">
-            <a>{{ auth()->user()->name }}</a>
+            <a href="{{ route('showprofile', ['user_id' => auth()->user()->id]) }}" class="profile-link">
+                <i class="fas fa-user-circle"></i> {{ auth()->user()->name }}
+            </a>
+
+            <!-- Admin Menu -->
+            @if(auth()->user()->role === 'admin')
+                <div class="admin-menu">
+                    <a href="#" class="admin-link"><i class="fas fa-tools"></i> Menu Admin</a>
+                    <div class="dropdown-content">
+                        <a href="{{route('users.list')}}"><i class="fas fa-users"></i> Senarai Pengguna</a>
+                        <a href="{{route('vehicles.book')}}"><i class="fas fa-car"></i> Senarai Kenderaan</a>
+                        <a href="{{route('showAddAdminForm')}}"><i class="fas fa-user-plus"></i> Tambah Admin</a>
+                        <a href="{{ route('rooms.create') }}"><i class="fas fa-plus-square"></i> Tambah Bilik</a>
+                        <a href="{{ route('vehicles.create') }}"><i class="fas fa-truck"></i> Tambah Kenderaan</a>
+                    </div>
+                </div>
+            @endif
+
+            <!-- Logout Form -->
             <form method="POST" action="{{ route('logout') }}" style="display:inline;">
                 @csrf
                 <button type="submit" class="logout-button">
-                    Log Keluar
+                    <i class="fas fa-sign-out-alt"></i> Log Keluar
                 </button>
             </form>
         </div>
     </header>
+
 
     
     <div class="breadcrumb">

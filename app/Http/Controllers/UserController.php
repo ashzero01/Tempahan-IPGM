@@ -78,7 +78,7 @@ public function addAdmin(Request $request)
         'ICnumber' => $validatedData['ICnumber'],
         'phone_number' => $validatedData['phone_number'],
         'affiliation' => $validatedData['affiliation'],
-        'role' => 'admin', // Assign the role as 'admin'
+        'role' =>  $validatedData['role'], // Assign the role as 'admin'
     ]);
 
     return redirect()->route('users.list')->with('success', 'Admin berjaya ditambah!');

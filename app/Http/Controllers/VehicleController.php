@@ -10,7 +10,7 @@ use App\Models\Vehicle;
         public function index()
     {
         $vehicles = Vehicle::all();
-        return view('vehicles', compact('vehicles'));
+        return view('vehicle', compact('vehicles'));
     }
 
 
@@ -75,7 +75,7 @@ use App\Models\Vehicle;
         $vehicle = Vehicle::findOrFail($id);
         $vehicle->delete();
 
-        return redirect()->route('vehicles.index')->with('success', 'Vehicle deleted successfully!');
+        return redirect()->route('vehicles.book')->with('success', 'Vehicle deleted successfully!');
     }
 
     public function book()

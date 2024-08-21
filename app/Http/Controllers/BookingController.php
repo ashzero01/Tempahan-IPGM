@@ -325,11 +325,11 @@ public function generatePdf(Booking $booking)
 
     // Coordinates for text fields
     $coordinates = [
-        'name' => [110  , 45],
+        'name' => [85  , 45],
         'ICnumber' => [70, 52],
         'phone_number' => [160, 52],
-        'affiliation' => [125, 60],
-        'purpose' => [110, 67],
+        'affiliation' => [110, 60],
+        'purpose' => [65, 67],
         'room_name' => [125, 60],
         'date' => [72, 137],
         'start_time' => [127, 137],
@@ -352,9 +352,9 @@ public function generatePdf(Booking $booking)
         $tickCoordinates = [103, 82]; // Example coordinates for 'test 7'
     } elseif ($room->name === 'Bilik Mesy. Gerakans') {
         $tickCoordinates = [103, 87]; // Example coordinates for 'test 8'
-    } elseif ($room->name === 'Bilik Kuliah Mahpoor Baba') {
+    } elseif ($room->name === 'Bilik Mesy. Gigih') {
         $tickCoordinates = [103, 92]; // Example coordinates for 'test 9'
-    } elseif ($room->name === 'Test Room 10') {
+    } elseif ($room->name === 'Bilik Kuliah Mahpoor Baba') {
         $tickCoordinates = [103, 97]; // Example coordinates for 'test 10'
     } else {
         $tickCoordinates = [103, 102]; // Default coordinates for other rooms
