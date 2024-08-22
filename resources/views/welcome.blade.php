@@ -114,6 +114,20 @@
 
 .login-form button:hover {
     background-color: #1D4ED8;
+
+    
+}
+/* Styles for Notification Banner */
+.notification-banner {
+    background-color: #FFDDC1; /* Light orange background */
+    color: #9C2D2F; /* Dark red text */
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem; /* Space below the banner */
+    text-align: center; /* Center the text */
+    font-size: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visibility */
+    display: none; /* Hide by default */
 }
 
 /* Mobile View Styles */
@@ -172,7 +186,13 @@
     .about-footer a:hover {
         text-decoration: underline;
     }
+    @media (max-width: 768px) {
+    .notification-banner {
+        display: block; /* Show the banner on small screens */
+    }
 }
+
+}   
 
 
     </style>
@@ -194,6 +214,10 @@
 
     <!-- Main Content -->
     <div class="main-content">
+        <!-- Notification Banner -->
+<div class="notification-banner">
+    <p>Sila gunakan desktop/PC/laptop untuk penggunaan yang lebih baik.</p>
+</div>
         <h1>Selamat Datang Ke Sistem Tempahan</h1>
         <p>Sila log masuk untuk meneruskan.</p>
 
