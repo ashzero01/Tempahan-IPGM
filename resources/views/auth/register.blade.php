@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sistem Tempahan IPGMKKB</title>
+    <link href="{{ asset('css/mobile.css') }}" rel="stylesheet">
+
 
 
     <!-- Styles -->
@@ -119,6 +121,64 @@
             margin-bottom: 1rem;
             font-size: 1rem;
         }
+
+        /* Mobile View Styles */
+@media (max-width: 768px) {
+
+
+/* Main content styles */
+.main-content {
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.9); /* More opaque white background */
+    border-radius: 0.5rem;
+    margin: 1rem auto;
+    max-width: 90%; /* Reduce max-width for mobile */
+    margin-top: 3rem; /* Adjust margin top for better spacing */
+}
+
+.main-content h1 {
+    font-size: 1.75rem; /* Smaller heading for mobile */
+    margin-bottom: 1rem;
+}
+
+.main-content p {
+    font-size: 0.875rem; /* Smaller text for mobile */
+    margin-bottom: 1.5rem;
+}
+
+.login-form {
+    padding: 1rem;
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+.login-form input[type="text"], 
+.login-form input[type="password"] {
+    padding: 0.5rem;
+    font-size: 1rem; /* Adjust font size for inputs */
+}
+
+.login-form button {
+    padding: 0.5rem;
+    font-size: 1rem; /* Adjust font size for button */
+}
+
+/* Footer styles */
+.about-footer {
+    padding: 1rem;
+    text-align: center;
+    font-size: 0.875rem; /* Smaller font size for footer */
+}
+
+.about-footer a {
+    color: #2563EB; /* Link color */
+    text-decoration: none;
+}
+
+.about-footer a:hover {
+    text-decoration: underline;
+}
+}
 
     </style>
 </head>

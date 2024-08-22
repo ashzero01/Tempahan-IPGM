@@ -2,7 +2,8 @@
 <html>
 <head>
     <title>Sistem Tempahan IPGM</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
@@ -13,6 +14,8 @@
     <link href="{{ asset('css/header.css') }}" rel="stylesheet">
     <link href="{{ asset('css/backbutton.css') }}" rel="stylesheet">
     <link href="{{ asset('css/breadcrumb.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/mobile.css') }}" rel="stylesheet">
+
 
 
     <!-- flatpickr CSS -->
@@ -136,6 +139,129 @@
         .error-message ul li {
             margin-bottom: 5px;
         }
+
+
+          /* Styles specifically for mobile view */
+  @media (max-width: 480px) {
+   /* Header styles for mobile */
+   .header {
+            flex-direction: row; /* Align items in a row */
+            align-items: center; /* Center items vertically */
+            padding: 5px 10px; /* Reduced padding */
+            height: auto; /* Adjust height based on content */
+            box-shadow: none; /* Optional: remove shadow for a flatter look */
+        }
+
+        .header .logo-container {
+            flex: 1; /* Allow logo to take available space */
+            display: flex;
+            align-items: center;
+        }
+
+        .header .logo {
+            max-width: 60px; /* Adjust logo size for mobile */
+        }
+
+        .header .header-title {
+            display: none; /* Hide the header title on mobile */
+        }
+
+        .nav-links {
+            margin-left: auto; /* Push nav links to the right */
+            display: flex;
+            align-items: center; /* Align items vertically */
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            margin-left: 10px; /* Space between profile icon and other items */
+            font-size: 0.875rem; /* Smaller font size */
+        }
+
+        /* Main container and page title */
+        .main-container {
+            padding: 0px;
+            margin-top: 15px; /* Space for fixed header */
+        }
+
+        .form-container {
+        padding: 1.5rem; /* Increased padding for a more spacious feel */
+        background-color: #ffffff; /* White background for the form */
+        border-radius: 0.75rem; /* More rounded corners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle, slightly larger shadow */
+        max-width: 80%; /* Ensure it takes full width */
+        margin: 0 auto; /* Center the form container */
+    }
+
+    .form-container h1 {
+        font-size: 1.5rem; /* Adjust font size for better readability on smaller screens */
+        margin-bottom: 1rem; /* Reduced margin for a tighter layout */
+        text-align: center; /* Center text */
+        color: #333; /* Dark text color for contrast */
+    }
+
+    .input-container {
+    margin-bottom: 1.5rem; /* Increased space between input fields */
+    font-size: 1.25rem; /* Larger font size for readability */
+    text-align: center; /* Center text */
+    position: relative; /* Ensure icons are correctly positioned */
+    width: 100%; /* Ensure it takes the full width */
+}
+
+.input-container input[type="text"] {
+    padding: 1rem 1.5rem; /* Increased padding for a larger touch area */
+    font-size: 1.25rem; /* Larger font size for better readability */
+    border: 1px solid #ddd; /* Light border color */
+    border-radius: 0.5rem; /* More rounded corners for a larger appearance */
+    width: 100%; /* Ensure it takes the full width of the container */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.input-container .icon-calendar {
+    font-size: 1.5rem; /* Larger icon size for better visibility */
+    position: absolute; /* Position icon relative to the input field */
+    left: 1rem; /* Space from the left edge */
+    top: 50%; /* Center vertically */
+    transform: translateY(-50%); /* Adjust vertical alignment */
+    color: #4a90e2; /* Consistent color with design */
+}
+    button {
+        padding: 0.75rem; /* Adequate padding for touch interactions */
+        font-size: 1rem; /* Consistent font size */
+        background-color: #007bff; /* Primary button color */
+        color: #ffffff; /* White text color */
+        border: none; /* Remove default border */
+        border-radius: 0.375rem; /* Rounded corners */
+        cursor: pointer; /* Pointer cursor on hover */
+        transition: background-color 0.3s ease; /* Smooth transition */
+    }
+
+    button:hover {
+        background-color: #0056b3; /* Darker color on hover */
+    }
+
+    .error-message {
+        padding: 1rem; /* Adequate padding for readability */
+        font-size: 0.875rem; /* Smaller font size for error messages */
+        background-color: #f8d7da; /* Light red background for errors */
+        color: #721c24; /* Dark red text color for errors */
+        border: 1px solid #f5c6cb; /* Light red border for errors */
+        border-radius: 0.375rem; /* Rounded corners for error box */
+        margin-bottom: 1rem; /* Space below the error message */
+    }
+
+    .error-message ul {
+        list-style-type: none; /* Remove default list styles */
+        padding: 0; /* Remove padding */
+        margin: 0; /* Remove margin */
+    }
+
+    .error-message ul li {
+        margin-bottom: 0.5rem; /* Space between list items */
+    }
+
+}
     </style>
 </head>
 <body>

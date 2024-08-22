@@ -88,6 +88,75 @@
     transform: translateY(-3px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
+/* Styles specifically for mobile view */
+@media (max-width: 480px) {
+    /* Make the header more compact */
+    .header {
+        flex-direction: row; /* Align items in a row */
+        align-items: center; /* Center items vertically */
+        padding: 5px 10px; /* Reduced padding */
+        height: auto; /* Let the height adjust based on content */
+        box-shadow: none; /* Optional: remove shadow for a flatter look */
+    }
+
+    /* Align the logo to the left and hide the title */
+    .header .logo-container {
+        flex: 1; /* Allow logo to take available space */
+        display: flex;
+        align-items: center;
+    }
+
+    .header .logo {
+        max-width: 60px; /* Reduced logo size */
+    }
+
+    .header .header-title {
+        display: none; /* Hide the header title on mobile */
+    }
+
+    /* Show only the profile icon in the nav links */
+    .nav-links {
+        margin-left: auto; /* Push nav links to the right */
+        display: flex;
+        align-items: center; /* Align items vertically */
+    }
+
+    .nav-links a {
+        display: flex;
+        align-items: center;
+        margin-left: 10px; /* Space between profile icon and other items */
+    }
+
+    /* Hide admin menu and logout button for mobile */
+    .admin-menu, .logout-button {
+        display: none;
+    }
+
+    /* Make buttons container stack vertically on mobile */
+    .buttons-container {
+        flex-direction: column;
+    }
+
+    /* Make custom buttons narrower on mobile */
+    .custom-button {
+        width: 80%; /* Adjust the width as needed */
+        max-width: 300px; /* Set a max-width if desired */
+        height: auto;
+        font-size: 16px;
+    }
+
+    /* Adjust button icon size for mobile */
+    .button-icon {
+        font-size: 24px;
+    }
+
+    /* Adjust button text size for mobile */
+    .button-text {
+        font-size: 14px;
+    }
+}
+
     </style>
 
     <link href="{{ asset('css/header.css') }}" rel="stylesheet">

@@ -8,6 +8,7 @@
     <link href="{{ asset('css/header.css') }}" rel="stylesheet">
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('css/backbutton.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/mobile.css') }}" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('fontawesome-free-6.6.0-web/css/all.min.css') }}">
@@ -135,6 +136,47 @@
             margin-left: 0.5rem;
             color: #4B5563;
         }
+
+
+          /* Styles specifically for mobile view */
+  @media (max-width: 480px) {
+    /* Header styles for mobile */
+    .header {
+        flex-direction: row; /* Align items in a row */
+        align-items: center; /* Center items vertically */
+        padding: 5px 10px; /* Reduced padding */
+        height: auto; /* Adjust height based on content */
+        box-shadow: none; /* Optional: remove shadow for a flatter look */
+    }
+
+    .header .logo-container {
+        flex: 1; /* Allow logo to take available space */
+        display: flex;
+        align-items: center;
+    }
+
+    .header .logo {
+        max-width: 60px; /* Adjust logo size for mobile */
+    }
+
+    .header .header-title {
+        display: none; /* Hide the header title on mobile */
+    }
+
+    .nav-links {
+        margin-left: auto; /* Push nav links to the right */
+        display: flex;
+        align-items: center; /* Align items vertically */
+    }
+
+    .nav-links a {
+        display: flex;
+        align-items: center;
+        margin-left: 10px; /* Space between profile icon and other items */
+    }
+
+
+}
     </style>
 
     <link href="{{ asset('css/breadcrumb.css') }}" rel="stylesheet">

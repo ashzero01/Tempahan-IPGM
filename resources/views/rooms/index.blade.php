@@ -17,6 +17,7 @@
     <link href="{{ asset('css/header.css') }}" rel="stylesheet">
     <link href="{{ asset('css/backbutton.css') }}" rel="stylesheet">
     <link href="{{ asset('css/breadcrumb.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/mobile.css') }}" rel="stylesheet">
 
     <style>
         body {
@@ -82,26 +83,71 @@
             color: #333333;
         }
 
-        .filter-buttons {
-            margin: 20px 0;
-            display: flex;
-            gap: 10px;
+        /* General Styles for Dropdown */
+        .filter-dropdown {
+            position: relative;
+            display: inline-block;
         }
 
-        .filter-button {
+        .filter-dropdown-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
             background-color: #E5E7EB;
             color: #333333;
             border: none;
-            padding: 0.5rem 1rem;
             border-radius: 0.375rem;
             cursor: pointer;
-            font-size: 0.875rem;
-            transition: background-color 0.3s ease;
-            flex: 0 1 auto; /* Allow buttons to shrink but not grow */
-            min-width: 120px; /* Ensure buttons have a minimum width */
+            text-align: left;
+            width: 100%; /* Adjust width as needed */
         }
 
-        .filter-button.active {
+        .filter-text {
+            flex: 1;
+        }
+
+        .filter-dropdown-button i {
+            margin-left: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        /* Arrow Rotation When Dropdown is Open */
+        .filter-dropdown.open .filter-dropdown-button i {
+            transform: rotate(90deg);
+        }
+
+        /* Dropdown Content */
+        .filter-dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 0.375rem;
+            z-index: 1000;
+        }
+
+        .filter-dropdown-content button {
+            display: block;
+            width: 100%;
+            padding: 0.5rem;
+            background-color: #E5E7EB;
+            color: #333333;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            border-bottom: 1px solid #dddddd;
+        }
+
+        .filter-dropdown-content button:last-child {
+            border-bottom: none;
+        }
+
+        .filter-dropdown-content button.active {
             background-color: #3B82F6;
             color: white;
         }
@@ -136,6 +182,174 @@
 
         .back-button:hover {
             background-color: #357bd8;
+        }
+
+        /* Styles specifically for mobile view */
+        @media (max-width: 480px) {
+            /* Header styles for mobile */
+            .header {
+                flex-direction: row; /* Align items in a row */
+                align-items: center; /* Center items vertically */
+                padding: 5px 10px; /* Reduced padding */
+                height: auto; /* Adjust height based on content */
+                box-shadow: none; /* Optional: remove shadow for a flatter look */
+            }
+
+            .header .logo-container {
+                flex: 1; /* Allow logo to take available space */
+                display: flex;
+                align-items: center;
+            }
+
+            .header .logo {
+                max-width: 60px; /* Adjust logo size for mobile */
+            }
+
+            .header .header-title {
+                display: none; /* Hide the header title on mobile */
+            }
+
+            .nav-links {
+                margin-left: auto; /* Push nav links to the right */
+                display: flex;
+                align-items: center; /* Align items vertically */
+            }
+
+            .nav-links a {
+                display: flex;
+                align-items: center;
+                margin-left: 10px; /* Space between profile icon and other items */
+            }
+
+            /* Main container and page title */
+            .main-container {
+                padding: 0px;
+                margin-top: 15px; /* Space for fixed header */
+            }
+
+            .filter-buttons {
+                display: flex;
+                flex-direction: column;
+                width: 100%; /* Full width for dropdown */
+            }
+
+            .filter-button {
+                display: none; /* Hide individual buttons */
+            }
+
+            .filter-dropdown {
+                position: relative;
+                display: inline-block;
+            }
+
+            .filter-dropdown-button {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                padding: 0.5rem;
+                font-size: 0.875rem;
+                background-color: #E5E7EB;
+                color: #333333;
+                border: none;
+                border-radius: 0.375rem;
+                cursor: pointer;
+                text-align: left;
+                position: relative;
+            }
+
+            .filter-text {
+                flex: 1;
+            }
+
+            .filter-dropdown-button i {
+                margin-left: 0.5rem;
+                transition: transform 0.3s ease, color 0.3s ease;
+            }
+
+            .filter-dropdown.open .filter-dropdown-button i {
+                transform: rotate(90deg); /* Rotate arrow when dropdown is open */
+            }
+
+            .filter-dropdown-content {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: #ffffff;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                border-radius: 0.375rem;
+                z-index: 1000;
+            }
+
+            .filter-dropdown-content button {
+                display: block;
+                width: 100%;
+                padding: 0.5rem;
+                background-color: #E5E7EB;
+                color: #333333;
+                border: none;
+                text-align: left;
+                cursor: pointer;
+                border-bottom: 1px solid #dddddd;
+            }
+
+            .filter-dropdown-content button:last-child {
+                border-bottom: none;
+            }
+
+            .filter-dropdown-content button.active {
+                background-color: #3B82F6;
+                color: white;
+            }
+
+            .filter-dropdown-content {
+                display: none; /* Default hidden */
+            }
+
+            .filter-dropdown.open .filter-dropdown-content {
+                display: block; /* Show dropdown when open */
+            }
+
+            /* Room container and boxes */
+            .room-container {
+                flex-direction: column; /* Stack room boxes vertically */
+                gap: 15px;
+                padding: 0; /* Remove extra padding */
+            }
+
+            .room-box {
+                width: 95%; /* Full width for vehicle boxes */
+                padding: 15px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                border-radius: 10px;
+                position: relative; /* Position relative to align delete button */
+                transition: transform 0.3s ease;
+            }
+
+            .room-image {
+                height: 250px; /* Adjust image height for mobile */
+            }
+
+            .room-name {
+                font-size: 16px;
+            }
+
+            .room-link {
+                font-size: 14px;
+            }
+
+            /* Hide delete button for non-admin users */
+            .delete-button {
+                display: none;
+            }
+
+            /* Back button styles */
+            .back-button {
+                padding: 8px 16px;
+                font-size: 0.75rem;
+            }
         }
     </style>
 </head>
@@ -190,11 +404,18 @@
         </div>
         <div class="main-content">
             <div class="filter-buttons">
-                <button class="filter-button active" data-type="">Semua Bilik</button>
-                <button class="filter-button" data-type="bilik">Bilik</button>
-                <button class="filter-button" data-type="dewan">Dewan</button>
+                <div class="filter-dropdown">
+                    <button class="filter-dropdown-button">
+                        <span class="filter-text">Semua Bilik dan Dewan</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <div class="filter-dropdown-content">
+                        <button class="filter-button" data-type="">Semua Jenis</button>
+                        <button class="filter-button" data-type="bilik">Bilik</button>
+                        <button class="filter-button" data-type="dewan">Dewan</button>
+                    </div>
+                </div>
             </div>
-
             <div class="room-container">
                 <!-- Room Boxes -->
                 @foreach ($rooms as $room)
@@ -204,19 +425,18 @@
                         <!-- Room Name -->
                         <div class="room-name">{{ $room->name }}</div>
                         <!-- Link to room bookings -->
-                        <span class="room-link">Tempah Sekarang</span>
+                        <a href="{{ route('bookings.create', $room->id) }}" class="room-link">Tempah Sekarang</a>
 
                         <!-- Delete Button for Admin -->
-                       <!-- Delete Button for Admin -->
-@if(auth()->user()->role === 'admin')
-    <form action="{{ route('rooms.destroy', $room->id) }}" method="POST" style="display: inline;">
-        @csrf
-        @method('DELETE')
-        <button type="submit" class="delete-button" onclick="return confirm('Are you sure you want to delete this room?'); event.stopPropagation();">
-            <i class="fas fa-trash"></i> Hapus
-        </button>
-    </form>
-@endif
+                        @if(auth()->user()->role === 'admin')
+                            <form action="{{ route('rooms.destroy', $room->id) }}" method="POST" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="delete-button" onclick="return confirm('Are you sure you want to delete this room?'); event.stopPropagation();">
+                                    <i class="fas fa-trash"></i> Hapus
+                                </button>
+                            </form>
+                        @endif
                     </div>
                 @endforeach
             </div>
@@ -225,9 +445,26 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const filterButtons = document.querySelectorAll('.filter-button');
+            const filterDropdownButton = document.querySelector('.filter-dropdown-button');
+            const filterDropdownContent = document.querySelector('.filter-dropdown-content');
+            const filterButtons = document.querySelectorAll('.filter-dropdown-content .filter-button');
             const roomBoxes = document.querySelectorAll('.room-box');
+            const filterDropdown = document.querySelector('.filter-dropdown');
+            const filterText = document.querySelector('.filter-text');
 
+            // Function to update the dropdown button text
+            function updateDropdownButtonText(text) {
+                filterText.textContent = text;
+            }
+
+            // Toggle dropdown content visibility and manage arrow rotation
+            filterDropdownButton.addEventListener('click', function () {
+                const isOpen = filterDropdownContent.style.display === 'block';
+                filterDropdownContent.style.display = isOpen ? 'none' : 'block';
+                filterDropdown.classList.toggle('open', !isOpen); // Add/remove class for arrow rotation
+            });
+
+            // Filter vehicles and update button text
             filterButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     // Remove active class from all buttons
@@ -235,6 +472,13 @@
 
                     // Add active class to the clicked button
                     button.classList.add('active');
+
+                    // Close the dropdown after selection
+                    filterDropdownContent.style.display = 'none';
+                    filterDropdown.classList.remove('open'); // Reset arrow rotation
+
+                    // Update dropdown button text
+                    updateDropdownButtonText(button.textContent);
 
                     // Filter rooms
                     const selectedType = button.getAttribute('data-type');
@@ -250,17 +494,19 @@
                     });
                 });
             });
+
+            // Close dropdown if clicked outside
+            document.addEventListener('click', function(event) {
+                if (!filterDropdown.contains(event.target) && filterDropdownContent.style.display === 'block') {
+                    filterDropdownContent.style.display = 'none';
+                    filterDropdown.classList.remove('open');
+                }
+            });
         });
 
         function handleRoomClick(url, event) {
             // Only trigger the booking if not clicking on delete button
             if (!event.target.classList.contains('delete-button')) {
-                window.location.href = url;
-            }
-        }
-
-        function confirmDelete(url) {
-            if (confirm('Are you sure you want to delete this room?')) {
                 window.location.href = url;
             }
         }

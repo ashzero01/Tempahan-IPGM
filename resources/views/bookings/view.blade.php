@@ -10,6 +10,8 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('fontawesome-free-6.6.0-web/css/all.min.css') }}">
+    <link href="{{ asset('css/mobile.css') }}" rel="stylesheet">
+
 
     <style>
         body {
@@ -148,6 +150,82 @@
                 display: none;
             }
         }
+
+        /* Mobile View Styles */
+@media (max-width: 768px) {
+    /* Page Title */
+    .page-title {
+        font-size: 1.75rem; /* Smaller font size for mobile */
+        padding: 1rem; /* Reduce padding */
+        border-bottom: 1px solid #E5E7EB; /* Thinner border */
+    }
+
+    /* Main Container */
+    .main-container {
+        padding: 1rem; /* Reduce padding */
+    }
+
+    /* Main Content */
+    .main-content {
+        padding: 1rem; /* Reduce padding */
+        box-shadow: none; /* Remove shadow for a cleaner look */
+        border-radius: 0.25rem; /* Smaller border radius */
+        width: 90%;
+    }
+
+    /* Booking Details */
+    .booking-details {
+        flex-direction: column; /* Stack details vertically */
+    }
+
+    .booking-details-left,
+    .booking-details-right {
+        width: 90%; /* Full width for each section */
+        margin-bottom: 1rem; /* Space between sections */
+    }
+
+    .booking-details p {
+        font-size: 1rem; /* Smaller font size */
+    }
+
+    .booking-details p span {
+        font-weight: 600;
+        color: #1F2937;
+    }
+
+    /* Edit Button */
+    .edit-button {
+        position: static; /* Remove absolute positioning */
+        margin-top: 1rem; /* Space above button */
+        margin-right: 0; /* Remove right margin */
+        margin: 1rem auto; /* Center horizontally with auto margins */
+        width: 50%; /* Full width button */
+        text-align: center; /* Center text */
+    }
+
+    /* Action Buttons */
+    .actions {
+        margin-top: 1.5rem; /* Space above action buttons */
+    }
+
+    .print-button{
+        position: static; /* Remove absolute positioning */
+        margin-top: 1rem; /* Space above button */
+        margin-right: 0; /* Remove right margin */
+        width: 50%; /* Full width button */
+        text-align: center; /* Center text */
+    }
+
+    .actions .approve-button,
+    .actions .reject-button,
+     {
+        display: block;
+        width: 100%; /* Full width buttons */
+        margin-bottom: 0.5rem; /* Space between buttons */
+    }
+
+
+}
     </style>
 
 <link href="{{ asset('css/breadcrumb.css') }}" rel="stylesheet">
@@ -212,7 +290,7 @@
             <div class="booking-details">
                 <div class="booking-details-left">
                     <p><span>Bilik:</span> {{ $room->name }}</p>
-                    <p><span>Tarikh Untuk Tempahan:</span> {{ $booking->date }}</p>
+                    <p><span>Tarikh Tempahan:</span> {{ $booking->date }}</p>
                     <p><span>Hari:</span> {{ $dayDate }}</p>
                     <p><span>Masa Mula:</span> {{ $startTime }}</p>
                     <p><span>Masa Tamat:</span> {{ $endTime }}</p>
@@ -221,7 +299,7 @@
                 <div class="booking-details-right">
                     <p><span>Nama Pemohon:</span> {{ $booking->user->name }}</p>
                     <p><span>IC Pemohon:</span> {{ $booking->user->ICnumber}}</p>
-                    <p><span>Nombor Telefon Pemohon:</span> {{ $booking->user->phone_number }}</p>
+                    <p><span>No Tel. Pemohon:</span> {{ $booking->user->phone_number }}</p>
                     <p><span>Jawatan/Jabatan Pemohon:</span> {{ $booking->user->affiliation }}</p>
                     @if(auth()->user()->id === $booking->user_id)
                     <a href="{{ route('editprofile') }}" class="edit-profile-link">Kemaskini Profil</a>

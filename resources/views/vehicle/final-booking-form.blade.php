@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Final Booking Details</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -14,6 +15,8 @@
     <link href="{{ asset('css/header.css') }}" rel="stylesheet">
     <link href="{{ asset('css/backbutton.css') }}" rel="stylesheet">
     <link href="{{ asset('css/breadcrumb.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/mobile.css') }}" rel="stylesheet">
+
     
 
     <!-- Flatpickr -->
@@ -120,6 +123,132 @@
         button:hover {
             background-color: #357bd8;
         }
+
+          /* Styles specifically for mobile view */
+  @media (max-width: 480px) {
+
+    
+    .form-container {
+        padding: 1.5rem;
+        background-color: #ffffff;
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 80%;
+        margin: 0 auto;
+    }
+
+    .form-container h1 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        text-align: center;
+        color: #333;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .full-width {
+        grid-column: span 1;
+    }
+
+    .input-container {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+
+    .input-container input[type="text"] {
+        width: 100%;
+        padding: 1rem 2.5rem;
+        border: 1px solid #ddd;
+        border-radius: 0.5rem;
+        box-sizing: border-box;
+        font-size: 1.25rem;
+    }
+
+    .input-container .icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #4a90e2;
+    }
+
+    .input-container .icon-calendar {
+        font-size: 1.5rem;
+    }
+
+    .input-container .icon-clock {
+        font-size: 1.25rem;
+    }
+
+    button {
+        display: block;
+        width: 100%;
+        padding: 0.75rem;
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+        border-radius: 0.375rem;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 1rem;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    .error-message {
+        padding: 1rem;
+        font-size: 0.875rem;
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        border-radius: 0.375rem;
+        margin-bottom: 1rem;
+    }
+
+    .error-message ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .error-message ul li {
+        margin-bottom: 0.5rem;
+    }
+
+      /* Ensure Flatpickr input fields have adequate size and padding on mobile */
+      .flatpickr-input {
+            font-size: 1rem; /* Adequate font size */
+            padding: 0.75rem; /* Adequate touch target */
+        }
+
+        /* Adjust time picker dropdown for mobile */
+        .flatpickr-time {
+            font-size: 1rem; /* Larger font size for readability */
+        }
+
+        /* Adjust time components */
+        .flatpickr-time .flatpickr-hour,
+        .flatpickr-time .flatpickr-minute {
+            width: 50%; /* Make sure components are well sized */
+        }
+
+        /* Style the time picker elements for better mobile experience */
+        .flatpickr-time .flatpickr-time-separator {
+            display: none; /* Hide separator if it causes layout issues */
+        }
+
+        /* Ensure that the Flatpickr time picker has proper width */
+        .flatpickr-time {
+            width: 100%; /* Ensure full width on mobile */
+        }
+    }
     </style>
 </head>
 <body>
@@ -255,6 +384,7 @@
             noCalendar: true,
             dateFormat: "h:i K",  // 12-hour format with AM/PM
             time_24hr: false       // 12-hour format
+
         });
 
         flatpickr("#return_time", {
@@ -262,6 +392,7 @@
             noCalendar: true,
             dateFormat: "h:i K",  // 12-hour format with AM/PM
             time_24hr: false       // 12-hour format
+
         });
     </script>
 </body>

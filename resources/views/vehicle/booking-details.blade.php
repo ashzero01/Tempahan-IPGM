@@ -12,6 +12,8 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('fontawesome-free-6.6.0-web/css/all.min.css') }}">
+    <link href="{{ asset('css/mobile.css') }}" rel="stylesheet">
+
 
     <style>
         body {
@@ -146,46 +148,120 @@
         .btn-danger:hover {
             background-color: #EF4444; /* Darker red */
         }
+
+        /* Mobile view styles */
+@media (max-width: 768px) {
+
+
+.table-container {
+    margin-bottom: 1rem; /* Space below each table */
+}
+
+
+.table-container {
+        margin: 0; /* Remove margins for mobile view */
+        padding: 0.5rem; /* Add some padding around the table */
+        overflow-x: auto; /* Allow horizontal scroll if necessary */
+    }
+
+    table.booking-details {
+        width: 100%; /* Ensure the table takes full width */
+        border-collapse: collapse; /* Collapse borders */
+    }
+
+    table.booking-details th, 
+    table.booking-details td {
+        padding: 0.5rem; /* Adjust padding for smaller screens */
+        font-size: 0.875rem; /* Smaller font size for readability */
+    }
+
+    table.booking-details th {
+        font-size: 1rem; /* Slightly larger font size for headers */
+    }
+
+    table.booking-details td {
+        text-align: left; /* Align text to the left */
+    }
+
+    /* Reduce space between rows */
+    table.booking-details tr {
+        border-bottom: 1px solid #E5E7EB; /* Add a border between rows */
+    }
+    .booking-details .info-cell {
+            text-align: left;
+        }
+table {
+    width: 10%;
+    border-co0llapse: collapse;
+}
+
+th, td {
+    padding: 0.5rem; /* Less padding for smaller screens */
+    font-size: 0.75rem; /* Slightly smaller font size */
+}
+
+th {
+    font-size: 0.75rem; /* Adjust header font size */
+}
+
+.booking-details th, .booking-details td,
+.vehicle-details th, .vehicle-details td,
+.user-info th, .user-info td {
+    width: auto; /* Allow columns to adjust width */
+}
+
+.actions, .button-container {
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 0.5rem; /* Less gap between buttons */
+}
+
+.print-button, .btn-success, .btn-danger {
+    width: 100%; /* Full width buttons for mobile */
+    text-align: center; /* Center text */
+    padding: 0.75rem; /* Ensure adequate padding */
+    font-size: 0.875rem; /* Adjust font size */
+}
+}
     </style>
 
     <link href="{{ asset('css/header.css') }}" rel="stylesheet">
     <link href="{{ asset('css/breadcrumb.css') }}" rel="stylesheet">
 </head>
 <body>
-  <!-- Header Section -->
-  <header class="header">
-      <div class="logo-container">
-          <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
-          <h2 class="header-title">Sistem Tempahan Bilik dan Kenderaan</h2>
-      </div>
-      <div class="nav-links">
-          <a href="{{ route('showprofile', ['user_id' => auth()->user()->id]) }}" class="profile-link">
-              <i class="fas fa-user-circle"></i> {{ auth()->user()->name }}
-          </a>
+<!-- Header Section -->
+<header class="header">
+    <div class="logo-container">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
+        <h2 class="header-title">Sistem Tempahan Bilik dan Kenderaan</h2>
+    </div>
+    <div class="nav-links">
+        <a href="{{ route('showprofile', ['user_id' => auth()->user()->id]) }}" class="profile-link">
+            <i class="fas fa-user-circle"></i> {{ auth()->user()->name }}
+        </a>
 
-          <!-- Admin Menu -->
-          @if(auth()->user()->role === 'admin')
-              <div class="admin-menu">
-                  <a href="#" class="admin-link"><i class="fas fa-tools"></i> Admin Menu</a>
-                  <div class="dropdown-content">
-                      <a href="#"><i class="fas fa-users"></i> See user list</a>
-                      <a href="vehicles"><i class="fas fa-car"></i> See vehicle list</a>
-                      <a href="#"><i class="fas fa-user-plus"></i> Add admin</a>
-                      <a href="{{ route('rooms.create') }}"><i class="fas fa-plus-square"></i> Add room</a>
-                      <a href="{{ route('vehicles.create') }}"><i class="fas fa-truck"></i> Add vehicle</a>
-                  </div>
-              </div>
-          @endif
+        <!-- Admin Menu -->
+        @if(auth()->user()->role === 'admin')
+            <div class="admin-menu">
+                <a href="#" class="admin-link"><i class="fas fa-tools"></i>Menu Admin</a>
+                <div class="dropdown-content">
+                    <a href="{{route('users.list')}}"><i class="fas fa-users"></i> Senarai Pengguna</a>
+                    <a href="{{route('vehicles.book')}}"><i class="fas fa-car"></i> Senarai Kenderaan</a>
+                    <a href="{{route('showAddAdminForm')}}"><i class="fas fa-user-plus"></i> Tambah Admin</a>
+                    <a href="{{ route('rooms.create') }}"><i class="fas fa-plus-square"></i> Tambah Bilik</a>
+                    <a href="{{ route('vehicles.create') }}"><i class="fas fa-truck"></i> Tambah Kenderaan</a>
+                </div>
+            </div>
+        @endif
 
-          <!-- Logout Form -->
-          <form method="POST" action="{{ route('logout') }}" style="display:inline;">
-              @csrf
-              <button type="submit" class="logout-button">
-                  <i class="fas fa-sign-out-alt"></i> Log Keluar
-              </button>
-          </form>
-      </div>
-  </header>
+        <!-- Logout Form -->
+        <form method="POST" action="{{ route('logout') }}" style="display:inline;">
+            @csrf
+            <button type="submit" class="logout-button">
+                <i class="fas fa-sign-out-alt"></i> Log Keluar
+            </button>
+        </form>
+    </div>
+</header>
 
   <!-- Breadcrumb Section -->
   <div class="breadcrumb">
@@ -232,37 +308,38 @@
 @endphp
 
               <!-- Booking Details Table -->
-              <div class="table-container">
-                  <h2>Maklumat Tempahan</h2>
-                  <table class="booking-details">
-                      <tbody>
-                          <tr>
-                              <td class="title-cell">Destinasi</td>
-                              <td class="info-cell">{{ $destination }}</td>
-                          </tr>
-                          <tr>
-                              <td class="title-cell">Tujuan</td>
-                              <td class="info-cell">{{ $bookings->first()->purpose }}</td>
-                          </tr>
-                          <tr>
-                              <td class="title-cell">Tarikh Bertolak</td>
-                              <td class="info-cell">{{ $departureDate->format('d/m/Y') }} ({{ $departureDay }})</td>
-                          </tr>
-                          <tr>
-                              <td class="title-cell">Masa Bertolak</td>
-                              <td class="info-cell">{{ $formatTime($departureTime) }}</td>
-                          </tr>
-                          <tr>
-                              <td class="title-cell">Tarikh Pulang</td>
-                              <td class="info-cell">{{ $returnDate->format('d/m/Y') }} ({{ $returnDay }})</td>
-                          </tr>
-                          <tr>
-                              <td class="title-cell">Masa Pulang</td>
-                              <td class="info-cell">{{ $formatTime($returnTime) }}</td>
-                          </tr>
-                      </tbody>
-                  </table>
-              </div>
+              <!-- Booking Details Table -->
+<div class="table-container">
+    <h2>Maklumat Tempahan</h2>
+    <table class="booking-details">
+        <tbody>
+            <tr>
+                <td class="title-cell">Destinasi</td>
+                <td class="info-cell">{{ $destination }}</td>
+            </tr>
+            <tr>
+                <td class="title-cell">Tujuan</td>
+                <td class="info-cell">{{ $bookings->first()->purpose }}</td>
+            </tr>
+            <tr>
+                <td class="title-cell">Tarikh Bertolak</td>
+                <td class="info-cell">{{ $departureDate->format('d/m/Y') }} ({{ $departureDay }})</td>
+            </tr>
+            <tr>
+                <td class="title-cell">Masa Bertolak</td>
+                <td class="info-cell">{{ $formatTime($departureTime) }}</td>
+            </tr>
+            <tr>
+                <td class="title-cell">Tarikh Pulang</td>
+                <td class="info-cell">{{ $returnDate->format('d/m/Y') }} ({{ $returnDay }})</td>
+            </tr>
+            <tr>
+                <td class="title-cell">Masa Pulang</td>
+                <td class="info-cell">{{ $formatTime($returnTime) }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
               <!-- Vehicle Details Table -->
               <div class="table-container">
@@ -325,22 +402,22 @@
             </a>
             <form action="{{ route('vehicle.bookings.approve', [$timestamp, $destination]) }}" method="POST">
                 @csrf
-                <button type="submit" class="btn btn-success">Approve</button>
+                <button type="submit" class="btn btn-success">Terima</button>
             </form>
 
             <form action="{{ route('vehicle.bookings.reject', [$timestamp, $destination]) }}" method="POST">
                 @csrf
-                <button type="submit" class="btn btn-danger">Reject</button>
+                <button type="submit" class="btn btn-danger">Tolak</button>
             </form>
         @else
             <form action="{{ route('vehicle.bookings.approve', [$timestamp, $destination]) }}" method="POST">
                 @csrf
-                <button type="submit" class="btn btn-success">Approve</button>
+                <button type="submit" class="btn btn-success">Terima</button>
             </form>
 
             <form action="{{ route('vehicle.bookings.reject', [$timestamp, $destination]) }}" method="POST">
                 @csrf
-                <button type="submit" class="btn btn-danger">Reject</button>
+                <button type="submit" class="btn btn-danger">Tolak</button>
             </form>      
         @endif
     @endif

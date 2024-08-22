@@ -17,6 +17,7 @@
     <link href="{{ asset('css/header.css') }}" rel="stylesheet">
     <link href="{{ asset('css/backbutton.css') }}" rel="stylesheet">
     <link href="{{ asset('css/breadcrumb.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/mobile.css') }}" rel="stylesheet">
 
     <style>
         body {
@@ -82,29 +83,75 @@
             color: #333333;
         }
 
-        .filter-buttons {
-            margin: 20px 0;
-            display: flex;
-            gap: 10px;
-        }
+       /* General Styles for Dropdown */
+.filter-dropdown {
+    position: relative;
+    display: inline-block;
+}
 
-        .filter-button {
-            background-color: #E5E7EB;
-            color: #333333;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem;
-            cursor: pointer;
-            font-size: 0.875rem;
-            transition: background-color 0.3s ease;
-            flex: 0 1 auto; /* Allow buttons to shrink but not grow */
-            min-width: 120px; /* Ensure buttons have a minimum width */
-        }
+.filter-dropdown-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    background-color: #E5E7EB;
+    color: #333333;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    text-align: left;
+    width: 100%; /* Adjust width as needed */
+}
 
-        .filter-button.active {
-            background-color: #3B82F6;
-            color: white;
-        }
+.filter-text {
+    flex: 1;
+}
+
+.filter-dropdown-button i {
+    margin-left: 0.5rem;
+    transition: transform 0.3s ease;
+}
+
+/* Arrow Rotation When Dropdown is Open */
+.filter-dropdown.open .filter-dropdown-button i {
+    transform: rotate(90deg);
+}
+
+/* Dropdown Content */
+.filter-dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 0.375rem;
+    z-index: 1000;
+}
+
+.filter-dropdown-content button {
+    display: block;
+    width: 100%;
+    padding: 0.5rem;
+    background-color: #E5E7EB;
+    color: #333333;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    border-bottom: 1px solid #dddddd;
+}
+
+.filter-dropdown-content button:last-child {
+    border-bottom: none;
+}
+
+.filter-dropdown-content button.active {
+    background-color: #3B82F6;
+    color: white;
+}
+        
 
         .back-button {
             display: inline-block;
@@ -137,6 +184,171 @@
         .delete-button:hover {
             background-color: #c9302c;
         }
+
+      
+  /* Styles specifically for mobile view */
+  @media (max-width: 480px) {
+    /* Header styles for mobile */
+    .header {
+        flex-direction: row; /* Align items in a row */
+        align-items: center; /* Center items vertically */
+        padding: 5px 10px; /* Reduced padding */
+        height: auto; /* Adjust height based on content */
+        box-shadow: none; /* Optional: remove shadow for a flatter look */
+    }
+
+    .header .logo-container {
+        flex: 1; /* Allow logo to take available space */
+        display: flex;
+        align-items: center;
+    }
+
+    .header .logo {
+        max-width: 60px; /* Adjust logo size for mobile */
+    }
+
+    .header .header-title {
+        display: none; /* Hide the header title on mobile */
+    }
+
+    .nav-links {
+        margin-left: auto; /* Push nav links to the right */
+        display: flex;
+        align-items: center; /* Align items vertically */
+    }
+
+    .nav-links a {
+        display: flex;
+        align-items: center;
+        margin-left: 10px; /* Space between profile icon and other items */
+    }
+
+    /* Main container and page title */
+    .main-container {
+        padding: 0px;
+        margin-top: 15px; /* Space for fixed header */
+    }
+
+
+
+       .filter-buttons {
+        display: flex;
+        flex-direction: column;
+        width: 100%; /* Full width for dropdown */
+    }
+
+    .filter-button {
+        display: none; /* Hide individual buttons */
+    }
+
+    .filter-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.filter-dropdown-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    background-color: #E5E7EB;
+    color: #333333;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    text-align: left;
+    position: relative;
+}
+
+.filter-text {
+    flex: 1;
+}
+
+.filter-dropdown-button i {
+    margin-left: 0.5rem;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.filter-dropdown.open .filter-dropdown-button i {
+    transform: rotate(90deg); /* Rotate arrow when dropdown is open */
+}
+
+.filter-dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 0.375rem;
+    z-index: 1000;
+}
+
+.filter-dropdown-content button {
+    display: block;
+    width: 100%;
+    padding: 0.5rem;
+    background-color: #E5E7EB;
+    color: #333333;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    border-bottom: 1px solid #dddddd;
+}
+
+.filter-dropdown-content button:last-child {
+    border-bottom: none;
+}
+
+.filter-dropdown-content button.active {
+    background-color: #3B82F6;
+    color: white;
+}
+
+
+    /* Vehicle container and boxes */
+    .vehicle-container {
+        flex-direction: column; /* Stack vehicle boxes vertically */
+        gap: 15px;
+        padding: 0; /* Remove extra padding */
+    }
+
+    .vehicle-box {
+        width: 95%; /* Full width for vehicle boxes */
+        padding: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        position: relative; /* Position relative to align delete button */
+        transition: transform 0.3s ease;
+    }
+
+    .vehicle-image {
+        height: 250px; /* Adjust image height for mobile */
+    }
+
+    .vehicle-name {
+        font-size: 16px;
+    }
+
+    .vehicle-link {
+        font-size: 14px;
+    }
+
+    /* Hide delete button for non-admin users */
+    .delete-button {
+        display: none;
+    }
+
+    /* Back button styles */
+    .back-button {
+        padding: 8px 16px;
+        font-size: 0.75rem;
+    }
+}
+        
     </style>
 </head>
 <body>
@@ -189,14 +401,22 @@
             Tempahan Kenderaan
         </div>
         <div class="main-content">
-            <div class="filter-buttons">
-                <button class="filter-button active" data-type="">Semua Kenderaan</button>
-                <button class="filter-button" data-type="bas">Bas</button>
-                <button class="filter-button" data-type="kereta">Kereta</button>
-                <button class="filter-button" data-type="van">Van</button>
-                <button class="filter-button" data-type="pajero">Pajero</button>
-                <button class="filter-button" data-type="mini bus">Bas Mini</button>
-            </div>
+        <div class="filter-buttons">
+        <div class="filter-dropdown">
+    <button class="filter-dropdown-button">
+        <span class="filter-text">Semua Kenderaan</span>
+        <i class="fas fa-chevron-right"></i>
+    </button>
+    <div class="filter-dropdown-content">
+        <button class="filter-button" data-type="">Semua Kenderaan</button>
+        <button class="filter-button" data-type="bas">Bas</button>
+        <button class="filter-button" data-type="kereta">Kereta</button>
+        <button class="filter-button" data-type="van">Van</button>
+        <button class="filter-button" data-type="pajero">Pajero</button>
+        <button class="filter-button" data-type="mini bus">Bas Mini</button>
+    </div>
+</div>
+</div>
             <div class="vehicle-container">
     <!-- Vehicle Boxes -->
     @foreach ($vehicles as $vehicle)
@@ -224,33 +444,59 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const filterButtons = document.querySelectorAll('.filter-button');
-            const vehicleBoxes = document.querySelectorAll('.vehicle-box');
+   document.addEventListener('DOMContentLoaded', function () {
+    const filterDropdownButton = document.querySelector('.filter-dropdown-button');
+    const filterDropdownContent = document.querySelector('.filter-dropdown-content');
+    const filterButtons = document.querySelectorAll('.filter-dropdown-content .filter-button');
+    const vehicleBoxes = document.querySelectorAll('.vehicle-box');
+    const filterDropdown = document.querySelector('.filter-dropdown');
+    const filterText = document.querySelector('.filter-text');
 
-            filterButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    // Remove active class from all buttons
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
+    // Function to update the dropdown button text
+    function updateDropdownButtonText(text) {
+        filterText.textContent = text;
+    }
 
-                    // Add active class to the clicked button
-                    button.classList.add('active');
+    // Toggle dropdown content visibility and manage arrow rotation
+    filterDropdownButton.addEventListener('click', function () {
+        const isOpen = filterDropdownContent.style.display === 'block';
+        filterDropdownContent.style.display = isOpen ? 'none' : 'block';
+        filterDropdown.classList.toggle('open', !isOpen); // Add/remove class for arrow rotation
+    });
 
-                    // Filter vehicles
-                    const selectedType = button.getAttribute('data-type');
+    // Filter vehicles and update button text
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active class from all buttons
+            filterButtons.forEach(btn => btn.classList.remove('active'));
 
-                    vehicleBoxes.forEach(box => {
-                        const vehicleType = box.getAttribute('data-type');
+            // Add active class to the clicked button
+            button.classList.add('active');
 
-                        if (selectedType === '' || vehicleType === selectedType) {
-                            box.style.display = 'block';
-                        } else {
-                            box.style.display = 'none';
-                        }
-                    });
-                });
+            // Close the dropdown after selection
+            filterDropdownContent.style.display = 'none';
+            filterDropdown.classList.remove('open'); // Reset arrow rotation
+
+            // Update dropdown button text
+            updateDropdownButtonText(button.textContent);
+
+            // Filter vehicles
+            const selectedType = button.getAttribute('data-type');
+
+            vehicleBoxes.forEach(box => {
+                const vehicleType = box.getAttribute('data-type');
+
+                if (selectedType === '' || vehicleType === selectedType) {
+                    box.style.display = 'block';
+                } else {
+                    box.style.display = 'none';
+                }
             });
         });
-    </script>
+    });
+});
+
+</script>
+
 </body>
 </html>
