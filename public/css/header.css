@@ -6,6 +6,7 @@
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow */
+    height: 40px; /* Set a fixed height for the header */
 }
 
 .logo-container {
@@ -14,8 +15,8 @@
 }
 
 .logo {
-    max-height: 40px;
-    max-width: 100px;
+    height: 80px; /* Increase height */
+    width: auto; /* Maintain aspect ratio */
     margin-right: 1rem;
 }
 
@@ -111,5 +112,15 @@
 
 .admin-menu:hover .dropdown-content {
     display: block;
+}
+
+@media (max-width: 768px) {
+
+    .logo {
+    height: 70px; /* Increase height */
+    width: auto; /* Maintain aspect ratio */
+    margin-right: 1rem;
+}
+
 }
 

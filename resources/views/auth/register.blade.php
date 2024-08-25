@@ -19,25 +19,32 @@
         }
 
         .header {
-            background-color: #1F2937; /* Dark gray background */
-            padding: 1rem;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+    background: linear-gradient(90deg, #1F2937, #4B5563); /* Gradient background */
+    padding: 1rem;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow */
+    height: 40px; /* Set a fixed height for the header */
+}
 
-        .logo-container {
-            display: flex;
-            align-items: center;
-        }
+.logo-container {
+    display: flex;
+    align-items: center;
+}
 
-        .logo {
-            max-height: 40px; /* Set a maximum height for the logo */
-            max-width: 100px; /* Set a maximum width for the logo */
-            margin-right: 1rem; /* Space between logo and text */
-        }
+.logo {
+    height: 80px; /* Increase height */
+    width: auto; /* Maintain aspect ratio */
+    margin-right: 1rem;
+}
+.logo4 {
+    height: 300px; /* Increase height */
+    width: auto; /* Maintain aspect ratio */
+    margin-right: 1rem;
+}
+
 
         .header-title {
             font-size: 1.5rem; /* Adjust as needed */
@@ -152,7 +159,7 @@
     margin: 0 auto;
 }
 
-.login-form input[type="text"], 
+.login-form input[type="text"],
 .login-form input[type="password"] {
     padding: 0.5rem;
     font-size: 1rem; /* Adjust font size for inputs */

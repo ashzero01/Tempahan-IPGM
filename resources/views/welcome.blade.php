@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sistem Tempahan IPGMKKB</title>
     <link href="{{ asset('css/mobile.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/header.css') }}" rel="stylesheet">
 
 
     <!-- Styles -->
@@ -19,13 +20,14 @@
         }
 
         .header {
-    background-color: #1F2937; /* Dark gray background */
+    background: linear-gradient(90deg, #1F2937, #4B5563); /* Gradient background */
     padding: 1rem;
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow */
+    height: 40px; /* Set a fixed height for the header */
 }
 
 .logo-container {
@@ -34,9 +36,14 @@
 }
 
 .logo {
-    max-height: 40px; /* Set a maximum height for the logo */
-    max-width: 100px; /* Set a maximum width for the logo */
-    margin-right: 1rem; /* Space between logo and text */
+    height: 80px; /* Increase height */
+    width: auto; /* Maintain aspect ratio */
+    margin-right: 1rem;
+}
+.logo4 {
+    height: 300px; /* Increase height */
+    width: auto; /* Maintain aspect ratio */
+    margin-right: 1rem;
 }
 
 .header-title {
@@ -79,6 +86,7 @@
     margin-bottom: 2rem;
 }
 
+
 .login-form {
     margin-top: 2rem;
     padding: 2rem;
@@ -115,7 +123,7 @@
 .login-form button:hover {
     background-color: #1D4ED8;
 
-    
+
 }
 /* Styles for Notification Banner */
 .notification-banner {
@@ -133,7 +141,11 @@
 /* Mobile View Styles */
 @media (max-width: 768px) {
 
-
+    .logo4 {
+    height: 120px; /* Increase height */
+    width: auto; /* Maintain aspect ratio */
+    margin-right: 1rem;
+}
     /* Main content styles */
     .main-content {
         padding: 1rem;
@@ -160,7 +172,7 @@
         margin: 0 auto;
     }
 
-    .login-form input[type="text"], 
+    .login-form input[type="text"],
     .login-form input[type="password"] {
         padding: 0.5rem;
         font-size: 1rem; /* Adjust font size for inputs */
@@ -192,11 +204,11 @@
     }
 }
 
-}   
+}
 
 
     </style>
-    
+
     <link rel="stylesheet" href="{{ asset('css/about.css') }}">
 </head>
 <body>
@@ -214,18 +226,20 @@
 
     <!-- Main Content -->
     <div class="main-content">
+        <img src="{{ asset('images/logo4.png') }}" alt="Logo" class="logo4"> <!-- Logo at the top -->
+
         <!-- Notification Banner -->
+         <!-- Login Form -->
 <div class="notification-banner">
     <p>Sila gunakan desktop/PC/laptop untuk penggunaan yang lebih baik.</p>
 </div>
         <h1>Selamat Datang Ke Sistem Tempahan</h1>
         <p>Sila log masuk untuk meneruskan.</p>
 
-        <!-- Login Form -->
-        <div class="login-form">
+         <!-- Login Form -->
+         <div class="login-form">
             <form method="POST" action="{{ route('user.login') }}">
                 @csrf
-
                 <div>
                     <label for="ICnumber" style="display: block; margin-bottom: 0.5rem;">No Kad Pengenalan</label>
                     <input id="ICnumber" type="text" name="ICnumber" required autofocus />
