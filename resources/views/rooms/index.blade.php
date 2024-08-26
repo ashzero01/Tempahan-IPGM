@@ -429,14 +429,19 @@
 
                         <!-- Delete Button for Admin -->
                         @if(auth()->user()->role === 'admin')
-                            <form action="{{ route('rooms.destroy', $room->id) }}" method="POST" style="display: inline;">
-                                @csrf
+                        <div class="admin-buttons">
+                        <form action="{{ route('rooms.destroy', $room->id) }}" method="POST" style="display: inline;">
+                            @csrf
                                 @method('DELETE')
                                 <button type="submit" class="delete-button" onclick="return confirm('Are you sure you want to delete this room?'); event.stopPropagation();">
-                                    <i class="fas fa-trash"></i> Hapus
+                                    <i class="fas fa-trash-alt"></i>
                                 </button>
                             </form>
-                        @endif
+                            <a href="{{ route('rooms.edit.image', $room->id) }}" class="edit-image-button">
+                            <i class="fas fa-edit"></i>
+                                </a>
+                        </div>
+                    @endif
                     </div>
                 @endforeach
             </div>

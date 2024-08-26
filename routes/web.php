@@ -56,6 +56,9 @@ Route::middleware(['auth'])->group(function () {
     Route::put('rooms/bookings/{booking}/', [BookingController::class, 'update'])->name('bookings.update');
     Route::put('rooms/bookings/{booking}/approve', [BookingController::class, 'approve'])->name('bookings.approve');
     Route::put('rooms/bookings/{booking}/reject', [BookingController::class, 'reject'])->name('bookings.reject');
+    Route::get('/rooms/edit-image/{id}', [RoomController::class, 'showEditImage'])->name('rooms.edit.image');
+    Route::put('/rooms/update-image/{id}', [RoomController::class, 'updateImage'])->name('rooms.update.image');
+    
 
     // User Profile Routes
     Route::get('/showprofile/{user_id}', [UserController::class, 'showProfile'])->name('showprofile');
@@ -84,6 +87,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/vehicles/book', [VehicleController::class, 'book'])->name('vehicles.book');
     Route::resource('vehicles', VehicleController::class)->except(['show']);
+    Route::get('/vehicles/book/edit-image/{id}', [VehicleController::class, 'showEditImage'])->name('vehicles.edit.image');
+    Route::put('/vehicles/update-image/{id}', [VehicleController::class, 'updateImage'])->name('vehicles.update.image');
     Route::delete('vehicles/book/delete/{id}', [VehicleController::class, 'destroy'])->name('vehicles.destroy');
 
 

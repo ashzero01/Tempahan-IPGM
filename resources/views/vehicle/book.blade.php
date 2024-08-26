@@ -421,16 +421,21 @@
     <!-- Vehicle Boxes -->
     @foreach ($vehicles as $vehicle)
         <div class="vehicle-box" data-type="{{ $vehicle->type }}" onclick="window.location='{{ route('vehicles.booking.details', $vehicle->id) }}';">
-            <!-- Show delete button only for admin users -->
-            @if(auth()->user()->role === 'admin')
-                <form action="{{ route('vehicles.destroy', $vehicle->id) }}" method="POST" style="display: inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="delete-button" onclick="return confirm('Adakah anda pasti ingin memadam kenderaan ini?');">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                </form>
-            @endif
+              <!-- Show delete and edit buttons only for admin users -->
+              @if(auth()->user()->role === 'admin')
+                        <div class="admin-buttons">
+                            <form action="{{ route('vehicles.destroy', $vehicle->id) }}" method="POST" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="delete-button" onclick="return confirm('Adakah anda pasti ingin memadam kenderaan ini?');">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                            <a href="{{ route('vehicles.edit.image', $vehicle->id) }}" class="edit-image-button">
+                            <i class="fas fa-edit"></i>
+                                </a>
+                        </div>
+                    @endif
             <!-- Vehicle Image -->
             <img src="{{ asset(($vehicle->image ? $vehicle->image : 'default-vehicle.jpg')) }}" alt="{{ $vehicle->name }}" class="vehicle-image">
             <!-- Vehicle Name -->

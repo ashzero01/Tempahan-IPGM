@@ -91,4 +91,33 @@ public function filter($description)
     return view('rooms.index', compact('rooms'));
 }
 
+public function showEditImage($id)
+{
+    $room = Room::findOrFail($id); // Use singular variable name for consistency
+    return view('rooms.editimage', compact('room'));
+}
+
+
+
+
+public function updateImage(Request $request, $id)
+{
+    $request->validate([
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
+
+    $room = Room::findOrFail($id); // Use singular variable name for consistency
+
+    if ($request->hasFile('image')) {
+        // Upload the new image
+        $image = $request->file('image');
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('images'), $imageName);
+        $room->update(['image' => 'images/' . $imageName]); // Update the room model, not vehicle
+    }
+
+    return redirect()->route('rooms.index')->with('success', 'Room image updated successfully!'); // Corrected route
+}
+
+
 }

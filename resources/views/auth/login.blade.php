@@ -214,8 +214,8 @@
         </div>
     </div>
     <footer class="about-footer">
-        <p>&copy; {{ date('Y') }} by Amierul Syahmi</p>
-        <a href="{{ route('about-guest') }}" class="footer-link">Tentang Kami</a>
+        <p>&copy; 2024 Hakcipta Terpelihara IPG Kampus Kota Bharu</p>
+        <a href="{{ route('about-guest') }}" class="footer-link">Mengenai Kami</a>
     </footer>
 </body>
 

@@ -84,5 +84,30 @@ use App\Models\Vehicle;
     return view('vehicle.book', compact('vehicles'));
 }
 
+public function showEditImage($id)
+{
+    $vehicle = Vehicle::findOrFail($id);
+    return view('vehicle.editimage', compact('vehicle'));
+}
+public function updateImage(Request $request, $id)
+{
+    $request->validate([
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
+
+    $vehicle = Vehicle::findOrFail($id);
+
+    if ($request->hasFile('image')) {
+
+        // Upload the new image
+        $image = $request->file('image');
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('images'), $imageName);
+        $vehicle->update(['image' => 'images/' . $imageName]);
+    }
+
+    return redirect()->route('vehicles.book')->with('success', 'Vehicle image updated successfully!');
+}
+
 
 }

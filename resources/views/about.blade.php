@@ -89,6 +89,35 @@
     transform: translateY(-3px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
+.centered-title {
+    text-align: center;
+    font-size: 36px; /* Adjust size as needed */
+    margin-bottom: 20px; /* Space below the heading */
+}
+
+.about-section {
+            margin-bottom: 40px; /* Added bottom margin */
+            text-align: center; /* Center align text */
+        }
+
+        .about-section h2 {
+            font-size: 24px; /* Increased font size */
+            margin-bottom: 15px; /* Space below the heading */
+        }
+
+        .about-section p {
+            font-size: 18px; /* Increased font size */
+            line-height: 1.6; /* Improved line height for readability */
+            margin: 0; /* Remove default margin */
+        }
+
+        .about-section img {
+            width: 80px; /* Set a standard width for logos */
+            height: auto; /* Maintain aspect ratio */
+            display: block;
+            margin: 0 auto 20px; /* Center logo and add spacing */
+        }
     </style>
 
     <link href="{{ asset('css/header.css') }}" rel="stylesheet">
@@ -136,21 +165,30 @@
     
     <!-- Main Content -->
     <main class="main-container">
-        <div class="main-content">
-            <h1>Tentang Kami</h1>
+    <div class="main-content">
+        <h1 class="centered-title">Mengenai Kami</h1>
+
             <section class="about-section">
-                <h2>Misi</h2>
-                <p>Memudahkan warga IPGMKKB menjalankan tugas mereka membina generasi akan datang dengan menyediakan kemudahan menempah fasiliti yang tersedia di IPGMKKB</p>
+                <h2><i class="fas fa-bullseye"></i> Visi</h2>
+                <p>"IPG Peneraju Kecemerlangan Pendidikan Guru"</p>
             </section>
-            
+
             <section class="about-section">
-                <h2>Anggota Kami</h2>
-                <p>1. Amierul Syahmi bin Mohd Hasbi - Developer</p>
+            <h2><i class="fas fa-tachometer-alt"></i> Misi</h2>
+                <p>"Melahirkan Guru yang kompeten dan berjiwa pendidik melalui program pembangunan guru yang dinamik ke arah pendidikan sekolah bertaraf dunia"</p>
             </section>
-            
+
             <section class="about-section">
-                <h2>Hubungi Kami</h2>
-                <p>Email: amierul2001@gmail.com</p>
+            <h2><i class="fas fa-address-book"></i> Hubungi Kami</h2>
+                <p>
+                    IPG Kampus Kota Bharu<br>
+                    Jalan Maktab, Pengkalan Chepa,<br>
+                    16109 Kota Bharu,<br>
+                    Kelantan.<br><br>
+
+                    Tel: 09-7717700<br>
+                    Faks: 09-7738488
+                </p>
             </section>
         </div>
     </main>

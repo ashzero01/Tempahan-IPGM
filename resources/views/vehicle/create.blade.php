@@ -30,11 +30,11 @@
         }
 
         #preview {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 8px;
-            display: block; /* Ensure it's displayed */
+            max-width: 300px; /* Adjust size as needed */
+        height: auto;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-top: 10px;
         }
 
         body {
