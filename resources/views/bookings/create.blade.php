@@ -465,28 +465,30 @@ function formatTime(time) {
 
 
         // Event listener for date button clicks
-        dayButtonsContainer.addEventListener('click', function (event) {
+      // Event listener for date button clicks
+      dayButtonsContainer.addEventListener('click', function (event) {
 
-            if (event.target.classList.contains('date-btn')) {
-                // Remove active class from all buttons
-                dayButtonsContainer.querySelectorAll('.date-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
+if (event.target.classList.contains('date-btn')) {
+    // Remove active class from all buttons
+    dayButtonsContainer.querySelectorAll('.date-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
 
-                event.target.classList.add('active');
+    event.target.classList.add('active');
 
-                // Add active class to the clicked button
-                    
-                const selectedDate = event.target.getAttribute('data-date');
-                bookingDateInput.value = selectedDate;
+    // Add active class to the clicked button
+        
+    const selectedDate = event.target.getAttribute('data-date');
+    bookingDateInput.value = selectedDate;
 
-                // Fetch and display booking details for the selected date
-                fetchAndDisplayBookingDetails(selectedDate);
-                
-            }
-            
-            
-        });
+    // Fetch and display booking details for the selected date
+    fetchAndDisplayBookingDetails(selectedDate);
+    
+}
+
+
+});
+
         function getDayOfWeek(dateString) {
         const daysOfWeek = ['Ahad', 'Isnin', 'Selasa', 'Rabu', 'Khamis', 'Jumaat', 'Sabtu'];
         const date = new Date(dateString);
@@ -563,7 +565,7 @@ function formatTime(time) {
 
         // Function to fetch and display booking details for a specific date
         // Function to fetch and display booking details for a specific date
-function fetchAndDisplayBookingDetails(date) {
+        function fetchAndDisplayBookingDetails(date) {
     const roomId = '{{ $room->id }}';
     const endpoint = `{{ route('bookings.json1', ['room' => $room->id]) }}?date=${date}`;
 
@@ -579,6 +581,9 @@ function fetchAndDisplayBookingDetails(date) {
             tbody.innerHTML = '';
             const userId = '{{ auth()->id() }}'; // Get the ID of the authenticated user
             const isAdmin = '{{ auth()->user()->isAdmin() }}'; // Check if the authenticated user is an admin
+
+            // Filter bookings to include only those with type "rooms"
+            const filteredBookings = bookings.filter(booking => booking.type === 'rooms');
 
             filteredBookings.forEach(booking => {
                 const row = document.createElement('tr');
@@ -618,6 +623,7 @@ function fetchAndDisplayBookingDetails(date) {
         })
         .catch(error => console.error('Error fetching booking details:', error));
 }
+
 
     });
     
