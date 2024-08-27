@@ -29,6 +29,7 @@
             padding: 1rem;
             font-size: 2rem;
             color: #333333;
+            text-transform: uppercase;
         }
 
         .table-container {

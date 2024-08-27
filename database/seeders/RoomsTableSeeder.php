@@ -26,7 +26,7 @@ class RoomsTableSeeder extends Seeder
                 'image' => 'images/dewanbakti.jpg'
             ],
             [
-                'name' => 'Dewan Kuliah K39',
+                'name' => 'Dewan HJ. MOHD RASID (K39)',
                 'description' => 'dewan',
                 'image' => 'images/dewankuliah(k39).jpg'
             ],
@@ -51,7 +51,7 @@ class RoomsTableSeeder extends Seeder
                 'image' => 'images/dewankdp.jpg'
             ],
             [
-                'name' => 'Bilik Mesy. Gerakan',
+                'name' => 'Bilik Mesyuarat Gerakan',
                 'description' => 'bilik',
                 'image' => 'images/bilikgerakan.jpg'
             ],
@@ -61,7 +61,7 @@ class RoomsTableSeeder extends Seeder
                 'image' => 'images/bilikkuliahmahpoorbaba.jpg'
             ],
             [
-                'name' => 'Bilik Mesy. Gigih',
+                'name' => 'Bilik Mesyuarat Gigih',
                 'description' => 'bilik',
                 'image' => 'images/bilikgigih.jpg'
             ]

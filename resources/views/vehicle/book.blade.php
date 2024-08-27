@@ -81,6 +81,7 @@
             padding: 1rem;
             font-size: 2rem;
             color: #333333;
+            text-transform: uppercase;
         }
 
        /* General Styles for Dropdown */
@@ -439,7 +440,7 @@
             <!-- Vehicle Image -->
             <img src="{{ asset(($vehicle->image ? $vehicle->image : 'default-vehicle.jpg')) }}" alt="{{ $vehicle->name }}" class="vehicle-image">
             <!-- Vehicle Name -->
-            <div class="vehicle-name">{{ $vehicle->name }}</div>
+            <div class="vehicle-name" style="text-transform: uppercase;">{{ $vehicle->name }}</div>
             <!-- Link to vehicle bookings -->
             <span class="vehicle-link">Tempah Sekarang</span>
         </div>

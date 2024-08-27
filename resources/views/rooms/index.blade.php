@@ -81,6 +81,7 @@
             padding: 1rem;
             font-size: 2rem;
             color: #333333;
+            text-transform: uppercase;
         }
 
         /* General Styles for Dropdown */
@@ -423,7 +424,7 @@
                         <!-- Room Image -->
                         <img src="{{ asset(($room->image ? $room->image : 'default-room.jpg')) }}" alt="{{ $room->name }}" class="room-image">
                         <!-- Room Name -->
-                        <div class="room-name">{{ $room->name }}</div>
+                        <div class="room-name" style="text-transform: uppercase;">{{ $room->name }}</div>
                         <!-- Link to room bookings -->
                         <a href="{{ route('bookings.create', $room->id) }}" class="room-link">Tempah Sekarang</a>
 

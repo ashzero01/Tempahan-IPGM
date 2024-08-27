@@ -28,6 +28,8 @@
             font-size: 2.5rem;
             color: #333333;
             border-bottom: 2px solid #E5E7EB;
+            text-transform: uppercase;
+
         }
 
         .main-container {
